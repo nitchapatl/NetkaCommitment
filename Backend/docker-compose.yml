@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  netkacommitment.web:
+    image: ${DOCKER_REGISTRY-}netkacommitmentweb
+    build:
+      context: .
+      dockerfile: NetkaCommitment.Web/Dockerfile
