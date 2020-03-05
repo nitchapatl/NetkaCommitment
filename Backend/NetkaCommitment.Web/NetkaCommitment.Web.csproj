@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NewFolder\**" />
+    <Content Remove="NewFolder\**" />
+    <EmbeddedResource Remove="NewFolder\**" />
+    <None Remove="NewFolder\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.9.10" />
@@ -16,6 +23,10 @@
   <ItemGroup>
     <ProjectReference Include="..\NetkaCommitment.Business\NetkaCommitment.Business.csproj" />
     <ProjectReference Include="..\NetkaCommitment.Common\NetkaCommitment.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ApiControllers\" />
   </ItemGroup>
 
 </Project>
