@@ -24,6 +24,7 @@ namespace NetkaCommitment.Data.EFModels
         public uint CreatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public uint? UpdatedBy { get; set; }
+        public ulong IsDeleted { get; set; }
 
         public virtual MDepartmentLm CommitmentLmNavigation { get; set; }
         public virtual ICollection<TApprove> TApprove { get; set; }

@@ -30,10 +30,6 @@
     <ProjectReference Include="..\NetkaCommitment.Data\NetkaCommitment.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ApiControllers\" />
-  </ItemGroup>
-
 
 
 </Project>

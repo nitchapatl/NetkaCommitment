@@ -317,6 +317,10 @@ namespace NetkaCommitment.Data.EFModels
                     .HasColumnName("CREATED_DATE")
                     .HasColumnType("datetime");
 
+                entity.Property(e => e.IsDeleted)
+                    .HasColumnName("IS_DELETED")
+                    .HasColumnType("bit(1)");
+
                 entity.Property(e => e.ParentId).HasColumnName("PARENT_ID");
 
                 entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
@@ -472,6 +476,10 @@ namespace NetkaCommitment.Data.EFModels
                     .HasColumnName("CREATED_DATE")
                     .HasColumnType("datetime");
 
+                entity.Property(e => e.IsDeleted)
+                    .HasColumnName("IS_DELETED")
+                    .HasColumnType("bit(1)");
+
                 entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
 
                 entity.Property(e => e.UpdatedDate)
@@ -549,6 +557,10 @@ namespace NetkaCommitment.Data.EFModels
                     .HasColumnName("CREATED_DATE")
                     .HasColumnType("datetime");
 
+                entity.Property(e => e.IsDeleted)
+                    .HasColumnName("IS_DELETED")
+                    .HasColumnType("bit(1)");
+
                 entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
 
                 entity.Property(e => e.UpdatedDate)
@@ -601,6 +613,10 @@ namespace NetkaCommitment.Data.EFModels
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
+                entity.Property(e => e.IsDeleted)
+                    .HasColumnName("IS_DELETED")
+                    .HasColumnType("bit(1)");
+
                 entity.Property(e => e.UpdatedBy).HasColumnName("UPDATED_BY");
 
                 entity.Property(e => e.UpdatedDate)
@@ -633,6 +649,10 @@ namespace NetkaCommitment.Data.EFModels
                 entity.Property(e => e.CreatedDate)
                     .HasColumnName("CREATED_DATE")
                     .HasColumnType("datetime");
+
+                entity.Property(e => e.IsDeleted)
+                    .HasColumnName("IS_DELETED")
+                    .HasColumnType("bit(1)");
 
                 entity.Property(e => e.NotificationCount)
                     .HasColumnName("NOTIFICATION_COUNT")
