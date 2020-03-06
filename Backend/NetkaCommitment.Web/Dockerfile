@@ -1,17 +1,13 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM mcr.microsoft.com/dotnet/core/aspnet:2.1-stretch-slim AS base
+FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
-FROM mcr.microsoft.com/dotnet/core/sdk:2.1-stretch AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["NetkaCommitment.Web/NetkaCommitment.Web.csproj", "NetkaCommitment.Web/"]
-COPY ["NetkaCommitment.Common/NetkaCommitment.Common.csproj", "NetkaCommitment.Common/"]
-COPY ["NetkaCommitment.Business/NetkaCommitment.Business.csproj", "NetkaCommitment.Business/"]
-COPY ["NetkaCommitment.Repository/NetkaCommitment.Repository.csproj", "NetkaCommitment.Repository/"]
-COPY ["NetkaCommitment.Data/NetkaCommitment.Data.csproj", "NetkaCommitment.Data/"]
 RUN dotnet restore "NetkaCommitment.Web/NetkaCommitment.Web.csproj"
 COPY . .
 WORKDIR "/src/NetkaCommitment.Web"

@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectVersion>2.1</ProjectVersion>
     <DockerTargetOS>Linux</DockerTargetOS>
-    <ProjectGuid>f728b9eb-47fd-4be6-ac1d-627fbbfce05a</ProjectGuid>
+    <ProjectGuid>aa15ce8a-db0f-442d-b9ff-6d76d9ba417e</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
     <DockerServiceUrl>{Scheme}://localhost:{ServicePort}</DockerServiceUrl>
     <DockerServiceName>netkacommitment.web</DockerServiceName>
