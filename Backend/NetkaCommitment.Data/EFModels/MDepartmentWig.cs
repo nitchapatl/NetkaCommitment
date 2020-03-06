@@ -21,7 +21,9 @@ namespace NetkaCommitment.Data.EFModels
         public ulong IsDeleted { get; set; }
         public uint? DepartmentId { get; set; }
         public uint? CompanyWigId { get; set; }
+        public uint? CompanyLmId { get; set; }
 
+        public virtual MCompanyLm CompanyLm { get; set; }
         public virtual MCompanyWig CompanyWig { get; set; }
         public virtual MDepartment Department { get; set; }
         public virtual ICollection<MDepartmentLm> MDepartmentLm { get; set; }

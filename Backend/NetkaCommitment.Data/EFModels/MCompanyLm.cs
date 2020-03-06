@@ -3,26 +3,26 @@ using System.Collections.Generic;
 
 namespace NetkaCommitment.Data.EFModels
 {
-    public partial class MCompanyWig
+    public partial class MCompanyLm
     {
-        public MCompanyWig()
+        public MCompanyLm()
         {
-            MCompanyLm = new HashSet<MCompanyLm>();
             MDepartmentWig = new HashSet<MDepartmentWig>();
         }
 
-        public uint CompanyWigId { get; set; }
-        public string CompanyWigName { get; set; }
-        public ushort CompanyWigYear { get; set; }
-        public string CompanyWigDescription { get; set; }
-        public uint CompanyWigSequence { get; set; }
+        public uint CompanyLmId { get; set; }
+        public string CompanyLmName { get; set; }
+        public string CompanyLmDescription { get; set; }
+        public byte CompanyLmValue { get; set; }
+        public uint CompanyLmSequence { get; set; }
         public DateTime CreatedDate { get; set; }
         public uint CreatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public uint? UpdatedBy { get; set; }
         public ulong IsDeleted { get; set; }
+        public uint? CompanyWigId { get; set; }
 
-        public virtual ICollection<MCompanyLm> MCompanyLm { get; set; }
+        public virtual MCompanyWig CompanyWig { get; set; }
         public virtual ICollection<MDepartmentWig> MDepartmentWig { get; set; }
     }
 }

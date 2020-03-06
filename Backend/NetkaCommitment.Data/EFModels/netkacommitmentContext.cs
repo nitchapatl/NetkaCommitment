@@ -15,7 +15,7 @@ namespace NetkaCommitment.Data.EFModels
         {
         }
 
-        public virtual DbSet<MCompanyBigWig> MCompanyBigWig { get; set; }
+        public virtual DbSet<MCompanyLm> MCompanyLm { get; set; }
         public virtual DbSet<MCompanyWig> MCompanyWig { get; set; }
         public virtual DbSet<MDepartment> MDepartment { get; set; }
         public virtual DbSet<MDepartmentLm> MDepartmentLm { get; set; }
@@ -38,31 +38,36 @@ namespace NetkaCommitment.Data.EFModels
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<MCompanyBigWig>(entity =>
+            modelBuilder.Entity<MCompanyLm>(entity =>
             {
-                entity.HasKey(e => e.CompanyBigWigId)
+                entity.HasKey(e => e.CompanyLmId)
                     .HasName("PRIMARY");
 
-                entity.ToTable("m_company_big_wig");
+                entity.ToTable("m_company_lm");
 
-                entity.Property(e => e.CompanyBigWigId).HasColumnName("COMPANY_BIG_WIG_ID");
+                entity.HasIndex(e => e.CompanyWigId)
+                    .HasName("FK_m_company_lm_m_company_wig");
 
-                entity.Property(e => e.CompanyBigWigDescription)
-                    .HasColumnName("COMPANY_BIG_WIG_DESCRIPTION")
+                entity.Property(e => e.CompanyLmId).HasColumnName("COMPANY_LM_ID");
+
+                entity.Property(e => e.CompanyLmDescription)
+                    .HasColumnName("COMPANY_LM_DESCRIPTION")
                     .HasColumnType("varchar(500)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.CompanyBigWigName)
+                entity.Property(e => e.CompanyLmName)
                     .IsRequired()
-                    .HasColumnName("COMPANY_BIG_WIG_NAME")
+                    .HasColumnName("COMPANY_LM_NAME")
                     .HasColumnType("varchar(500)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
-                entity.Property(e => e.CompanyBigWigSequence).HasColumnName("COMPANY_BIG_WIG_SEQUENCE");
+                entity.Property(e => e.CompanyLmSequence).HasColumnName("COMPANY_LM_SEQUENCE");
 
-                entity.Property(e => e.CompanyBigWigYear).HasColumnName("COMPANY_BIG_WIG_YEAR");
+                entity.Property(e => e.CompanyLmValue).HasColumnName("COMPANY_LM_VALUE");
+
+                entity.Property(e => e.CompanyWigId).HasColumnName("COMPANY_WIG_ID");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
 
@@ -79,6 +84,11 @@ namespace NetkaCommitment.Data.EFModels
                 entity.Property(e => e.UpdatedDate)
                     .HasColumnName("UPDATED_DATE")
                     .HasColumnType("datetime");
+
+                entity.HasOne(d => d.CompanyWig)
+                    .WithMany(p => p.MCompanyLm)
+                    .HasForeignKey(d => d.CompanyWigId)
+                    .HasConstraintName("FK_m_company_lm_m_company_wig");
             });
 
             modelBuilder.Entity<MCompanyWig>(entity =>
@@ -88,12 +98,7 @@ namespace NetkaCommitment.Data.EFModels
 
                 entity.ToTable("m_company_wig");
 
-                entity.HasIndex(e => e.CompanyBigWigId)
-                    .HasName("FK_m_company_wig_m_company_big_wig");
-
                 entity.Property(e => e.CompanyWigId).HasColumnName("COMPANY_WIG_ID");
-
-                entity.Property(e => e.CompanyBigWigId).HasColumnName("COMPANY_BIG_WIG_ID");
 
                 entity.Property(e => e.CompanyWigDescription)
                     .HasColumnName("COMPANY_WIG_DESCRIPTION")
@@ -110,7 +115,7 @@ namespace NetkaCommitment.Data.EFModels
 
                 entity.Property(e => e.CompanyWigSequence).HasColumnName("COMPANY_WIG_SEQUENCE");
 
-                entity.Property(e => e.CompanyWigValue).HasColumnName("COMPANY_WIG_VALUE");
+                entity.Property(e => e.CompanyWigYear).HasColumnName("COMPANY_WIG_YEAR");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
 
@@ -127,11 +132,6 @@ namespace NetkaCommitment.Data.EFModels
                 entity.Property(e => e.UpdatedDate)
                     .HasColumnName("UPDATED_DATE")
                     .HasColumnType("datetime");
-
-                entity.HasOne(d => d.CompanyBigWig)
-                    .WithMany(p => p.MCompanyWig)
-                    .HasForeignKey(d => d.CompanyBigWigId)
-                    .HasConstraintName("FK_m_company_wig_m_company_big_wig");
             });
 
             modelBuilder.Entity<MDepartment>(entity =>
@@ -156,9 +156,8 @@ namespace NetkaCommitment.Data.EFModels
                     .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.DepartmentName)
-                    .IsRequired()
                     .HasColumnName("DEPARTMENT_NAME")
-                    .HasColumnType("varchar(50)")
+                    .HasColumnType("varchar(500)")
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
@@ -233,6 +232,9 @@ namespace NetkaCommitment.Data.EFModels
 
                 entity.ToTable("m_department_wig");
 
+                entity.HasIndex(e => e.CompanyLmId)
+                    .HasName("FK_m_department_wig_m_company_lm");
+
                 entity.HasIndex(e => e.CompanyWigId)
                     .HasName("FK_m_department_wig_m_company_wig");
 
@@ -240,6 +242,8 @@ namespace NetkaCommitment.Data.EFModels
                     .HasName("FK_m_department_wig_m_department");
 
                 entity.Property(e => e.DepartmentWigId).HasColumnName("DEPARTMENT_WIG_ID");
+
+                entity.Property(e => e.CompanyLmId).HasColumnName("COMPANY_LM_ID");
 
                 entity.Property(e => e.CompanyWigId).HasColumnName("COMPANY_WIG_ID");
 
@@ -275,6 +279,11 @@ namespace NetkaCommitment.Data.EFModels
                 entity.Property(e => e.UpdatedDate)
                     .HasColumnName("UPDATED_DATE")
                     .HasColumnType("datetime");
+
+                entity.HasOne(d => d.CompanyLm)
+                    .WithMany(p => p.MDepartmentWig)
+                    .HasForeignKey(d => d.CompanyLmId)
+                    .HasConstraintName("FK_m_department_wig_m_company_lm");
 
                 entity.HasOne(d => d.CompanyWig)
                     .WithMany(p => p.MDepartmentWig)
@@ -436,24 +445,24 @@ namespace NetkaCommitment.Data.EFModels
                 entity.Property(e => e.ApproveRemark)
                     .HasColumnName("APPROVE_REMARK")
                     .HasColumnType("varchar(500)")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.ApproveStatus)
                     .IsRequired()
                     .HasColumnName("APPROVE_STATUS")
                     .HasColumnType("varchar(50)")
                     .HasDefaultValueSql("'Watting for approval.'")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.ApproveType)
                     .IsRequired()
                     .HasColumnName("APPROVE_TYPE")
                     .HasColumnType("varchar(500)")
                     .HasDefaultValueSql("'ยาก'")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.CommitmentId).HasColumnName("COMMITMENT_ID");
 
@@ -491,8 +500,8 @@ namespace NetkaCommitment.Data.EFModels
                 entity.Property(e => e.CommitmentDescription)
                     .HasColumnName("COMMITMENT_DESCRIPTION")
                     .HasColumnType("varchar(500)")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.CommitmentFinishDate)
                     .HasColumnName("COMMITMENT_FINISH_DATE")
@@ -509,8 +518,8 @@ namespace NetkaCommitment.Data.EFModels
                     .IsRequired()
                     .HasColumnName("COMMITMENT_NAME")
                     .HasColumnType("varchar(500)")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.CommitmentNo)
                     .HasColumnName("COMMITMENT_NO")
@@ -519,8 +528,8 @@ namespace NetkaCommitment.Data.EFModels
                 entity.Property(e => e.CommitmentRemark)
                     .HasColumnName("COMMITMENT_REMARK")
                     .HasColumnType("varchar(500)")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.CommitmentStartDate)
                     .HasColumnName("COMMITMENT_START_DATE")
@@ -531,8 +540,8 @@ namespace NetkaCommitment.Data.EFModels
                     .HasColumnName("COMMITMENT_STATUS")
                     .HasColumnType("varchar(50)")
                     .HasDefaultValueSql("'Watting for approval.'")
-                    .HasCharSet("utf8mb4")
-                    .HasCollation("utf8mb4_0900_ai_ci");
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
 
