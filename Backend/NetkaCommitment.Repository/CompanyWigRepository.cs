@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace NetkaCommitment.Repository
 {
-    public class CompanyWigRepository<T> : BaseRepository, IRepository<MCompanyWig>
+    public class CompanyWigRepository : BaseRepository, IRepository<MCompanyWig>
     {
         public bool Delete(MCompanyWig obj)
         {

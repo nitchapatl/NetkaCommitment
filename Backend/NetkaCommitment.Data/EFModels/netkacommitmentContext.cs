@@ -22,6 +22,8 @@ namespace NetkaCommitment.Data.EFModels
         public virtual DbSet<MDepartmentWig> MDepartmentWig { get; set; }
         public virtual DbSet<MParentUser> MParentUser { get; set; }
         public virtual DbSet<MUser> MUser { get; set; }
+        public virtual DbSet<TAccessLog> TAccessLog { get; set; }
+        public virtual DbSet<TAccessToken> TAccessToken { get; set; }
         public virtual DbSet<TApprove> TApprove { get; set; }
         public virtual DbSet<TCommitment> TCommitment { get; set; }
         public virtual DbSet<TFirebaseNotification> TFirebaseNotification { get; set; }
@@ -31,7 +33,7 @@ namespace NetkaCommitment.Data.EFModels
         {
             if (!optionsBuilder.IsConfigured)
             {
-                #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseMySql("server=localhost;database=netkacommitment;user=root;password=1234;treattinyasboolean=true", x => x.ServerVersion("8.0.19-mysql"));
             }
         }
@@ -424,10 +426,108 @@ namespace NetkaCommitment.Data.EFModels
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_0900_ai_ci");
 
+                entity.Property(e => e.UserPasswordResetToken)
+                    .HasColumnName("USER_PASSWORD_RESET_TOKEN")
+                    .HasColumnType("varchar(50)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
                 entity.HasOne(d => d.Department)
                     .WithMany(p => p.MUser)
                     .HasForeignKey(d => d.DepartmentId)
                     .HasConstraintName("FK_m_user_m_department");
+            });
+
+            modelBuilder.Entity<TAccessLog>(entity =>
+            {
+                entity.HasKey(e => e.AccessLogId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("t_access_log");
+
+                entity.HasIndex(e => e.UserId)
+                    .HasName("FK_t_access_log_m_user");
+
+                entity.Property(e => e.AccessLogId).HasColumnName("ACCESS_LOG_ID");
+
+                entity.Property(e => e.AccessLogCreatedDate)
+                    .HasColumnName("ACCESS_LOG_CREATED_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.AccessLogDevice)
+                    .IsRequired()
+                    .HasColumnName("ACCESS_LOG_DEVICE")
+                    .HasColumnType("varchar(500)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.AccessLogKey)
+                    .IsRequired()
+                    .HasColumnName("ACCESS_LOG_KEY")
+                    .HasColumnType("varchar(500)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.AccessLogUrl)
+                    .IsRequired()
+                    .HasColumnName("ACCESS_LOG_URL")
+                    .HasColumnType("varchar(500)")
+                    .HasCharSet("utf8")
+                    .HasCollation("utf8_general_ci");
+
+                entity.Property(e => e.UserId).HasColumnName("USER_ID");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.TAccessLog)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_t_access_log_m_user");
+            });
+
+            modelBuilder.Entity<TAccessToken>(entity =>
+            {
+                entity.HasKey(e => e.AccessTokenId)
+                    .HasName("PRIMARY");
+
+                entity.ToTable("t_access_token");
+
+                entity.HasIndex(e => e.UserId)
+                    .HasName("FK_t_access_token_m_user");
+
+                entity.Property(e => e.AccessTokenId).HasColumnName("ACCESS_TOKEN_ID");
+
+                entity.Property(e => e.AccessTokenCreatedDate)
+                    .HasColumnName("ACCESS_TOKEN_CREATED_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.AccessTokenDevice)
+                    .IsRequired()
+                    .HasColumnName("ACCESS_TOKEN_DEVICE")
+                    .HasColumnType("varchar(500)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.AccessTokenExpriedDate)
+                    .HasColumnName("ACCESS_TOKEN_EXPRIED_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.AccessTokenKey)
+                    .IsRequired()
+                    .HasColumnName("ACCESS_TOKEN_KEY")
+                    .HasColumnType("varchar(500)")
+                    .HasCharSet("utf8mb4")
+                    .HasCollation("utf8mb4_0900_ai_ci");
+
+                entity.Property(e => e.AccessTokenUpdatedDate)
+                    .HasColumnName("ACCESS_TOKEN_UPDATED_DATE")
+                    .HasColumnType("datetime");
+
+                entity.Property(e => e.UserId).HasColumnName("USER_ID");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.TAccessToken)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK_t_access_token_m_user");
             });
 
             modelBuilder.Entity<TApprove>(entity =>

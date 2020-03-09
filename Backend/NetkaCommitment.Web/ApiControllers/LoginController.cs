@@ -4,43 +4,64 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NetkaCommitment.Business;
+using NetkaCommitment.Data.ViewModel;
 
 namespace NetkaCommitment.Web.ApiControllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoginController : ControllerBase
+    public class LoginController : BaseApiController
     {
-        // GET: api/Login
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
+        private readonly LoginBiz oLoginBiz = null;
+        public LoginController(IHttpContextAccessor oHttpContextAccessor) : base(oHttpContextAccessor) { 
+            oLoginBiz = new LoginBiz();
         }
 
-        // GET: api/Login/5
-        [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        [HttpPost("getuser")]
+        public IActionResult GetUser()
         {
-            return "value";
+            var result = oLoginBiz.GetUser(11);
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
         }
 
-        // POST: api/Login
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("autorize")]
+        public IActionResult Autorize([FromBody] LoginUserViewModel model)
         {
+            string strToken = oLoginBiz.Authorize(model);
+            if (!string.IsNullOrEmpty(strToken))
+            {
+                return StatusCode(StatusCodes.Status201Created, strToken);
+            }
+            else if (oLoginBiz.AuthorizeExist(model))
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, "Wrong password.");
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound, "Username not found");
+            }
         }
 
-        // PUT: api/Login/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost("forgotpassword")]
+        public IActionResult ForgotPassword([FromBody] LoginUserViewModel model)
         {
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            if (oLoginBiz.ForgotPassword(model))
+            {
+                return StatusCode(StatusCodes.Status205ResetContent);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound, "Username not found");
+            }
         }
     }
 }

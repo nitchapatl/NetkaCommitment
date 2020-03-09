@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NetkaCommitment.Business\NetkaCommitment.Business.csproj" />
     <ProjectReference Include="..\NetkaCommitment.Data\NetkaCommitment.Data.csproj" />
   </ItemGroup>
 
