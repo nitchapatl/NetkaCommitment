@@ -15,8 +15,10 @@ namespace NetkaCommitment.Data.EFModels
         public DateTime? UpdatedDate { get; set; }
         public uint? UpdatedBy { get; set; }
         public ulong IsDeleted { get; set; }
+        public uint ApproveUserId { get; set; }
         public uint CommitmentId { get; set; }
 
+        public virtual MUser ApproveUser { get; set; }
         public virtual TCommitment Commitment { get; set; }
     }
 }

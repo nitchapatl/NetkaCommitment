@@ -11,6 +11,8 @@ namespace NetkaCommitment.Data.EFModels
             MParentUserUser = new HashSet<MParentUser>();
             TAccessLog = new HashSet<TAccessLog>();
             TAccessToken = new HashSet<TAccessToken>();
+            TApprove = new HashSet<TApprove>();
+            TCommitment = new HashSet<TCommitment>();
             TFirebaseNotification = new HashSet<TFirebaseNotification>();
             TNotificationLog = new HashSet<TNotificationLog>();
         }
@@ -36,6 +38,8 @@ namespace NetkaCommitment.Data.EFModels
         public virtual ICollection<MParentUser> MParentUserUser { get; set; }
         public virtual ICollection<TAccessLog> TAccessLog { get; set; }
         public virtual ICollection<TAccessToken> TAccessToken { get; set; }
+        public virtual ICollection<TApprove> TApprove { get; set; }
+        public virtual ICollection<TCommitment> TCommitment { get; set; }
         public virtual ICollection<TFirebaseNotification> TFirebaseNotification { get; set; }
         public virtual ICollection<TNotificationLog> TNotificationLog { get; set; }
     }

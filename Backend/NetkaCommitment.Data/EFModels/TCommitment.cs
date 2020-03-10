@@ -11,7 +11,6 @@ namespace NetkaCommitment.Data.EFModels
         }
 
         public uint CommitmentId { get; set; }
-        public uint CommitmentLm { get; set; }
         public uint CommitmentNo { get; set; }
         public string CommitmentName { get; set; }
         public string CommitmentDescription { get; set; }
@@ -25,8 +24,11 @@ namespace NetkaCommitment.Data.EFModels
         public DateTime? UpdatedDate { get; set; }
         public uint? UpdatedBy { get; set; }
         public ulong IsDeleted { get; set; }
+        public uint CommitmentLm { get; set; }
+        public uint UserId { get; set; }
 
         public virtual MDepartmentLm CommitmentLmNavigation { get; set; }
+        public virtual MUser User { get; set; }
         public virtual ICollection<TApprove> TApprove { get; set; }
     }
 }

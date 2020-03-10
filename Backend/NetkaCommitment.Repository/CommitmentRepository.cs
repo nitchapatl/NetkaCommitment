@@ -9,15 +9,15 @@ namespace NetkaCommitment.Repository
     {
         public bool Delete(TCommitment obj)
         {
-            TCommitment oResult = db.TCommitment.Where(t => t.CommitmentId == obj.CommitmentId).FirstOrDefault();
-            if (oResult == null)
+            if (!db.TCommitment.Any(t => t.CommitmentId == obj.CommitmentId))
             {
                 return false;
             }
 
-            oResult.UpdatedBy = 1;
-            oResult.UpdatedDate = DateTime.Now;
-            oResult.IsDeleted = 1;
+            obj.UpdatedBy = 1;
+            obj.UpdatedDate = DateTime.Now;
+            obj.IsDeleted = 1;
+            db.Entry(obj).State = EntityState.Modified;
             db.SaveChanges();
 
             return true;
@@ -45,6 +45,7 @@ namespace NetkaCommitment.Repository
             obj.CreatedDate = DateTime.Now;
             obj.UpdatedBy = null;
             obj.UpdatedDate = null;
+            obj.IsDeleted = 0;
             db.TCommitment.Add(obj);
             db.SaveChanges();
 
@@ -61,6 +62,7 @@ namespace NetkaCommitment.Repository
 
             obj.UpdatedBy = 1;
             obj.UpdatedDate = DateTime.Now;
+            obj.IsDeleted = 0;
             db.Entry(obj).State = EntityState.Modified;
             db.SaveChanges();
 

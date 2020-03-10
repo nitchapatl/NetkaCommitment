@@ -15,7 +15,7 @@ namespace NetkaCommitment.Business
             oMainRepository = new ApproveRepository();
         }
 
-        public bool Approval() {
+        public bool ApproveOrReject() {
             return oMainRepository.Insert(new TApprove
             {
                 ApproveNo = (uint)db.TApprove.Where(t=>t.CommitmentId == 1).Count() + 1,

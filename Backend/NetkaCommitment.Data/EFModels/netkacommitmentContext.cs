@@ -33,7 +33,7 @@ namespace NetkaCommitment.Data.EFModels
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseMySql("server=localhost;database=netkacommitment;user=root;password=1234;treattinyasboolean=true", x => x.ServerVersion("8.0.19-mysql"));
             }
         }
@@ -537,6 +537,9 @@ namespace NetkaCommitment.Data.EFModels
 
                 entity.ToTable("t_approve");
 
+                entity.HasIndex(e => e.ApproveUserId)
+                    .HasName("FK_t_approve_m_user");
+
                 entity.HasIndex(e => e.CommitmentId)
                     .HasName("FK_t_approve_t_commitment");
 
@@ -568,6 +571,8 @@ namespace NetkaCommitment.Data.EFModels
                     .HasCharSet("utf8")
                     .HasCollation("utf8_general_ci");
 
+                entity.Property(e => e.ApproveUserId).HasColumnName("APPROVE_USER_ID");
+
                 entity.Property(e => e.CommitmentId).HasColumnName("COMMITMENT_ID");
 
                 entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
@@ -586,6 +591,12 @@ namespace NetkaCommitment.Data.EFModels
                     .HasColumnName("UPDATED_DATE")
                     .HasColumnType("datetime");
 
+                entity.HasOne(d => d.ApproveUser)
+                    .WithMany(p => p.TApprove)
+                    .HasForeignKey(d => d.ApproveUserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_t_approve_m_user");
+
                 entity.HasOne(d => d.Commitment)
                     .WithMany(p => p.TApprove)
                     .HasForeignKey(d => d.CommitmentId)
@@ -602,6 +613,9 @@ namespace NetkaCommitment.Data.EFModels
 
                 entity.HasIndex(e => e.CommitmentLm)
                     .HasName("FK_t_commitment_m_department_lm");
+
+                entity.HasIndex(e => e.UserId)
+                    .HasName("FK_t_commitment_m_user");
 
                 entity.Property(e => e.CommitmentId).HasColumnName("COMMITMENT_ID");
 
@@ -667,11 +681,19 @@ namespace NetkaCommitment.Data.EFModels
                     .HasColumnName("UPDATED_DATE")
                     .HasColumnType("datetime");
 
+                entity.Property(e => e.UserId).HasColumnName("USER_ID");
+
                 entity.HasOne(d => d.CommitmentLmNavigation)
                     .WithMany(p => p.TCommitment)
                     .HasForeignKey(d => d.CommitmentLm)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_t_commitment_m_department_lm");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.TCommitment)
+                    .HasForeignKey(d => d.UserId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_t_commitment_m_user");
             });
 
             modelBuilder.Entity<TFirebaseNotification>(entity =>
