@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `m_company_wig` (
   PRIMARY KEY (`COMPANY_WIG_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
--- Dumping data for table netkacommitment.m_company_wig: ~1 rows (approximately)
+-- Dumping data for table netkacommitment.m_company_wig: ~0 rows (approximately)
 DELETE FROM `m_company_wig`;
 /*!40000 ALTER TABLE `m_company_wig` DISABLE KEYS */;
 INSERT INTO `m_company_wig` (`COMPANY_WIG_ID`, `COMPANY_WIG_NAME`, `COMPANY_WIG_YEAR`, `COMPANY_WIG_DESCRIPTION`, `COMPANY_WIG_SEQUENCE`, `CREATED_DATE`, `CREATED_BY`, `UPDATED_DATE`, `UPDATED_BY`, `IS_DELETED`) VALUES
@@ -360,9 +360,12 @@ CREATE TABLE IF NOT EXISTS `t_approve` (
   `UPDATED_DATE` datetime DEFAULT NULL,
   `UPDATED_BY` int unsigned DEFAULT NULL,
   `IS_DELETED` bit(1) NOT NULL,
+  `APPROVE_USER_ID` int unsigned NOT NULL,
   `COMMITMENT_ID` int unsigned NOT NULL,
   PRIMARY KEY (`APPROVE_ID`),
   KEY `FK_t_approve_t_commitment` (`COMMITMENT_ID`),
+  KEY `FK_t_approve_m_user` (`APPROVE_USER_ID`),
+  CONSTRAINT `FK_t_approve_m_user` FOREIGN KEY (`APPROVE_USER_ID`) REFERENCES `m_user` (`USER_ID`),
   CONSTRAINT `FK_t_approve_t_commitment` FOREIGN KEY (`COMMITMENT_ID`) REFERENCES `t_commitment` (`COMMITMENT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -375,7 +378,6 @@ DELETE FROM `t_approve`;
 DROP TABLE IF EXISTS `t_commitment`;
 CREATE TABLE IF NOT EXISTS `t_commitment` (
   `COMMITMENT_ID` int unsigned NOT NULL AUTO_INCREMENT,
-  `COMMITMENT_LM` int unsigned NOT NULL,
   `COMMITMENT_NO` int unsigned NOT NULL DEFAULT '1',
   `COMMITMENT_NAME` varchar(500) NOT NULL,
   `COMMITMENT_DESCRIPTION` varchar(500) DEFAULT NULL,
@@ -389,9 +391,13 @@ CREATE TABLE IF NOT EXISTS `t_commitment` (
   `UPDATED_DATE` datetime DEFAULT NULL,
   `UPDATED_BY` int unsigned DEFAULT NULL,
   `IS_DELETED` bit(1) NOT NULL,
+  `COMMITMENT_LM` int unsigned NOT NULL,
+  `USER_ID` int unsigned NOT NULL,
   PRIMARY KEY (`COMMITMENT_ID`),
   KEY `FK_t_commitment_m_department_lm` (`COMMITMENT_LM`),
-  CONSTRAINT `FK_t_commitment_m_department_lm` FOREIGN KEY (`COMMITMENT_LM`) REFERENCES `m_department_lm` (`LM_ID`)
+  KEY `FK_t_commitment_m_user` (`USER_ID`),
+  CONSTRAINT `FK_t_commitment_m_department_lm` FOREIGN KEY (`COMMITMENT_LM`) REFERENCES `m_department_lm` (`LM_ID`),
+  CONSTRAINT `FK_t_commitment_m_user` FOREIGN KEY (`USER_ID`) REFERENCES `m_user` (`USER_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Dumping data for table netkacommitment.t_commitment: ~0 rows (approximately)
