@@ -9,31 +9,24 @@ namespace NetkaCommitment.Common
 {
     public static class NotificationHelpers
     {
-        public static async Task<List<SendResponse>> SendPushNotificationAsync(List<string> lsRegistationToken) {
+        public static async Task<List<SendResponse>> SendPushNotificationAsync(List<string> lsRegistationToken, Notification model)
+        {
             var message = new MulticastMessage()
             {
                 Tokens = lsRegistationToken,
-                Data = new Dictionary<string, string>()
-                {
-                    { "score", "850" },
-                    { "time", "2:45" },
-                },
+                Notification = model
             };
 
             var response = await FirebaseMessaging.DefaultInstance.SendMulticastAsync(message);
-           return response.Responses.ToList();
+            return response.Responses.ToList();
         }
 
-        public static async Task<string> SendPushNotificationAsync(string registationToken)
+        public static async Task<string> SendPushNotificationAsync(string registationToken, Notification model)
         {
             var message = new Message()
             {
                 Token = registationToken,
-                Data = new Dictionary<string, string>()
-                {
-                    { "score", "850" },
-                    { "time", "2:45" },
-                },
+                Notification = model
             };
 
             return await FirebaseMessaging.DefaultInstance.SendAsync(message);
