@@ -9,15 +9,15 @@ namespace NetkaCommitment.Repository
     {
         public bool Delete(MDepartmentWig obj)
         {
-            MDepartmentWig oResult = db.MDepartmentWig.Where(t => t.DepartmentWigId == obj.DepartmentWigId).FirstOrDefault();
-            if (oResult == null)
+            if (!db.MDepartmentWig.Any(t => t.DepartmentWigId == obj.DepartmentWigId))
             {
                 return false;
             }
 
-            oResult.UpdatedBy = 1;
-            oResult.UpdatedDate = DateTime.Now;
-            oResult.IsDeleted = 1;
+            obj.UpdatedBy = 1;
+            obj.UpdatedDate = DateTime.Now;
+            obj.IsDeleted = 1;
+            db.Entry(obj).State = EntityState.Modified;
             db.SaveChanges();
 
             return true;

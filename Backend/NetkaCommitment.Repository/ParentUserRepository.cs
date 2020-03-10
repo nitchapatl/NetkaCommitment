@@ -9,15 +9,15 @@ namespace NetkaCommitment.Repository
     {
         public bool Delete(MParentUser obj)
         {
-            MParentUser oResult = db.MParentUser.Where(t => t.ParentUserId == obj.ParentUserId).FirstOrDefault();
-            if (oResult == null)
+            if (!db.MParentUser.Any(t => t.ParentUserId == obj.ParentUserId))
             {
                 return false;
             }
 
-            oResult.UpdatedBy = 1;
-            oResult.UpdatedDate = DateTime.Now;
-            oResult.IsDeleted = 1;
+            obj.UpdatedBy = 1;
+            obj.UpdatedDate = DateTime.Now;
+            obj.IsDeleted = 1;
+            db.Entry(obj).State = EntityState.Modified;
             db.SaveChanges();
 
             return true;

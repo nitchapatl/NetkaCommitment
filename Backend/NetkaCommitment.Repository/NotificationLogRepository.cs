@@ -9,15 +9,15 @@ namespace NetkaCommitment.Repository
     {
         public bool Delete(TNotificationLog obj)
         {
-            TNotificationLog oResult = db.TNotificationLog.Where(t => t.NotificationId == obj.NotificationId).FirstOrDefault();
-            if (oResult == null)
+            if (!db.TNotificationLog.Any(t => t.NotificationId == obj.NotificationId))
             {
                 return false;
             }
 
-            oResult.UpdatedBy = 1;
-            oResult.UpdatedDate = DateTime.Now;
-            oResult.IsDeleted = 1;
+            obj.UpdatedBy = 1;
+            obj.UpdatedDate = DateTime.Now;
+            obj.IsDeleted = 1;
+            db.Entry(obj).State = EntityState.Modified;
             db.SaveChanges();
 
             return true;

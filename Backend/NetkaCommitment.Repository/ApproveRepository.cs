@@ -10,15 +10,15 @@ namespace NetkaCommitment.Repository
 
         public bool Delete(TApprove obj)
         {
-            TApprove oResult = db.TApprove.Where(t => t.ApproveId == obj.ApproveId).FirstOrDefault();
-            if (oResult == null)
+            if (!db.TApprove.Any(t => t.ApproveId == obj.ApproveId))
             {
                 return false;
             }
 
-            oResult.UpdatedBy = 1;
-            oResult.UpdatedDate = DateTime.Now;
-            oResult.IsDeleted = 1;
+            obj.UpdatedBy = 1;
+            obj.UpdatedDate = DateTime.Now;
+            obj.IsDeleted = 1;
+            db.Entry(obj).State = EntityState.Modified;
             db.SaveChanges();
 
             return true;
