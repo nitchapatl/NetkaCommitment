@@ -8,10 +8,6 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
 COPY ["NetkaCommitment.Web/NetkaCommitment.Web.csproj", "NetkaCommitment.Web/"]
-COPY ["NetkaCommitment.Business/NetkaCommitment.Business.csproj", "NetkaCommitment.Business/"]
-COPY ["NetkaCommitment.Common/NetkaCommitment.Common.csproj", "NetkaCommitment.Common/"]
-COPY ["NetkaCommitment.Data/NetkaCommitment.Data.csproj", "NetkaCommitment.Data/"]
-COPY ["NetkaCommitment.Repository/NetkaCommitment.Repository.csproj", "NetkaCommitment.Repository/"]
 RUN dotnet restore "NetkaCommitment.Web/NetkaCommitment.Web.csproj"
 COPY . .
 WORKDIR "/src/NetkaCommitment.Web"
