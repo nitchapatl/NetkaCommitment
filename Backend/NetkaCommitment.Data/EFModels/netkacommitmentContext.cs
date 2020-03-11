@@ -34,7 +34,7 @@ namespace NetkaCommitment.Data.EFModels
             if (!optionsBuilder.IsConfigured)
             {
                 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseMySql("server=localhost;database=netkacommitment;user=root;password=1234;treattinyasboolean=true", x => x.ServerVersion("8.0.19-mysql"));
+                optionsBuilder.UseMySql("server=db;database=netkacommitment;user=root;password=1234;treattinyasboolean=true", x => x.ServerVersion("8.0.19-mysql"));
             }
         }
 

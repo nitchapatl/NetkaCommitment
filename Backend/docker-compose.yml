@@ -1,8 +1,30 @@
 version: '3.4'
 
 services:
-  netkacommitment.web:
-    image: ${DOCKER_REGISTRY-}netkacommitmentweb
-    build:
-      context: .
-      dockerfile: NetkaCommitment.Web/Dockerfile
+    db:
+        image: mysql
+        ports: 
+            - "3306:3306"
+        environment:
+          MYSQL_ROOT_PASSWORD: 1234
+        networks:
+            - default
+    netkacommitment.web:
+        image: ${DOCKER_REGISTRY-}netkacommitmentweb
+        build:
+            context: .
+            dockerfile: NetkaCommitment.Web/Dockerfile
+        links:
+          - db:db
+        ports:
+          - 8888:8888
+          - 9999:9999
+        restart: always
+    phpmyadmin:
+          image: phpmyadmin/phpmyadmin
+          links: 
+              - db:db
+          ports:
+              - "8000:80"
+          environment:
+              MYSQL_ROOT_PASSWORD: 1234
