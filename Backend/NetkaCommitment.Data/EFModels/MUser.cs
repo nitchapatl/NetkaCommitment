@@ -31,6 +31,8 @@ namespace NetkaCommitment.Data.EFModels
         public DateTime? UpdatedDate { get; set; }
         public uint? UpdatedBy { get; set; }
         public ulong IsDeleted { get; set; }
+        public ulong AllowNotification { get; set; }
+        public ulong DoNotDisturb { get; set; }
         public uint? DepartmentId { get; set; }
 
         public virtual MDepartment Department { get; set; }

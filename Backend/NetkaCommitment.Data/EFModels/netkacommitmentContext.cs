@@ -358,6 +358,10 @@ namespace NetkaCommitment.Data.EFModels
 
                 entity.Property(e => e.UserId).HasColumnName("USER_ID");
 
+                entity.Property(e => e.AllowNotification)
+                    .HasColumnName("ALLOW_NOTIFICATION")
+                    .HasColumnType("bit(1)");
+
                 entity.Property(e => e.CreatedBy).HasColumnName("CREATED_BY");
 
                 entity.Property(e => e.CreatedDate)
@@ -365,6 +369,10 @@ namespace NetkaCommitment.Data.EFModels
                     .HasColumnType("datetime");
 
                 entity.Property(e => e.DepartmentId).HasColumnName("DEPARTMENT_ID");
+
+                entity.Property(e => e.DoNotDisturb)
+                    .HasColumnName("DO_NOT_DISTURB")
+                    .HasColumnType("bit(1)");
 
                 entity.Property(e => e.IsDeleted)
                     .HasColumnName("IS_DELETED")
