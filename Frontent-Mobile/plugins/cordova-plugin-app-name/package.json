@@ -1,0 +1,66 @@
+{
+  "_from": "cordova-plugin-app-name@^1.0.6",
+  "_id": "cordova-plugin-app-name@1.0.7",
+  "_inBundle": false,
+  "_integrity": "sha512-FLgupy1VKwuk0s6H1W+U6DTK1KusAEkHtwP1zta8kjAts3Vf2nB/tQ5QAKcxVFUymEhLZOCE4KVE5iv8Q3ergQ==",
+  "_location": "/cordova-plugin-app-name",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "cordova-plugin-app-name@^1.0.6",
+    "name": "cordova-plugin-app-name",
+    "escapedName": "cordova-plugin-app-name",
+    "rawSpec": "^1.0.6",
+    "saveSpec": null,
+    "fetchSpec": "^1.0.6"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-app-name/-/cordova-plugin-app-name-1.0.7.tgz",
+  "_shasum": "394c756ffacdd107f3bc944d8ed9cc50a931eec5",
+  "_spec": "cordova-plugin-app-name@^1.0.6",
+  "_where": "/Users/pockiezzz/Documents/GitHub/NetkaCommitment/Frontent-Mobile",
+  "bugs": {
+    "url": "https://github.com/blakgeek/cordova-plugin-app-name/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "cordova-plugin-app-name",
+    "platforms": [
+      "ios",
+      "android"
+    ]
+  },
+  "dependencies": {
+    "semver": "^6.3.0",
+    "xml2js": "^0.4.16"
+  },
+  "deprecated": false,
+  "description": "A Cordova/PhoneGap plugin that allows you to give you app a name with spaces and special characters and stuff.",
+  "devDependencies": {
+    "libxmljs": "^0.18.4"
+  },
+  "homepage": "https://github.com/blakgeek/cordova-plugin-app-name",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "cordova:plugin",
+    "spaces",
+    "app",
+    "name",
+    "rename"
+  ],
+  "license": "MIT",
+  "name": "cordova-plugin-app-name",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/blakgeek/cordova-plugin-app-name.git"
+  },
+  "scripts": {
+    "postversion": "node scripts/sync-plugin-version.js; git add plugin.xml; git commit plugin.xml -m \"v${npm_package_version}\""
+  },
+  "version": "1.0.7"
+}

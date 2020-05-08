@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1014599454361",
+    "firebase_url": "https://netkacommitment.firebaseio.com",
+    "project_id": "netkacommitment",
+    "storage_bucket": "netkacommitment.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014599454361:android:776048c3abfb852553b208",
+        "android_client_info": {
+          "package_name": "com.netkasystem.netkacommitment"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014599454361-9b1uat50p7esroklb0o568e7c3a5k824.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6ZVXX-oKbierrVCOQRmA-yT-Cq_Zln14"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014599454361-9b1uat50p7esroklb0o568e7c3a5k824.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1014599454361-vmfs6pl8mvdft1jghhec7mcsar106ll1.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.netkasystem.netkacommitment"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

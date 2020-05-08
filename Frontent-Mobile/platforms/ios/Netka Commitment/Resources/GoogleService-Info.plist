@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>CLIENT_ID</key>
+    <string>1014599454361-vmfs6pl8mvdft1jghhec7mcsar106ll1.apps.googleusercontent.com</string>
+    <key>REVERSED_CLIENT_ID</key>
+    <string>com.googleusercontent.apps.1014599454361-vmfs6pl8mvdft1jghhec7mcsar106ll1</string>
+    <key>API_KEY</key>
+    <string>AIzaSyBKjYv10xj2gjfjS15t-3JHVKQpDty53MA</string>
+    <key>GCM_SENDER_ID</key>
+    <string>1014599454361</string>
+    <key>PLIST_VERSION</key>
+    <string>1</string>
+    <key>BUNDLE_ID</key>
+    <string>com.netkasystem.netkacommitment</string>
+    <key>PROJECT_ID</key>
+    <string>netkacommitment</string>
+    <key>STORAGE_BUCKET</key>
+    <string>netkacommitment.appspot.com</string>
+    <key>IS_ADS_ENABLED</key>
+    <false/>
+    <key>IS_ANALYTICS_ENABLED</key>
+    <false/>
+    <key>IS_APPINVITE_ENABLED</key>
+    <true/>
+    <key>IS_GCM_ENABLED</key>
+    <true/>
+    <key>IS_SIGNIN_ENABLED</key>
+    <true/>
+    <key>GOOGLE_APP_ID</key>
+    <string>1:1014599454361:ios:c053d0017b7d1a5753b208</string>
+    <key>DATABASE_URL</key>
+    <string>https://netkacommitment.firebaseio.com</string>
+    <key>FIREBASE_ANALYTICS_COLLECTION_ENABLED</key>
+    <string>false</string>
+    <key>FIREBASE_PERFORMANCE_COLLECTION_ENABLED</key>
+    <string>true</string>
+    <key>FIREBASE_CRASHLYTICS_COLLECTION_ENABLED</key>
+    <string>true</string>
+  </dict>
+</plist>
