@@ -1,3 +1,85 @@
+getDDLDepartmentWIG();
+
+function getDDLDepartmentWIG(){
+	$.ajax({
+		type:'POST',
+		contentType: 'application/json; charset=utf-8',
+		url: 'https://localhost:32768/api/commitment/getDepartmentWig',
+		data: '',
+		dataType: "json",
+		success: function (data,status){
+			data.forEach(function(item){
+				$('#ddlDepartmentWIG').append($('<option></option>').attr('value',item.WigID).text("W" + item.WigID + ":" + item.WigName));
+			});
+		},
+		error: function (data,status){
+			console.log(data);
+		}
+	});
+}
+
+function getDDLDepartmentLM(wigID){
+	//check null or empty
+	if(!wigID){
+		return;
+	}
+
+	$.ajax({
+		type:'POST',
+		contentType: 'application/json; charset=utf-8',
+		url: 'https://localhost:32768/api/commitment/getDepartmentWig',
+		data: '',
+		dataType: "json",
+		success: function (data,status){
+			$('#ddlDepartmentLM').empty();
+			for(var i in data){
+				if(data[i].WigID==wigID){
+					data[i].LmList.forEach(function(item,index){
+						var id = index+1; 
+						$('#ddlDepartmentLM').append($('<option></option>').attr('value',item.LmID).text("LM" + id + ":" + item.LmName));
+					});				
+				}
+			}
+		},
+		error: function (data,status){
+			console.log(data);
+		}
+	});
+}
+
+function addCommitment(){
+	var txtStartDate = $('#txtStartDate').val();
+	var txtCommitment = $('#txtCommitment').val();
+	var ddlDepartmentWig = $('#ddlDepartmentWIG').val();
+	var ddlDepartmentLm = $('#ddlDepartmentLM').val();
+	var message = "Warning!"
+	if(!ddlDepartmentWig){
+		message = "Please select WIG";
+		//$('#lblWarning').css('display','block');
+		$('#notification-1').addClass('notification-active');
+		//$('#btnAdd').attr('data-notification','notification-1');
+	}else if(!ddlDepartmentLm){
+		message = "Please select LM";
+		$('#lblWarning').css('display','block');
+	}else if(txtCommitment==""){
+		message = "Please input commitment";
+		//$('#lblWarning').css('display','block');
+		$('#notification-1').addClass('notification-active');
+		//$('#btnAdd').attr('data-notification','notification-1');
+	}else if(txtStartDate==""){
+		message = "Please input startdate";
+		$('#lblWarning').css('display','block');
+	}else{
+		//$('#lblWarning').css('display','none');
+		$('#notification-1').removeClass('notification-active');
+		//$('#btnAdd').attr('data-notification','notification-1');
+	}
+	$('#lblWarning span').text(message);	
+	//$('#notification-1').addClass('notification-inactive');
+}
+
+
+
 (function($) {
     Highcharts.chart('container', {
         credits: {
@@ -8,7 +90,7 @@
             backgroundColor: 'transparent'
         },
         title: {
-            text: 'This Commitment'
+            text: 'Commitment'
         },
         subtitle: {
             text: 'Overall'
