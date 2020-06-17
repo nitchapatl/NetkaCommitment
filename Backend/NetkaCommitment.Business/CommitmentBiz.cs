@@ -1,5 +1,7 @@
 ﻿using NetkaCommitment.Data.EFModels;
+using NetkaCommitment.Data.ViewModel;
 using NetkaCommitment.Repository;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +34,6 @@ namespace NetkaCommitment.Business
                 CommitmentStatus = db.MParentUser.Any(t => t.UserId == 11) ? "Watting for approve." : "In-Progress"
             });
         }
-
         public bool UpdateCommitment()
         {
             var oCommitment = oCommitmentRepository.Get().Where(t => t.CommitmentId == 1 && t.IsDeleted == 0).FirstOrDefault();
@@ -66,6 +67,23 @@ namespace NetkaCommitment.Business
             }
 
             return false;
+        }
+        public List<DepartmentWigDropdownlistViewModel> getDepartmentWig(uint departmentID)
+        {
+            return (from wig in db.MDepartmentWig
+                    where wig.DepartmentId == departmentID
+                    select new DepartmentWigDropdownlistViewModel
+                    {
+                        WigID = wig.DepartmentWigId,
+                        WigName = wig.DepartmentWigName,
+                        LmList = (from lm in db.MDepartmentLm
+                                  where lm.DepartmentWigId == wig.DepartmentWigId
+                                  select new DepartmentLMDropdownlistViewModel
+                                  {
+                                      LmID = lm.LmId,
+                                      LmName = lm.LmName
+                                  }).ToList()
+                    }).ToList();
         }
     }
 }
