@@ -33,5 +33,19 @@ namespace NetkaCommitment.Web.ApiControllers
             }
         }
 
+        [HttpPost("getDepartmentWig")]
+        public IActionResult getDepartmentWig() 
+        {
+            var result = oCommitmentBiz.getDepartmentWig(5);
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else 
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
     }
 }

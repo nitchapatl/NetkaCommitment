@@ -45,6 +45,14 @@ namespace NetkaCommitment.Web
             services.AddDbContextPool<NetkaCommitmentContext>(options => options.UseMySql("Server=127.0.0.1;port=3306;Database=netkacommitment;User=root;Password=1234;",
                 mySqlOptions => mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql))
             ));
+
+            services.AddCors(options => {
+                options.AddPolicy("CORSPolicy", builder => builder
+                 .AllowAnyHeader()
+                 .AllowAnyOrigin()
+                 .AllowAnyMethod());
+            });
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -66,6 +74,8 @@ namespace NetkaCommitment.Web
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("CORSPolicy");
 
             app.UseEndpoints(endpoints =>
             {
