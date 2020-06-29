@@ -25,6 +25,7 @@ namespace NetkaCommitment.Data.ViewModel
     {
         public uint CommitmentId { get; set; }
         public uint DepartmentLmId { get; set; }
+        public string DepartmentLmName { get; set; }
         public uint DepartmentWigId { get; set; }
         public uint CompanyLmId { get; set; }
         public uint CompanyWigId { get; set; }

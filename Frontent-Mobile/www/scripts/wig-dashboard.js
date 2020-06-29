@@ -116,14 +116,18 @@ function getDashboardCommitmentInfo() {
             console.log(data);
 
             $.each(data, function(i, item){
+                
+                var startdate = new Date(item.CommitmentStartDate);
+                var finishdate = new Date(item.CommitmentFinishDate);
+
                 $("#wig-dashboard-table").append(
                         "<tr><td>" + item.CommitmentNo + "</td>" 
-                      + "<td>" + item.CommitmentName + "</td>"
-                      + "<td>" + item.CommitmentDescription + "</td>"
+                      + "<td class='color-green1-dark'>" + item.CommitmentName + "</td>"
                       + "<td>" + item.CommitmentRemark + "</td>"
-                      + "<td>" + item.CommitmentStartDate + "</td>"
-                      + "<td>" + item.CommitmentFinishDate + "</td>"
-                      + "<td>" + item.CommitmentStatus + "</td>"
+                      + "<td>" + item.DepartmentLmName + "</td>"
+                      + "<td class='color-yellow1-dark'>" + moment(startdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
+                      + "<td class='color-yellow1-dark'>" + moment(finishdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
+                      + "<td class='color-blue1-dark'>" + item.CommitmentStatus + "</td>"
                       + "</tr>");
                                 
             });
