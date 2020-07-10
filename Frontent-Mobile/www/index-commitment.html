@@ -1,6 +1,5 @@
 <!DOCTYPE HTML>
 <html lang="en">
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -33,6 +32,60 @@
             <div class="clear"></div>
         </div>
         <div class="page-content header-clear-small">
+			
+
+			<!-- Content -->
+			<div class="content-boxed">
+				<div class="content"> 
+					<!-- Warning -->
+					<div id="notification-1" class="notification-style notification-ios bg-dark1-dark">
+						<span class="notification-icon">
+							<i class="fa fa-bell"></i>
+							<em>Enabled</em>
+							<i class="fa fa-times-circle"></i>
+						</span>
+						<h1 class="font-15">All Good</h1>
+						<p>
+							I'm a notification. I show at the top or bottom of the page.
+						</p>
+					</div> 
+					<div id="lblWarning" class="shadow-large alert alert-large alert-round-medium bg-dark1-dark" style="display:none">
+						<i class="fa fa-exclamation-triangle"></i>
+						<strong class="uppercase ultrabold">Warning</strong>
+						<span>Warning!</span>
+						<i class="fa fa-times"></i>
+					</div> 
+
+					<div class="input-style input-style-2 input-required">
+						<em><i class="fa fa-angle-down"></i></em>
+						<span>Select WIG</span>
+						<select id="ddlDepartmentWIG" onchange="getDDLDepartmentLM($('#ddlDepartmentWIG').val());">
+							<option value="default" disabled selected>Select WIG</option>
+						</select>
+					</div>
+					<div class="input-style input-style-2 input-required">
+						<em><i class="fa fa-angle-down"></i></em>
+						<span>Select LM</span>
+						<select id="ddlDepartmentLM"">
+							<option value="default" disabled selected>Select LM</option>
+						</select>
+					</div>
+					<div class="input-style input-style-1 input-required">
+						<span>Enter your Commitment</span>
+						<em>(required)</em>
+						<textarea id="txtCommitment" placeholder="Enter your Commitment"></textarea>
+					</div>
+					<div class="input-style input-style-1 input-required one-half">
+						<span>Start Date</span>
+						<em><i class="fa fa-angle-down"></i></em>
+						<input id="txtStartDate" type="date" value="1980-08-26">
+					</div>
+					<a href="#" id="btnAdd" class="button button-m shadow-small bg-blue2-dark" onclick="addCommitment();">Add</a>
+
+				</div>
+			</div>
+
+			<!-- Graph -->
             <div id="container"></div>
             <div class="content-boxed">
                 <div class="content">
@@ -239,7 +292,7 @@
         </div>
         <div class="menu-hider"></div>
     </div>
-    <script type="text/javascript" src="cordova.js"></script>
+    <!-- <script type="text/javascript" src="cordova.js"></script> -->
     <script type="text/javascript" src="scripts/jquery.js"></script>
     <script type="text/javascript" src="scripts/plugins.js"></script>
     <script type="text/javascript" src="scripts/custom.js"></script>
