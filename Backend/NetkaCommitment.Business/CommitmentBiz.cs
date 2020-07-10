@@ -1,4 +1,5 @@
-﻿using NetkaCommitment.Data.EFModels;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using NetkaCommitment.Data.EFModels;
 using NetkaCommitment.Data.ViewModel;
 using NetkaCommitment.Repository;
 using Newtonsoft.Json.Converters;
@@ -19,13 +20,14 @@ namespace NetkaCommitment.Business
             oCommitmentRepository = new CommitmentRepository();
         }
 
-        public bool InsertCommitment()
+        public bool InsertCommitment(uint lmId,string commitmentName)
         {
             return oCommitmentRepository.Insert(new TCommitment
             {
-                CommitmentLm = 1,
-                CommitmentNo = 1,
-                CommitmentName = "",
+                UserId = 11,
+
+                CommitmentLm = lmId,
+                CommitmentName = commitmentName,
                 CommitmentDescription = "",
                 CommitmentRemark = "",
                 CommitmentStartDate = DateTime.Now,
@@ -34,35 +36,45 @@ namespace NetkaCommitment.Business
                 CommitmentStatus = db.MParentUser.Any(t => t.UserId == 11) ? "Watting for approve." : "In-Progress"
             });
         }
-        public bool UpdateCommitment()
+        public bool UpdateCommitment(TCommitmentViewModel obj)
         {
-            var oCommitment = oCommitmentRepository.Get().Where(t => t.CommitmentId == 1 && t.IsDeleted == 0).FirstOrDefault();
+            var oCommitment = oCommitmentRepository.Get().Where(t => t.CommitmentId == obj.CommitmentId && t.IsDeleted == 0).FirstOrDefault();
             if (oCommitment != null)
             {
-                oCommitment.CommitmentStatus = db.MParentUser.Any(t => t.UserId == 11) ? "Watting for re-approve." : "In-Progress";
+                if (obj.CommitmentStatus=="done") {
+                    oCommitment.CommitmentFinishDate = DateTime.Now;
+                    oCommitment.CommitmentStatus = db.MParentUser.Any(t => t.UserId == obj.UpdatedBy) ? "Watting for done re-approve." : "Done";
+                    return oCommitmentRepository.Update(oCommitment);
+                } else if (obj.CommitmentStatus=="fail") {
+                    oCommitment.CommitmentRemark = obj.CommitmentRemark;
+                    oCommitment.CommitmentStatus = db.MParentUser.Any(t => t.UserId == obj.UpdatedBy) ? "Watting for fail re-approve." : "Failed";
+                    return oCommitmentRepository.Update(oCommitment);
+                }
+            }
+
+            return false;
+        }
+        public bool PostponeCommitment(TCommitmentViewModel obj) //uint commitmentId, uint? updatedBy
+        {
+            var oCommitment = oCommitmentRepository.Get().Where(t => t.CommitmentId == obj.CommitmentId && t.IsDeleted == 0).FirstOrDefault();
+            if (oCommitment != null)
+            {
+                //oCommitment.CommitmentNo += 1;
+                oCommitment.CommitmentStartDate = obj.CommitmentStartDate;
+                oCommitment.CommitmentRemark = obj.CommitmentRemark;
+                oCommitment.CommitmentStatus = db.MParentUser.Any(t => t.UserId == obj.UpdatedBy) ? "Watting for postpone re-approve." : "Postpone";
                 return oCommitmentRepository.Update(oCommitment);
             }
 
             return false;
         }
-        public bool PostponeCommitment()
+        public bool DeleteCommitment(TCommitmentViewModel obj)
         {
-            var oCommitment = oCommitmentRepository.Get().Where(t => t.CommitmentId == 1 && t.IsDeleted == 0).FirstOrDefault();
+            var oCommitment = oCommitmentRepository.Get().Where(t => t.CommitmentId == obj.CommitmentId && t.IsDeleted == 0).FirstOrDefault();
             if (oCommitment != null)
             {
-                oCommitment.CommitmentNo += 1;
-                oCommitment.CommitmentStatus = db.MParentUser.Any(t => t.UserId == 11) ? "Watting for postpone re-approve." : "In-Progress";
-                return oCommitmentRepository.Update(oCommitment);
-            }
-
-            return false;
-        }
-        public bool DeleteCommitment()
-        {
-            var oCommitment = oCommitmentRepository.Get().Where(t => t.CommitmentId == 1 && t.IsDeleted == 0).FirstOrDefault();
-            if (oCommitment != null)
-            {
-                oCommitment.CommitmentStatus = db.MParentUser.Any(t => t.UserId == 11) ? "Watting for delete re-approve." : "Deleted";
+                oCommitment.CommitmentRemark = obj.CommitmentRemark;
+                oCommitment.CommitmentStatus = db.MParentUser.Any(t => t.UserId == obj.UpdatedBy) ? "Watting for delete re-approve." : "Deleted";
                 return oCommitmentRepository.Delete(oCommitment);
             }
 
@@ -85,5 +97,30 @@ namespace NetkaCommitment.Business
                                   }).ToList()
                     }).ToList();
         }
+        public List<TCommitmentViewModel> GetCommitment()
+        {
+            return db.TCommitment.Select(t => new TCommitmentViewModel
+            {
+                CommitmentId = t.CommitmentId,
+                DepartmentLmId = t.CommitmentLmNavigation.LmId,
+                DepartmentWigId = t.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
+                CompanyLmId = t.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
+                CompanyWigId = t.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigId,
+                DepartmentId = t.CommitmentLmNavigation.DepartmentWig.Department.DepartmentId,
+                CommitmentNo = t.CommitmentNo,
+                CommitmentName = t.CommitmentName,
+                CommitmentDescription = t.CommitmentDescription,
+                CommitmentRemark = t.CommitmentRemark,
+                CommitmentStartDate = t.CommitmentStartDate,
+                CommitmentFinishDate = t.CommitmentFinishDate,
+                CommitmentIsDeleted = t.CommitmentIsDeleted,
+                CommitmentStatus = t.CommitmentStatus,
+                CreatedDate = t.CreatedDate,
+                CreatedBy = t.CreatedBy,
+                UpdatedDate = t.UpdatedDate,
+                UpdatedBy = t.UpdatedBy
+            }).ToList();
+        }
+
     }
 }

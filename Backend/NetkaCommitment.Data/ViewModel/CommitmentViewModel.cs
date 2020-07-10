@@ -39,5 +39,6 @@ namespace NetkaCommitment.Data.ViewModel
         public uint CreatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public uint? UpdatedBy { get; set; }
+        public uint IsDeleted { get; set; }
     }
 }

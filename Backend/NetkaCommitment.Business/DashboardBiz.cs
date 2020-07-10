@@ -79,6 +79,7 @@ namespace NetkaCommitment.Business
             return db.TCommitment.Select(t=> new DashboardCommitmentViewModel {
                 CommitmentId = t.CommitmentId,
                 DepartmentLmId = t.CommitmentLmNavigation.LmId,
+                DepartmentLmName = db.MDepartmentLm.Where(lm => lm.LmId == t.CommitmentLm).Select(lm => lm.LmName).FirstOrDefault(),
                 DepartmentWigId = t.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
                 CompanyLmId = t.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
                 CompanyWigId = t.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigId,
