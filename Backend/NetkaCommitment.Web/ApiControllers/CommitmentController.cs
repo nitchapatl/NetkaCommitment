@@ -121,5 +121,22 @@ namespace NetkaCommitment.Web.ApiControllers
                 return StatusCode(StatusCodes.Status404NotFound);
             }
         }
+
+
+        [HttpGet("GetCommitmentSummary")]
+        public IActionResult getCommitmentSummary()
+        {
+            var result = oCommitmentBiz.GetCommitmentSummary();
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        
     }
 }

@@ -184,5 +184,18 @@ namespace NetkaCommitment.Business
                     }).ToList();
         }
 
+
+        public List<TCommitmentSummaryViewModel> GetCommitmentSummary()
+        {
+            return db.MDepartmentLm.Select(t => new TCommitmentSummaryViewModel
+            {
+                CompanyWigName = t.DepartmentWig.CompanyLm.CompanyWig.CompanyWigName,
+                CompanyLmName = t.DepartmentWig.CompanyLm.CompanyLmName,
+                DepartmentWigName = t.DepartmentWig.DepartmentWigName,
+                DepartmentLmName = t.LmName,
+                CommitmentCount = t.TCommitment.Count()
+            }).ToList();
+        }
+
     }
 }
