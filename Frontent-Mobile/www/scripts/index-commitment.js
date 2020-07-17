@@ -1,5 +1,12 @@
 getDDLDepartmentWIG();
 
+function getDatatable(){
+    var table = $('#tbCommitment').DataTable( {
+		destroy: true,
+        responsive: true,
+		lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]]
+    } );
+}
 function getDDLDepartmentWIG(){
 	$.ajax({
 		type:'POST',
@@ -32,6 +39,7 @@ function getDDLDepartmentLM(wigID){
 		dataType: "json",
 		success: function (data,status){
 			$('#ddlDepartmentLM').empty();
+			$('#ddlDepartmentLM').append($('<option value="default" disabled selected>Select LM</option>'));
 			for(var i in data){
 				if(data[i].WigID==wigID){
 					data[i].LmList.forEach(function(item,index){
@@ -40,6 +48,7 @@ function getDDLDepartmentLM(wigID){
 					});				
 				}
 			}
+			$('#ddlDepartmentLM').prop('selectedIndex', 0);
 		},
 		error: function (data,status){
 			console.log(data);
@@ -47,10 +56,11 @@ function getDDLDepartmentLM(wigID){
 	});
 }
 
-function addNewCommitment(commitmentLm,commimentName){
+function addNewCommitment(commitmentLm,commimentName,commitmentStartDate){
 	var data = {};
 	data.DepartmentLmId = commitmentLm;
 	data.CommitmentName = commimentName;
+	data.CommitmentStartDate = commitmentStartDate;
 
 	$.ajax({
 		type:'POST',
@@ -59,7 +69,6 @@ function addNewCommitment(commitmentLm,commimentName){
 		data: JSON.stringify(data),
 		dataType: "json",
 		success: function (data,status){
-			debugger
 			if(!data){
 				$('.offline-message').text("Duplicate Data")
 				$('.offline-message').addClass('offline-message-active');
@@ -88,6 +97,18 @@ function clearData(){
 	$('#txtCommitment').val("");
 	$('#ddlDepartmentWIG').val("");
 	$('#ddlDepartmentLM').val("");
+
+	$('#ddlDepartmentWIG').prop('selectedIndex', 0);
+	$('.add-wig').find('i').remove();
+	$('.add-wig').find('em').append('<i class="fa fa-angle-down"></i>');
+
+	$('#ddlDepartmentLM').prop('selectedIndex', 0);
+	$('.add-lm').find('i').remove();
+	$('.add-lm').find('em').append('<i class="fa fa-angle-down"></i>');
+
+	$('.add-commitment').find('i').remove();
+	$('.add-commitment').find('em').append('<i class="fa fa-angle-down"></i>');
+	//$('.add-commitment-commitment').find('textarea').css('line-height','25px');
 }
 
 function addCommitment(){
@@ -105,7 +126,7 @@ function addCommitment(){
 	}else if(txtStartDate===""){
 		message = "Please input startdate";
 	}else{
-		addNewCommitment(ddlDepartmentLm,txtCommitment);
+		addNewCommitment(ddlDepartmentLm,txtCommitment,txtStartDate);
 	}
 	
 	if(!ddlDepartmentWig || !ddlDepartmentLm || txtCommitment==="" || txtStartDate===""){
@@ -123,31 +144,33 @@ function getCommitment(createBy){
 	$.ajax({
 		type:'POST',
 		contentType: 'application/json; charset=utf-8',
-		url: 'https://localhost:32768/api/commitment/GetCommitment',
+		url: 'https://localhost:32768/api/commitment/GetTCommitment',
 		data: JSON.stringify(data),
 		dataType: "json",
 		success: function (data,status){
 			$("#tbCommitment").empty();
-			var html = "<tr>"
+			var html = "<thead>"
+				html += "<tr>"
 				html += "<th>No.</th>"
 				html += "<th>Commitment</th>"
 				html += "<th>Start Date</th>"
-				html += "<th>Update Date</th>"
 				html += "<th>Status</th>"
 				html += "<th>Update</th>"
 				html += "</tr>";
+				html += "</thead>"
+				html += "<tbody>"
 			for(var i in data){
-				console.log(data[i]);
 				html += "<tr>"
 				html += "<td>" + data[i].CommitmentId + "</td>"
 				html += "<td style='text-align:left'>" + data[i].CommitmentName + "</td>"
 				html += "<td>" + data[i].CommitmentStartDate + "</td>"
-				html += "<td>" + data[i].UpdatedDate + "</td>"
 				html += "<td>" + data[i].CommitmentStatus + "</td>"
 				html += '<td><input onclick="getConfirmMenu($(this));" value="Update" type="button" class="button button-m shadow-small button-round-small bg-blue2-dark"/></td>'
 				html += "</tr>"
 			}
+			html += "</tbody>"
 			$("#tbCommitment").append(html);
+			getDatatable();
 		},
 		error: function (data,status){
 			$("#lblError").css('display','block')
@@ -160,70 +183,112 @@ function getCommitment(createBy){
 function statusOnChange(){
 	var status = $( "#ddlStatus option:selected" ).val();
 	$('#txtRemark').val('');
-	if(status==="postpone"){
-		$('.remark').show();
-		$('.postpone-date').show();
-		$('#menu-confirm').css("height","420px");
-	}else if(status==="fail"){
-		$('.remark').show();
-		$('.postpone-date').hide();	
+	if(status==="Postpone"){
+		$('.update-remark').show();
+		$('.update-postpone').show();
+		$('#menu-confirm').css("height","520px");
+	}else if(status==="Fail"){
+		$('.update-remark').show();
+		$('.update-postpone').hide();	
+		$('#menu-confirm').css("height","450px");
+	}else if(status==="Delete"){
+		$('.update-remark').show();
+		$('.update-postpone').hide();	
+		$('#menu-confirm').css("height","450px");
+	}else if(status==="Done"){	
+		$('.update-remark').hide();
+		$('.update-postpone').hide();	
 		$('#menu-confirm').css("height","350px");
-	}else if(status==="delete"){
-		$('.remark').show();
-		$('.postpone-date').hide();	
-		$('#menu-confirm').css("height","350px");
-	}else if(status==="done"){	
-		$('.remark').hide();
-		$('.postpone-date').hide();	
-		$('#menu-confirm').css("height","250px");
 	}else{		
-		$('.remark').hide();
-		$('.postpone-date').hide();		
-		$('#menu-confirm').css("height","250px");
+		$('.update-remark').hide();
+		$('.update-postpone').hide();		
+		$('#menu-confirm').css("height","350px");
 	}
 }
 
-function getConfirmMenu(ctrl){
-	var index = ctrl.closest('tr').index()
-	var element = $('#tbCommitment tr:eq(' + index + ')').find("td:eq(0)");
-	var id = (element.length > 0) ? element[0].innerHTML : "";
-	$("#menu-confirm").attr("data-id",id);
-	$('#ddlStatus').val('');
-	$('#txtRemark').val('');
 
-	$('#menu-confirm').addClass("menu-active");
-	$('.menu-hider').addClass("menu-active");
+
+function getConfirmMenu(ctrl){
+	$('#tbCommitment tbody').on('click', 'tr', function () {
+		var table = $('#tbCommitment').DataTable(); 
+		var index = table.row(this).index(); 
+		var rowData = table.row(index).data();
+		
+		var id = rowData[0];
+		var commitment = rowData[1];
+		var updateDate = rowData[2];
+		var status = rowData[3];
+
+		$('#ddlStatus').prop('selectedIndex',0);
+		$('.update-status').find('i').remove();
+		$('.update-status').find('em').append('<i class="fa fa-angle-down"></i>');
+		statusOnChange();
+
+		$('#ddlStatus').val(status);
+		$('.update-status').find('span').addClass('input-style-1-active');
+		$('.update-status').find('i').remove();
+		$('.update-status').find('em').append('<i class="fa fa-check color-green1-dark"></i>');
+
+		$("#menu-confirm").attr("data-id",id);
+		$('#txtCommitmentName').val(commitment);
+		//$('.update-commitment').find('textarea').css('line-height','25px'); 
+		//$('.update-commitment').find('textarea').css('padding-top','10px!important;'); 
+
+		$('#menu-confirm').addClass("menu-active");
+		$('.menu-hider').addClass("menu-active");
+
+		//commitment 
+		$('.update-commitment').find('span').removeClass('input-style-1').addClass('input-style-1-active');
+		$('.update-commitment').find('i').remove();
+	});
 }
 
+function notification(message){
+	$('.offline-message').text(message)
+	$('.offline-message').addClass('offline-message-active');
+	setTimeout(function(){
+		$('.offline-message').removeClass('offline-message-active');
+	},3000);
+}
 function UpdateStatus(){
 	var id = $('#menu-confirm').attr("data-id");
 	var status = $( "#ddlStatus option:selected" ).val(); 
+	var commitment = $('#txtCommitmentName').val();
 	var remark = $('#txtRemark').val();
+	var postpone = $('#txtPostpone').val();
 
 	if(status==""){
 		message = "Please select status";
-	}else if (remark=="")
-	{
+	}else if (commitment==""){
+		message = "Please input commitment"
+	}
+	else if (remark==""){
 		message = "Please input remark";
 	}
-	if(status!=="done" && (status=="" || remark=="")){
-		$('.offline-message').text(message)
-		$('.offline-message').addClass('offline-message-active');
-		setTimeout(function(){
-			$('.offline-message').removeClass('offline-message-active');
-		},3000);
 
+	if(status==="Done" && (commitment==="")){
+		notification(message);
+		return
+	}else if((status==="Fail" || status==="Delete") && (commitment==="" || remark==="")){
+		notification(message);
+		return
+	}else if(status==="In-Progress" && (commitment==="")){
+		notification(message);
+		return
+	}else if(status==="Postpone" && (postpone==="" || commitment==="" || remark==="")){
+		notification(message);
 		return
 	}
 	
 	var data = {};
+	data.CommitmentName = commitment;
 	data.CommitmentStatus = status;
 	data.CommitmentId = id;
 	data.CommitmentRemark = remark;
 	data.UpdatedBy = 15;
 
 	if(status==="postpone"){
-		data.CommitmentStartDate = $('#txtPostponeDate').val();
+		data.CommitmentStartDate = $('#txtPostpone').val();
 	}
 	console.log(data);
 
