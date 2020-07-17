@@ -10,6 +10,11 @@
     <link rel="stylesheet" type="text/css" href="styles/style.css">
     <link rel="stylesheet" type="text/css" href="styles/framework.css">
     <link rel="stylesheet" type="text/css" href="fonts/css/fontawesome-all.min.css">
+
+    <link rel="stylesheet" type="text/css" href="styles/datatables/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="styles/datatables/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="styles/datatables/fixedHeader.bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="styles/datatables/responsive.bootstrap.min.css">
     <!-- Don't forget to update PWA version (must be same) in pwa.js & manifest.json -->
     <link rel="manifest" href="_manifest.json" data-pwa-version="set_by_pwa.js">
     <link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png">
@@ -19,32 +24,46 @@
 	<!--menu confirm-->
 	<div id="menu-confirm" 
 		 class="menu menu-box-modal round-medium" 
-		 data-menu-height="250" 
-		 data-menu-width="310" 
+		 data-menu-height="350" 
+		 data-menu-width="610" 
 		 data-menu-effect="menu-over">
 		<h1 class="center-text uppercase ultrabold top-30">Update</h1>
 		<p class="boxed-text-small"></p>
 		<div class="content left-20 right-20">
-			<div class="input-style input-style-2 input-required">
+			<div class="input-style input-style-2 input-required update-status">
 				<span class="">Select Status</span>
 				<em><i class="fa fa-exclamation-triangle color-red2-light"></i></em>
 				<select onchange="statusOnChange();" id="ddlStatus">
 					<option value="" disabled="" selected="">Select Status</option>
-					<option value="done">Done</option>
-					<option value="postpone">Postpone</option>
-					<option value="fail">Fail</option>
-					<option value="delete">Delete</option>
+					<option value="Done">Done</option>
+					<option value="Postpone">Postpone</option>
+					<option value="Fail">Fail</option>
+					<option value="Delete">Delete</option>
+					<option value="In-Progress">In-Progress</option>
 				</select>
 			</div>
-			<div class="input-style input-style-2 input-required remark" style="display:none">
+
+			<!-- <div class="input-style input-style-1 input-required update-commitment">
+				<span class="input-style-1-active input-style-1-inactive">Enter your Commitment</span>
+				<em><i class="fa fa-check color-green1-dark"></i></em>
+				<textarea id="txtCommitmentName" placeholder="Enter your Commitment"></textarea>
+			</div> -->
+
+			<div class="input-style input-style-2 input-required update-commitment">
+				<span>Enter your Commitment</span>
+				<em>(required)</em>
+				<textarea id="txtCommitmentName" placeholder="Enter your Commitment"></textarea>
+			</div>
+
+			<div class="input-style input-style-2 input-required update-remark" style="display:none">
 				<span>Enter your Remark</span>
 				<em>(required)</em>
 				<textarea id="txtRemark" placeholder=""></textarea>
 			</div>
-			<div class="input-style input-style-1 input-required postpone-date" style="display:none">
+			<div class="input-style input-style-1 input-required postpone-date update-postpone" style="display:none">
 				<span class="input-style-1-active input-style-1-inactive">Postpone Date</span>
 				<em><i class="fa fa-angle-down"></i></em>
-				<input id="txtPostponeDate" type="date" value="1980-08-26">
+				<input id="txtPostpone" type="date" value="1980-08-26">
 			</div>
 
 			<div class="one-half">
@@ -79,41 +98,53 @@
             <a href="#" data-menu="menu-settings"><i class="fa fa-cog"></i><span>Settings</span></a>
             <div class="clear"></div>
         </div>
+
         <div class="page-content header-clear-medium">
-
 			<!-- Content -->
-			<div class="content-boxed">
-				<div class="content"> 
-					<div class="input-style input-style-2 input-required">
-						<em><i class="fa fa-angle-down"></i></em>
-						<span>Select WIG</span> 
-						<select id="ddlDepartmentWIG" onchange="getDDLDepartmentLM($('#ddlDepartmentWIG').val());">
-							<option value="default" disabled selected>Select WIG</option>
-						</select>
-					</div>
-					<div class="input-style input-style-2 input-required">
-						<em><i class="fa fa-angle-down"></i></em>
-						<span>Select LM</span> 
-						<select id="ddlDepartmentLM"">
-							<option value="default" disabled selected>Select LM</option>
-						</select>
-					</div>
-					<div class="input-style input-style-2 input-required">
-						<span class="input-style-1-inactive">Enter your Commitment</span>
-						<em>(required)</em>
-						<textarea id="txtCommitment" placeholder="Enter your Commitment"></textarea>
-					</div>
-
-					<div class="input-style input-style-1 input-required">
-						<span>Select your start date</span>
-						<em><i class="fa fa-angle-down"></i></em>
-						<input type="date" value="1980-08-26">
-					</div>
-
-					<a href="#" id="btnAdd" class="button button-m shadow-small bg-blue2-dark" onclick="addCommitment()">Add</a>
-
+			<!--<div class="content bottom-15">
+				<div class="one-third">
+					<div data-height="140" class="caption round-small bottom-15 shadow-huge" style="height: 140px;">
+						<div class="caption-center">
+							<h1 class="color-white left-20 bolder font-40">$19</h1>
+							<p class="color-white font-16 ultrabold line-height-medium left-15 bottom-20">MONTHLY</p>
+						</div>
+						<div class="caption-bottom">
+							<p class="left-15 color-white opacity-50 font-10">1 User Accounts</p>
+						</div>
+						<div class="caption-overlay bg-gradient opacity-50"></div>
+						<div class="caption-bg bg-gradient-green1"></div>
+					</div>    
+				</div>   
+				
+				<div class="one-third">
+					<div data-height="140" class="caption round-small bottom-15 shadow-huge" style="height: 140px;">
+						<div class="caption-center">
+							<h1 class="color-white left-20 bolder font-40">$59</h1>
+							<p class="color-white font-16 ultrabold line-height-medium left-15 bottom-20">MONTHLY</p>
+						</div>
+						<div class="caption-bottom">
+							<p class="left-15 color-white opacity-50 font-10">5 User Accounts</p>
+						</div>
+						<div class="caption-overlay bg-gradient opacity-50"></div>
+						<div class="caption-bg bg-gradient-red2"></div>
+					</div>    
 				</div>
-			</div>
+
+				<div class="one-third last-column">
+					<div data-height="140" class="caption round-small bottom-15 shadow-huge" style="height: 140px;">
+						<div class="caption-center">
+							<h1 class="color-white left-20 bolder font-40">$99</h1>
+							<p class="color-white font-16 ultrabold line-height-medium left-15 bottom-20">MONTHLY</p>
+						</div>
+						<div class="caption-bottom">
+							<p class="left-15 color-white opacity-50 font-10">9 User Accounts</p>
+						</div>
+						<div class="caption-overlay bg-gradient opacity-50"></div>
+						<div class="caption-bg bg-gradient-blue2"></div>
+					</div> 
+				</div>
+				<div class="clear"></div>
+			</div> -->
 
 			<!-- Graph -->
 			<div class="content-boxed">
@@ -123,17 +154,54 @@
 				</div>
 			</div>
 
+			<!-- Input -->
+			<div class="content-boxed">
+				<div class="content"> 
+					<div class="input-style input-style-2 input-required add-wig">
+						<em><i class="fa fa-angle-down"></i></em>
+						<span>Select WIG</span> 
+						<select id="ddlDepartmentWIG" onchange="getDDLDepartmentLM($('#ddlDepartmentWIG').val());">
+							<option value="default" disabled selected>Select WIG</option>
+						</select>
+					</div>
+					<div class="input-style input-style-2 input-required add-lm">
+						<em><i class="fa fa-angle-down"></i></em>
+						<span>Select LM</span> 
+						<select id="ddlDepartmentLM"">
+							<option value="default" disabled selected>Select LM</option>
+						</select>
+					</div>
+					<div class="input-style input-style-2 input-required add-commitment">
+						<span class="input-style-1-inactive">Enter your Commitment</span>
+						<em>(required)</em>
+						<textarea style="height:100px;" id="txtCommitment" placeholder="Enter your Commitment"></textarea>
+					</div>
+
+					<div class="input-style input-style-1 input-required">
+						<span>Select your start date</span>
+						<em><i class="fa fa-angle-down"></i></em>
+						<input type="date" id="txtStartDate" value="1980-08-26">
+					</div>
+
+					<a href="#" id="btnAdd" class="button button-m shadow-small bg-blue2-dark" onclick="addCommitment()">Add</a>
+
+				</div>
+			</div>
+
+			<!-- Table -->
             <div class="content-boxed">
                 <div class="content">
                     <h3 class="bolder">Pending Commitment</h3>
                     <p></p>
                     <div class="table-scroll">
-                        <table id="tbCommitment" class="table-borders-dark">
+                        <table id="tbCommitment" class="table table-striped table-bordered nowrap" style="width:100%">
 
                         </table>
                     </div>
                 </div>
             </div>
+
+
         </div>
         <!--Menu Call-->
         <div id="menu-call" class="menu menu-box-bottom menu-box-detached round-large" data-menu-height="340" data-menu-effect="menu-over">
@@ -292,7 +360,12 @@
         <div class="menu-hider"></div>
     </div>
     <!-- <script type="text/javascript" src="cordova.js"></script> -->
-    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
+	<script type="text/javascript" src="scripts/datatables/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="scripts/datatables/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="scripts/datatables/dataTables.fixedHeader.min.js"></script>
+    <script type="text/javascript" src="scripts/datatables/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="scripts/datatables/responsive.bootstrap.min.js"></script>
     <script type="text/javascript" src="scripts/plugins.js"></script>
     <script type="text/javascript" src="scripts/custom.js"></script>
     <script type="text/javascript" src="scripts/highcharts.js"></script>
