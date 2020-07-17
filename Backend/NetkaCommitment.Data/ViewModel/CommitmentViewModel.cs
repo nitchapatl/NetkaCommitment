@@ -19,6 +19,21 @@ namespace NetkaCommitment.Data.ViewModel
         public uint LmID { get; set; }
         public string LmName { get; set; }
     }
+    public class CommitmentGraphData
+    {       
+        public string name { get; set; }
+        public uint y { get; set; }
+        public string drilldown { get; set; }
+
+        public List<CommitmentGraphDrilldown> LDrilldown { get; set; }
+    }
+
+    public class CommitmentGraphDrilldown 
+    { 
+        public string name { get; set; }
+        public string id { get; set; }
+        public string data { get; set; }
+    }
     public class TCommitmentViewModel
     {
         public uint CommitmentId { get; set; }
@@ -39,5 +54,18 @@ namespace NetkaCommitment.Data.ViewModel
         public uint CreatedBy { get; set; }
         public DateTime? UpdatedDate { get; set; }
         public uint? UpdatedBy { get; set; }
+        public uint? IsDeleted { get; set; }
     }
+    public class TCommitmentSummaryViewModel
+    {
+        public string CompanyWigName { get; set; }
+        public string CompanyLmName { get; set; }
+        public string DepartmentWigName { get; set; }
+        public string DepartmentLmName { get; set; }
+        public int CommitmentCount { get; set; }
+
+    }
+
+
+    
 }

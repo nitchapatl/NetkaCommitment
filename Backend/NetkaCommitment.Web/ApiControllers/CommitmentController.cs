@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NetkaCommitment.Business;
+using NetkaCommitment.Data.ViewModel;
 
 namespace NetkaCommitment.Web.ApiControllers
 {
@@ -13,7 +14,7 @@ namespace NetkaCommitment.Web.ApiControllers
     public class CommitmentController : BaseApiController
     {
         private readonly CommitmentBiz oCommitmentBiz = null;
-        public  CommitmentController(IHttpContextAccessor oHttpContextAccessor) : base(oHttpContextAccessor)
+        public CommitmentController(IHttpContextAccessor oHttpContextAccessor) : base(oHttpContextAccessor)
         {
             oCommitmentBiz = new CommitmentBiz();
         }
@@ -34,18 +35,108 @@ namespace NetkaCommitment.Web.ApiControllers
         }
 
         [HttpPost("getDepartmentWig")]
-        public IActionResult getDepartmentWig() 
+        public IActionResult getDepartmentWig()
         {
             var result = oCommitmentBiz.getDepartmentWig(5);
             if (result != null)
             {
                 return StatusCode(StatusCodes.Status200OK, result);
             }
-            else 
+            else
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
         }
 
+        [HttpPost("updateCommitment")]
+        public IActionResult updateCommitment([FromBody] TCommitmentViewModel model)
+        {
+            var oCommitment = new TCommitmentViewModel();
+            oCommitment.CommitmentId = model.CommitmentId;
+            oCommitment.UpdatedBy = model.UpdatedBy;
+
+            var result = false;
+            if (model.CommitmentStatus == "Done" || model.CommitmentStatus == "Fail" || model.CommitmentStatus=="In-Progress") {
+                result = oCommitmentBiz.UpdateCommitment(model);
+                return StatusCode(StatusCodes.Status200OK, result);
+            } else if (model.CommitmentStatus == "Delete") {
+                result = oCommitmentBiz.DeleteCommitment(model);
+                return StatusCode(StatusCodes.Status200OK, result);
+            } else if (model.CommitmentStatus == "Postpone") {
+                result = oCommitmentBiz.PostponeCommitment(model);
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            return StatusCode(StatusCodes.Status404NotFound);
+        }
+
+        [HttpPost("addCommitment")]
+        public IActionResult addCommitment([FromBody] TCommitmentViewModel model) {
+            var result = oCommitmentBiz.InsertCommitment(model);
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpPost("GetTCommitment")]
+        public IActionResult getTCommitment([FromBody] TCommitmentViewModel model)
+        {
+            var result = oCommitmentBiz.GetTCommitment().Where(x => x.CreatedBy == model.CreatedBy);
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpPost("GetCommitment")]
+        public IActionResult getCommitment([FromBody] TCommitmentViewModel model) {
+            var result = oCommitmentBiz.GetCommitment().Where(x => !(x.IsDeleted == 1) && x.CreatedBy == model.CreatedBy);
+            if (result != null) {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpGet("GetGraphWig")]
+        public IActionResult GetCompanyWig()
+        {
+            var result = oCommitmentBiz.GetCompanyWIG();
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+
+        [HttpGet("GetCommitmentSummary")]
+        public IActionResult getCommitmentSummary()
+        {
+            var result = oCommitmentBiz.GetCommitmentSummary();
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        
     }
 }
