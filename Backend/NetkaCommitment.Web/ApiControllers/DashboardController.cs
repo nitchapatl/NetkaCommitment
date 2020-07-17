@@ -18,7 +18,7 @@ namespace NetkaCommitment.Web.ApiControllers
             oDashboardBiz = new DashboardBiz();
         }
 
-        [HttpGet("department/wig")]
+        /*[HttpGet("department/wig")]
         public IActionResult GetDepartmentWig()
         {
             var result = oDashboardBiz.GetDepartmentWIG(5);
@@ -31,7 +31,7 @@ namespace NetkaCommitment.Web.ApiControllers
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }
-        }
+        }*/
 
         [HttpGet("department/lm")]
         public IActionResult GetDepartmentLm()
@@ -82,6 +82,111 @@ namespace NetkaCommitment.Web.ApiControllers
         public IActionResult GetCommitment()
         {
             var result = oDashboardBiz.GetCommitment();
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpGet("company/commitment")]
+        public IActionResult GetCompanyCommitment()
+        {
+            var result = oDashboardBiz.GetCompanyCommitment();
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpGet("company/wig/commitment/{WigID}")]
+        public IActionResult GetCompanyCommitmentbyWig(uint WigID)
+        {
+            var result = oDashboardBiz.GetCompanyCommitmentbyWig(WigID).OrderBy(t => t.CommitmentNo);
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpGet("company/lm/commitment/{LmID}")]
+        public IActionResult GetCompanyCommitmentbyLm(uint LmID)
+        {
+            var result = oDashboardBiz.GetCompanyCommitmentbyLm(LmID).OrderBy(t => t.CommitmentNo);
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpGet("department/wig/{DepartmentId}")]
+        public IActionResult GetDepartmentWig(uint DepartmentId)
+        {
+            var result = oDashboardBiz.GetDepartmentWIG(DepartmentId);
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpGet("department/commitment/{DepartmentId}")]
+        public IActionResult GetDepartmentCommitment(uint DepartmentId)
+        {
+            var result = oDashboardBiz.GetDepartmentCommitment(DepartmentId).OrderBy(t => t.CommitmentNo);
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpGet("department/wig/commitment/{WigID}")]
+        public IActionResult GetDepartmentCommitmentbyWig(uint WigID)
+        {
+            var result = oDashboardBiz.GetDepartmentCommitmentbyWig(WigID).OrderBy(t => t.CommitmentNo);
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpGet("department/lm/commitment/{LmID}")]
+        public IActionResult GetDepartmentCommitmentbyLm(uint LmID)
+        {
+            var result = oDashboardBiz.GetDepartmentCommitmentbyLm(LmID).OrderBy(t => t.CommitmentNo);
 
             if (result != null)
             {
