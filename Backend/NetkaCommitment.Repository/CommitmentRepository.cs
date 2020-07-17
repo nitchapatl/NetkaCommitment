@@ -55,6 +55,7 @@ namespace NetkaCommitment.Repository
             obj.UpdatedBy = 1;
             obj.UpdatedDate = DateTime.Now;
             obj.IsDeleted = 0;
+            obj.CommitmentName = obj.CommitmentName;
             db.Entry(obj).State = EntityState.Modified;
             db.SaveChanges();
 

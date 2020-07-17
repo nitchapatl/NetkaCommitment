@@ -5,6 +5,7 @@ using NetkaCommitment.Repository;
 using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
 using System.Text;
 
@@ -20,17 +21,17 @@ namespace NetkaCommitment.Business
             oCommitmentRepository = new CommitmentRepository();
         }
 
-        public bool InsertCommitment(uint lmId,string commitmentName)
+        public bool InsertCommitment(TCommitmentViewModel obj)
         {
             return oCommitmentRepository.Insert(new TCommitment
             {
                 UserId = 11,
 
-                CommitmentLm = lmId,
-                CommitmentName = commitmentName,
+                CommitmentLm = obj.DepartmentLmId,
+                CommitmentName = obj.CommitmentName,
                 CommitmentDescription = "",
                 CommitmentRemark = "",
-                CommitmentStartDate = DateTime.Now,
+                CommitmentStartDate = obj.CommitmentStartDate, //DateTime.Now,
                 CommitmentFinishDate = null,
                 CommitmentIsDeleted = 0,
                 CommitmentStatus = db.MParentUser.Any(t => t.UserId == 11) ? "Watting for approve." : "In-Progress"
@@ -41,13 +42,17 @@ namespace NetkaCommitment.Business
             var oCommitment = oCommitmentRepository.Get().Where(t => t.CommitmentId == obj.CommitmentId && t.IsDeleted == 0).FirstOrDefault();
             if (oCommitment != null)
             {
-                if (obj.CommitmentStatus=="done") {
+                if (obj.CommitmentStatus == "Done") {
                     oCommitment.CommitmentFinishDate = DateTime.Now;
-                    oCommitment.CommitmentStatus = db.MParentUser.Any(t => t.UserId == obj.UpdatedBy) ? "Watting for done re-approve." : "Done";
+                    oCommitment.CommitmentStatus = db.MParentUser.Any(t => t.UserId == obj.UpdatedBy) ? "Waiting for " + obj.CommitmentStatus + " re-approve." : obj.CommitmentStatus;
                     return oCommitmentRepository.Update(oCommitment);
-                } else if (obj.CommitmentStatus=="fail") {
+                } else if (obj.CommitmentStatus == "Fail") {
                     oCommitment.CommitmentRemark = obj.CommitmentRemark;
-                    oCommitment.CommitmentStatus = db.MParentUser.Any(t => t.UserId == obj.UpdatedBy) ? "Watting for fail re-approve." : "Failed";
+                    oCommitment.CommitmentStatus = obj.CommitmentStatus;
+                    return oCommitmentRepository.Update(oCommitment);
+                } else if (obj.CommitmentStatus=="In-Progress") {
+                    oCommitment.CommitmentName = obj.CommitmentName;
+                    oCommitment.CommitmentStatus = obj.CommitmentStatus;
                     return oCommitmentRepository.Update(oCommitment);
                 }
             }
@@ -97,6 +102,32 @@ namespace NetkaCommitment.Business
                                   }).ToList()
                     }).ToList();
         }
+        public List<TCommitmentViewModel> GetTCommitment() 
+        { 
+            return (from t in db.TCommitment
+                    where t.CommitmentStatus== "In-Progress" //!(t.IsDeleted==1)
+                    select new TCommitmentViewModel
+                    {
+                        CommitmentId = t.CommitmentId,
+                        DepartmentLmId = t.CommitmentLmNavigation.LmId,
+                        DepartmentWigId = t.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
+                        CompanyLmId = t.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
+                        CompanyWigId = t.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigId,
+                        DepartmentId = t.CommitmentLmNavigation.DepartmentWig.Department.DepartmentId,
+                        CommitmentNo = t.CommitmentNo,
+                        CommitmentName = t.CommitmentName,
+                        CommitmentDescription = t.CommitmentDescription,
+                        CommitmentRemark = t.CommitmentRemark,
+                        CommitmentStartDate = t.CommitmentStartDate,
+                        CommitmentFinishDate = t.CommitmentFinishDate,
+                        CommitmentIsDeleted = t.CommitmentIsDeleted,
+                        CommitmentStatus = t.CommitmentStatus,
+                        CreatedDate = t.CreatedDate,
+                        CreatedBy = t.CreatedBy,
+                        UpdatedDate = t.UpdatedDate,
+                        UpdatedBy = t.UpdatedBy
+                    }).ToList();
+        }
         public List<TCommitmentViewModel> GetCommitment()
         {
             return db.TCommitment.Select(t => new TCommitmentViewModel
@@ -120,6 +151,37 @@ namespace NetkaCommitment.Business
                 UpdatedDate = t.UpdatedDate,
                 UpdatedBy = t.UpdatedBy
             }).ToList();
+        }
+        public List<DashboardWIGGraphViewModel> GetCompanyWIG()
+        {
+            return (from wig in db.MCompanyWig
+                    where wig.CompanyWigYear == DateTime.Now.Year
+                    select new DashboardWIGGraphViewModel
+                    {
+                        WigID = wig.CompanyWigId,
+                        WigName = wig.CompanyWigName,
+                        WigValue = db.TCommitment.Where(t => t.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyWigId == wig.CompanyWigId).Count(),
+                        LmList = (from lm in db.MCompanyLm
+                                  where lm.CompanyWigId == wig.CompanyWigId
+                                  select new DashboardLMGraphViewModel
+                                  {
+                                      LmID = lm.CompanyLmId,
+                                      LmName = lm.CompanyLmName,
+                                      LmValue = db.TCommitment.Where(t => t.CommitmentLmNavigation.DepartmentWig.CompanyLmId == lm.CompanyLmId).Count()
+                                  }).ToList()
+                    }).ToList();
+        }
+        public List<CommitmentGraphData> GetGraphDrillDown()
+
+        {
+            return (from wig in db.MDepartmentWig
+                    join lm in db.MDepartmentLm on wig.DepartmentWigId equals lm.DepartmentWigId
+                    //join t in db.TCommitment on t.CommitmentLm equals lm.LmId 
+                    select new CommitmentGraphData
+                    {
+                        //y = t.CommitmentId,
+                        //drilldown = t.CommitmentName
+                    }).ToList();
         }
 
     }
