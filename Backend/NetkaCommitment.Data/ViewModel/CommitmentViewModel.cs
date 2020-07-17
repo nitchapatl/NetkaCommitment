@@ -41,4 +41,16 @@ namespace NetkaCommitment.Data.ViewModel
         public uint? UpdatedBy { get; set; }
         public uint IsDeleted { get; set; }
     }
+    public class TCommitmentSummaryViewModel
+    {
+        public string CompanyWigName { get; set; }
+        public string CompanyLmName { get; set; }
+        public string DepartmentWigName { get; set; }
+        public string DepartmentLmName { get; set; }
+        public int CommitmentCount { get; set; }
+
+    }
+
+
+    
 }
