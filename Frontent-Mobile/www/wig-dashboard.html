@@ -12,6 +12,8 @@
 <!-- Don't forget to update PWA version (must be same) in pwa.js & manifest.json -->
 <link rel="manifest" href="_manifest.json" data-pwa-version="set_by_pwa.js">
 <link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png">
+
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/ju/dt-1.10.21/datatables.min.css"/>
 </head>
     
 <body class="theme-light" data-highlight="red2">
@@ -27,12 +29,20 @@
 	<!--<div class="header header-fixed header-logo-app">
         <a href="index.html" class="header-title">Sticky Mobile</a>
 		<a href="#" class="back-button header-icon header-icon-1"><i class="fas fa-arrow-left"></i></a>
-		<a href="#" data-toggle-theme class="header-icon header-icon-2"><i class="fas fa-lightbulb"></i></a>
-	</div>-->
+        <a href="#" class="header-icon header-icon-3"><i class="fas fa-share-alt"></i></a>
+        <a href="#" data-toggle-theme class="header-icon header-icon-2"><i class="fas fa-lightbulb"></i></a>
+    </div>-->
+
+   <div class="header header-static header-logo-right">
+        <a href="index.html#" class="header-title"><span class="color-highlight">Netka </span>Commitment</a>
+        <a href="#" class="header-icon header-icon-1"><i class="fa fa-bars"></i></a>
+        <a href="#" class="header-icon header-icon-2"><i class="fas fa-chart-pie color-red2-light"></i></a>
+        <a href="javascript:window.location.assign('company-wig-dashboard.html')" class="header-icon header-icon-3"><i class="fas fa-industry color-red2-light"></i></a>
+    </div>
     
     
     <div id="footer-menu" class="footer-menu-6-icons footer-menu-style-1">
-        <a href="wig-dashboard.html" class="active-nav"><i class="fa fa-tachometer-alt"></i><span>Dashboard</span></a>
+        <a href="javascript:window.location.assign('wig-dashboard.html')" class="active-nav"><i class="fa fa-tachometer-alt"></i><span>Dashboard</span></a>
         <a href="index-commitment.html"><i class="fa fa-comment-dots"></i><span>Commitment</span></a>
         <a href="index-success.html"><i class="fa fa-grin"></i><span>Success</span></a>
         <a href="index-fail.html"><i class="fa fa-frown"></i><span>Fail</span></a>
@@ -42,9 +52,89 @@
     </div>
     
 	<div class="page-content shadow-none header-clear-small">	
+
+        <div data-height="150" class="caption caption-margins round-medium shadow-large">
+            <!--<div class="caption-center right-15 top-15 text-right">
+                <a href="#" class="button button-xs button-round-small bg-highlight"><i class="fa fa-chart-pie"></i> select department</a>
+            </div>-->
+            <div class="caption-center left-15 text-left">
+                <h1 class="color-white">User: Bow</h1>
+                <h1 class="color-white">Team: R&D</h1>
+                <p class="under-heading color-white opacity-90 bottom-0">
+                    
+                </p>
+            </div>
+            <div class="caption-overlay bg-black opacity-60"></div>
+            <div class="caption-bg bg-30"></div>
+        </div>
+        
+        <div class="content-boxed content-boxed-full">
+            <div class="tab-controls tab-animated tabs-medium" 
+                 data-tab-items="2" 
+                 data-tab-active="bg-red2-light">
+                <a href="#" class="font-12 bolder" data-tab-active data-tab="tab-1">Personal</a>
+                <a href="#" class="font-12 bolder" data-tab="tab-2">Overall</a>
+            </div>
+            <div class="clear bottom-15"></div>
+            <div class="tab-content left-20 right-20" id="tab-1">
                 
+                <p>
+                    A graphical view of your wallet. The expenses, incomes and available funds in your account.
+                    These are created using the powerful charts.js plugin.
+                </p>
+                <div class="chart-container">
+                    <canvas class="chart" id="wallet-chart"/>
+                </div>
+                <div class="divider top-30"></div>
+            </div>
+            <div class="tab-content left-20 right-20" id="tab-2">
+                <div class="text-right">
+                    <div class="demo-icon">
+                        <a href="#" class="button button-3d button-xs shadow-small button-round-small border-green1-dark bg-green1-light"><i class="fa fa-user"></i></a>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <div id="container"></div>
+
+                <div class="divider top-30"></div>
+            </div>
+        </div>
+
+            <div class="content-boxed">
+                <div class="content">
+                    <h3 class="bolder">Department WIG</h3>
+                    <p>
+                        All Commitment
+                    </p>
+                    <div class="table-scroll">
+                        <table id="wig-dashboard-table" class="table-borders-dark">
+                            <thead>
+                            <tr>
+                                <th>Commitment NO</th>
+                                <th>Name</th>
+                                <th>Remark</th>
+                                <th>Department LM</th>
+                                <th>Start Date</th>
+                                <th>Finish Date</th>
+                                <th>Status</th>
+                            </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Content -->
+            <div id="wig-dashboard">
+                
+            </div>
+
+        <!--
         <div class="content">
-            <!--<div class="one-half">
+            <div class="one-half">
                 <a href="pages.html" data-height="220" class="caption round-medium shadow-huge bottom-20">
                     <div class="caption-center center-text">
                         <i class="fa fa-home fa-3x color-green1-dark top-15 bottom-20"></i>
@@ -56,8 +146,8 @@
                     </div>
                     <div class="caption-overlay bg-theme"></div>
                 </a>
-            </div>-->
-            <div class="one-half#">
+            </div>
+            <div class="one-half last-column">
                 <a href="javascript:window.location.assign('company-wig-dashboard.html')" data-height="220" class="caption round-medium shadow-huge bottom-20">
                     <div class="caption-center center-text">
                         <i class="fa fa-cog fa-3x color-blue2-dark top-15 bottom-20"></i>
@@ -73,7 +163,7 @@
         </div>
         <div class="clear"></div>
         <div class="content">
-            <div class="one-half#">
+            <div class="one-half">
                 <a href="javascript:window.location.assign('randd-wig-dashboard.html')" data-height="220" class="caption round-medium shadow-huge bottom-20">
                     <div class="caption-center center-text">
                         <i class="fa fa-file fa-3x color-magenta1-dark top-15 bottom-20"></i>
@@ -86,7 +176,7 @@
                     <div class="caption-overlay bg-theme"></div>
                 </a>
             </div>
-            <!--<div class="one-half last-column">
+            <div class="one-half last-column">
                 <a href="component-footers.html" data-height="220" class="caption round-medium shadow-huge bottom-20">
                     <div class="caption-center center-text">
                         <i class="fa fa-bars fa-3x color-brown1-dark top-15 bottom-20"></i>
@@ -98,10 +188,10 @@
                     </div>
                     <div class="caption-overlay bg-theme"></div>
                 </a>
-            </div>-->  
+            </div>  
         </div>
         <div class="clear"></div>
-        <!--<div class="content">
+        <div class="content">
             <div class="one-half">
                 <a href="media.html" data-height="220" class="caption round-medium shadow-huge bottom-10">
                     <div class="caption-center center-text">
@@ -128,34 +218,25 @@
                     <div class="caption-overlay bg-theme"></div>
                 </a>
             </div>
-        </div>-->
-        <div class="clear"></div>
-        
-        <!--<div class="content-boxed bottom-0">
-            <div class="footer">
-                <a href="#" class="footer-title"><span class="color-highlight">StickyMobile</span></a>
-                <p class="footer-text"><span>Made with <i class="fa fa-heart color-highlight font-16 left-10 right-10"></i> by Enabled</span><br><br>Powered by the best Mobile Website Developer on the Envato Marketplaces. Elite Quality. Elite Products.</p>
-                <div class="footer-socials">
-                    <a href="#" class="round-tiny shadow-medium bg-facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="round-tiny shadow-medium bg-twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="round-tiny shadow-medium bg-phone"><i class="fa fa-phone"></i></a>
-                    <a href="#" data-menu="menu-share" class="round-tiny shadow-medium bg-red2-dark"><i class="fa fa-share-alt"></i></a>
-                    <a href="#" class="back-to-top round-tiny shadow-medium bg-dark1-light"><i class="fa fa-angle-up"></i></a>
-                </div>
-                <div class="clear"></div>
-                <p class="footer-copyright">Copyright &copy; Enabled <span id="copyright-year">2017</span>. All Rights Reserved.</p>
-                <p class="footer-links"><a href="#" class="color-highlight">Privacy Policy</a> | <a href="#" class="color-highlight">Terms and Conditions</a> | <a href="#" class="back-to-top color-highlight"> Back to Top</a></p>
-                <div class="clear"></div>
-            </div>    
-        </div>-->
+        </div>
+    -->
 
     </div>
 
     <div class="menu-hider"></div>
 </div>
 
-<script type="text/javascript" src="cordova.js"></script>
-<script type="text/javascript" src="scripts/jquery.js"></script>
-<script type="text/javascript" src="scripts/plugins.js"></script>
-<script type="text/javascript" src="scripts/custom.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
+    <script type="text/javascript" src="scripts/plugins.js"></script>
+    <script type="text/javascript" src="scripts/custom.js"></script>
+    <script type="text/javascript" src="scripts/highcharts.js"></script>
+    <script type="text/javascript" src="scripts/drilldown.js"></script>
+    <script type="text/javascript" src="scripts/wig-dashboard.js"></script>
+    <script type="text/javascript" src="scripts/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="scripts/datatables/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        
+    </script>
 </body>
