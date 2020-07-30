@@ -11,7 +11,7 @@ function getDepartmentWIGDashboardInfo(DepartmentId) {
     $.ajax({
 		type:'GET',
 		contentType: 'application/json',
-		url: 'https://localhost:32768/api/dashboard/department/wig/' + DepartmentId,
+		url: URL + '/api/dashboard/department/wig/' + DepartmentId,
 		data: '',
 		dataType: "json",
 		success: function (data,status){
@@ -157,12 +157,12 @@ function drawPiechart(wig_series, lm_series) {
 
 function getDashboardDepartmentCommitmentInfo(DepartmentId) {
 
-    clearWigDashboardTable();
+    /*clearWigDashboardTable();
     
     $.ajax({
         type:'GET',
         contentType: 'application/json',
-        url: 'https://localhost:32768/api/dashboard/department/commitment/' + DepartmentId,
+        url: URL + '/api/dashboard/department/commitment/' + DepartmentId,
         data: '',
         dataType: "json",
         success: function (data,status){
@@ -190,30 +190,39 @@ function getDashboardDepartmentCommitmentInfo(DepartmentId) {
         error: function (data,status){
             console.log(data);
         }
-    });
+    });*/
     
-    /*$('#wig-dashboard-table').DataTable( {
+    $('#wig-dashboard-table').DataTable( {
         "processing": true,
         "serverSide": true,
         "ajax": {
-            "url" : "https://localhost:32768/api/dashboard/department/commitment/" + DepartmentId,
-            "type": "GET",    
-        "dataType": "JSON",    
-        "data": function (d)    
-        {    
-          return d;    
-        },    
+            "url" : URL + "/api/dashboard/department/commitment",
+            "type": "POST", 
+            //"contentType": "application/json", 
+            "dataType": "json",
+            "data": function (data)    
+            {    
+                // Pre-submit
+                data.DepartmentId = DepartmentId;
+
+                return JSON.stringify(data);    
+            }, 
+            dataSrc: function(response) {
+
+                // Post-submit
+                return response.data;
+            }
         },
         "columns": [
             { "data": "CommitmentNo" },
             { "data": "CommitmentName" },
             { "data": "CommitmentRemark" },
             { "data": "DepartmentLmName" },
-            { "data": "startdate" },
-            { "data": "finishdate" },
+            { "data": "CommitmentStartDate" },
+            { "data": "CommitmentFinishDate" },
             { "data": "CommitmentStatus" }
         ]
-    } );*/
+    } );
 }
 
 function getDashboardDepartmentWigCommitmentInfo(WigID) {
@@ -223,7 +232,7 @@ function getDashboardDepartmentWigCommitmentInfo(WigID) {
     $.ajax({
 		type:'GET',
 		contentType: 'application/json',
-		url: 'https://localhost:32768/api/dashboard/department/wig/commitment/' + WigID,
+		url: URL + '/api/dashboard/department/wig/commitment/' + WigID,
 		data: '',
 		dataType: "json",
 		success: function (data,status){
@@ -261,7 +270,7 @@ function getDashboardDepartmentLmCommitmentInfo(LmID) {
     $.ajax({
 		type:'GET',
 		contentType: 'application/json',
-		url: 'https://localhost:32768/api/dashboard/department/lm/commitment/' + LmID,
+		url: URL + '/api/dashboard/department/lm/commitment/' + LmID,
 		data: '',
 		dataType: "json",
 		success: function (data,status){
