@@ -171,7 +171,7 @@ namespace NetkaCommitment.Web.ApiControllers
         }*/
 
         [HttpPost("department/commitment")]
-        public IActionResult GetDepartmentCommitment()
+        public IActionResult GetDepartmentCommitment(DashboardCommitmentViewModel model)
         {
             var draw = Request.Form["draw"].FirstOrDefault();
             // Skiping number of Rows count  

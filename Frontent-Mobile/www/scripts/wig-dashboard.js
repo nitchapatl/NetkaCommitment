@@ -198,7 +198,7 @@ function getDashboardDepartmentCommitmentInfo(DepartmentId) {
         "ajax": {
             "url" : URL + "/api/dashboard/department/commitment",
             "type": "POST", 
-            //"contentType": "application/json", 
+            "contentType": "application/json", 
             "dataType": "json",
             "data": function (data)    
             {    
