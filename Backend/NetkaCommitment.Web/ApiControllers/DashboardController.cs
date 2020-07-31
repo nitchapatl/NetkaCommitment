@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NetkaCommitment.Business;
-using NetkaCommitment.Common.Model;
+using NetkaCommitment.Common;
 using NetkaCommitment.Data.ViewModel;
 
 namespace NetkaCommitment.Web.ApiControllers
@@ -173,52 +173,58 @@ namespace NetkaCommitment.Web.ApiControllers
         [HttpPost("department/commitment")]
         public IActionResult GetDepartmentCommitment(DashboardCommitmentViewModel model)
         {
-            var draw = Request.Form["draw"].FirstOrDefault();
-            // Skiping number of Rows count  
-            var start = Request.Form["start"].FirstOrDefault();
-            // Paging Length 10,20  
-            var length = Request.Form["length"].FirstOrDefault();
-            var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-            // Sort Column Direction ( asc ,desc)  
-            var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
-            // Search Value from (Search box)  
-            var searchValue = Request.Form["search[value]"].FirstOrDefault();
 
-            //Paging Size (10,20,50,100)  
-            int pageSize = length != null ? Convert.ToInt32(length) : 0;
-            int skip = start != null ? Convert.ToInt32(start) : 0;
-            int recordsTotal = 0;
-
-            IOrderedEnumerable<DashboardCommitmentViewModel> result = oDashboardBiz.GetCompanyCommitment().OrderBy(t => t.CommitmentNo);
-
-            IOrderedEnumerable<DashboardCommitmentViewModel> resultsOrdered = result.OrderBy(t => t.CommitmentId);
-            /*//Sorting  
-            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
+            model = model ?? new DashboardCommitmentViewModel();
+            model.columns = model.columns ?? new List<Data.ViewModel.Column>();
+            model.search = model.search ?? new Data.ViewModel.Search
             {
-                resultsOrdered = resultsOrdered.OrderBy(sortColumn + " " + sortColumnDirection);
+                value = string.Empty
+            };
+
+            IEnumerable<DashboardCommitmentViewModel> results = oDashboardBiz.GetDepartmentCommitment(model.DepartmentId).OrderBy(t => t.CommitmentNo);
+
+            IEnumerable<DashboardCommitmentViewModel> resultsFiltered = results;
+            if (!string.IsNullOrEmpty(model.search.value.Trim()))
+            {
+                resultsFiltered = resultsFiltered.Where(t =>
+                    t.CommitmentName.Contains(model.search.value.Trim()) ||
+                    t.CommitmentRemark.Contains(model.search.value.Trim()) ||
+                    t.CommitmentStatus.Contains(model.search.value.Trim())
+                );
             }
-            //Search  
-            if (!string.IsNullOrEmpty(searchValue))
-            {
-                customerData = customerData.Where(m => m.Name == searchValue);
-            }*/
 
-            /*if (sortColumn.Any())
-            {
-                resultsOrdered = sortColumn == "CommitmentNo" ? (sortColumnDirection == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentNo) : resultsOrdered.OrderByDescending(t => t.CommitmentNo)) : resultsOrdered;
-                resultsOrdered = sortColumn == "CommitmentName" ? (sortColumnDirection == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentName) : resultsOrdered.OrderByDescending(t => t.CommitmentName)) : resultsOrdered;
-                resultsOrdered = sortColumn == "CommitmentRemark" ? (sortColumnDirection == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentRemark) : resultsOrdered.OrderByDescending(t => t.CommitmentRemark)) : resultsOrdered;
-                resultsOrdered = sortColumn == "CommitmentStartDate" ? (sortColumnDirection == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentStartDate) : resultsOrdered.OrderByDescending(t => t.CommitmentStartDate)) : resultsOrdered;
-                resultsOrdered = sortColumn == "CommitmentFinishDate" ? (sortColumnDirection == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentFinishDate) : resultsOrdered.OrderByDescending(t => t.CommitmentFinishDate)) : resultsOrdered;
-                resultsOrdered = sortColumn == "CommitmentStatus" ? (sortColumnDirection == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentStatus) : resultsOrdered.OrderByDescending(t => t.CommitmentStatus)) : resultsOrdered;
-            }*/
+            IOrderedEnumerable<DashboardCommitmentViewModel> resultsOrdered = resultsFiltered.OrderBy(t => t.CommitmentId);
 
-            //total number of rows count   
-            recordsTotal = result.Count();
-            //Paging   
-            var data = resultsOrdered.Skip(skip).Take(pageSize).ToList();
-            //Returning Json Data  
-            //return Json(new { draw = draw, recordsFiltered = resultsOrdered.Count(), recordsTotal = recordsTotal, data = data });
+            if (model.columns.Any())
+            {
+                string orderBy = model.columns[model.order[0].column].data;
+                string orderType = model.order[0].dir;
+
+                resultsOrdered = orderBy == "CommitmentNo" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentNo) : resultsOrdered.OrderByDescending(t => t.CommitmentNo)) : resultsOrdered;
+                resultsOrdered = orderBy == "CommitmentName" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentName) : resultsOrdered.OrderByDescending(t => t.CommitmentName)) : resultsOrdered;
+                resultsOrdered = orderBy == "CommitmentRemark" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentRemark) : resultsOrdered.OrderByDescending(t => t.CommitmentRemark)) : resultsOrdered;
+                resultsOrdered = orderBy == "CommitmentStartDate" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentStartDate) : resultsOrdered.OrderByDescending(t => t.CommitmentStartDate)) : resultsOrdered;
+                resultsOrdered = orderBy == "CommitmentFinishDate" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentFinishDate) : resultsOrdered.OrderByDescending(t => t.CommitmentFinishDate)) : resultsOrdered;
+                resultsOrdered = orderBy == "CommitmentStatus" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentStatus) : resultsOrdered.OrderByDescending(t => t.CommitmentStatus)) : resultsOrdered;
+            }
+
+            /*return new DataTablesServerSideResult<DashboardCommitmentViewModel>
+            {
+                draw = model.draw,
+                recordsFiltered = resultsOrdered.Count(),
+                recordsTotal = results.Count(),
+                data = resultsOrdered.Skip(model.start).Take(model.length).ToList()
+            };*/
+            return Ok(new DataTablesServerSideResult<DashboardCommitmentViewModel>
+            {
+                draw = model.draw,
+                recordsTotal = results.Count(),
+                recordsFiltered = resultsOrdered.Count(),
+                data = resultsOrdered
+                    .Skip(model.start)
+                    .Take(model.length)
+                    .ToList()
+            });
             /*if (result != null)
             {
                 return StatusCode(StatusCodes.Status200OK, result);
@@ -227,9 +233,6 @@ namespace NetkaCommitment.Web.ApiControllers
             {
                 return StatusCode(StatusCodes.Status404NotFound);
             }*/
-
-            dynamic response = new { Data = result, draw = draw, RecordsFiltered = resultsOrdered.Count(), RecordsTotal = recordsTotal};
-            return Ok(response);
         }
 
         [HttpGet("department/wig/commitment/{WigID}")]

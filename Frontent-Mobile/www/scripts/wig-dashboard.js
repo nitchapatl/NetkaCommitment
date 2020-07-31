@@ -206,18 +206,17 @@ function getDashboardDepartmentCommitmentInfo(DepartmentId) {
                 data.DepartmentId = DepartmentId;
 
                 return JSON.stringify(data);    
-            }, 
+            }/*, 
             dataSrc: function(response) {
 
                 // Post-submit
                 return response.data;
-            }
+            }*/
         },
         "columns": [
             { "data": "CommitmentNo" },
             { "data": "CommitmentName" },
             { "data": "CommitmentRemark" },
-            { "data": "DepartmentLmName" },
             { "data": "CommitmentStartDate" },
             { "data": "CommitmentFinishDate" },
             { "data": "CommitmentStatus" }
