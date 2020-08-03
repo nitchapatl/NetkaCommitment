@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MySqlConnector;
 using NetkaCommitment.Data.EFModels;
 using Newtonsoft.Json.Serialization;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
@@ -42,7 +43,11 @@ namespace NetkaCommitment.Web
                 options.SerializerSettings.ContractResolver = new DefaultContractResolver();
             });
 
-            services.AddDbContextPool<NetkaCommitmentContext>(options => options.UseMySql("Server=127.0.0.1;port=3306;Database=netkacommitment;User=root;Password=1234;",
+            /*services.AddDbContextPool<NetkaCommitmentContext>(options => options.UseMySql("Server=127.0.0.1;port=3306;Database=netkacommitment;User=root;Password=1234;",
+                mySqlOptions => mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql))
+            ));*/
+
+            services.AddDbContextPool<NetkaCommitmentContext>(options => options.UseMySql("Server=10.1.8.31;port=3306;Database=netkacommitment;User=nksnms;Password=G4xK$8qLa",
                 mySqlOptions => mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql))
             ));
 

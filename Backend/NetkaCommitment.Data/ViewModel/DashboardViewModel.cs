@@ -21,7 +21,7 @@ namespace NetkaCommitment.Data.ViewModel
         public string LmName { get; set; }
         public float LmValue { get; set; }
     }
-    public class DashboardCommitmentViewModel
+    public class DashboardCommitmentViewModel : DataTableAjaxPostViewModel
     {
         public uint CommitmentId { get; set; }
         public uint DepartmentLmId { get; set; }

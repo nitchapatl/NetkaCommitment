@@ -1,17 +1,12 @@
-$(document).ready(function() {
-    
 
-var DepartmentId = 5; 
-    
+getWIGDashboardInfo();
+getDashboardCommitmentInfo();
 
-getDepartmentWIGDashboardInfo(DepartmentId);
-getDashboardDepartmentCommitmentInfo(DepartmentId);
-
-function getDepartmentWIGDashboardInfo(DepartmentId) {
-    $.ajax({
+function getWIGDashboardInfo() {
+	$.ajax({
 		type:'GET',
 		contentType: 'application/json',
-		url: URL + '/api/dashboard/department/wig/' + DepartmentId,
+		url: 'https://localhost:32768/api/dashboard/company/wig',
 		data: '',
 		dataType: "json",
 		success: function (data,status){
@@ -47,8 +42,8 @@ function getDepartmentWIGDashboardInfo(DepartmentId) {
                 lm_series.push(lm_list);
             });
 
-            console.log(wig_series);
-            console.log(lm_series);
+            //console.log(wig_series);
+            //console.log(lm_series);
 
             drawPiechart(wig_series, lm_series);
 
@@ -62,7 +57,7 @@ function getDepartmentWIGDashboardInfo(DepartmentId) {
 function drawPiechart(wig_series, lm_series) {
 
     Highcharts.setOptions({
-        colors: ['#7fdbda', '#ade498', '#ede682', '#febf63', '#df5e88', '#1dd3bd', '#436f8a', '#e5e5e5', '#fcf876', '#fe8a71']
+        colors: ['#24CBE5', '#64E572', '#FF9655', '#CB2326', '#6AF9C4']
     });
     Highcharts.chart('container', {
         credits: {
@@ -76,7 +71,7 @@ function drawPiechart(wig_series, lm_series) {
                        
                 },    
                 drillup: function(e) {    
-                    getDashboardDepartmentCommitmentInfo(DepartmentId);
+                    getDashboardCommitmentInfo();
                 }    
             }    
         },
@@ -84,7 +79,7 @@ function drawPiechart(wig_series, lm_series) {
             text: 'WIG Dashboard'
         },
         subtitle: {
-            text: 'Department :' + DepartmentId + ' Employee: ' + 'mf'
+            text: 'Overall'
         },
 
         accessibility: {
@@ -100,28 +95,33 @@ function drawPiechart(wig_series, lm_series) {
             series: {
                 dataLabels: {
                     enabled: true,
-                    format: '{point.name}: {point.y}',
-                    padding: 0
+                    format: '{point.name}: {point.y}'
                 },
                 events: {
                         click: function(e) {
                             
-                            
+                            //alert(e.point.name)
+                            //alert(e.point.wigid)
+                            //alert(e.point.lmid)
+                            //console.log(e.point.x)
+                            //console.log(e.point.series.userOptions.data)
+                            //console.log(this.chart.series.options.data[e.point.x])
+
                             var WigID = e.point.wigid; //console.log(WigID)
                             var LmID = e.point.lmid; //console.log(LmID)
 
-                            var XAxis_value = e.point.x; //console.log(XAxis_value)
+                            var XAxis_value = e.point.x; 
+                            //console.log(XAxis_value)
                             //console.log(e.point.series.userOptions.data[XAxis_value])
-
                             var wiglm_data = e.point.series.userOptions.data[XAxis_value];
 
-                            // Get department commitment by WigID or LmID //
+                            // Get commitment by WigID or LmID //
                             if (WigID != "" && LmID == "") 
                             {
                                 console.log("display commitment by wig")
                                 console.log("WIG ID: " + WigID)
 
-                                getDashboardDepartmentWigCommitmentInfo(WigID);
+                                getDashboardWigCommitmentInfo(WigID);
                             }
                             else if (WigID != "" && LmID != "") {
                                 console.log("display commitment by lm")
@@ -130,7 +130,7 @@ function drawPiechart(wig_series, lm_series) {
                                 console.log("WIG ID: " + WigID_value);
                                 console.log("LM ID: " + LmID_value);
                                 
-                                getDashboardDepartmentLmCommitmentInfo(LmID_value);
+                                getDashboardLmCommitmentInfo(LmID_value);
                             }
 
                         }
@@ -145,7 +145,7 @@ function drawPiechart(wig_series, lm_series) {
         },
 
         series: [{
-            name: "Department WIG",
+            name: "Company WIG",
             colorByPoint: true,
             data: wig_series
         }],
@@ -155,83 +155,14 @@ function drawPiechart(wig_series, lm_series) {
     });
 }
 
-function getDashboardDepartmentCommitmentInfo(DepartmentId) {
-
-    /*clearWigDashboardTable();
-    
-    $.ajax({
-        type:'GET',
-        contentType: 'application/json',
-        url: URL + '/api/dashboard/department/commitment/' + DepartmentId,
-        data: '',
-        dataType: "json",
-        success: function (data,status){
-            
-            console.log(data);
-
-            $.each(data, function(i, item){
-                
-                var startdate = new Date(item.CommitmentStartDate);
-                var finishdate = new Date(item.CommitmentFinishDate);
-
-                $("#wig-dashboard-table").find('tbody').append(
-                        "<tr><td>" + item.CommitmentNo + "</td>" 
-                      + "<td class='color-green1-dark'>" + item.CommitmentName + "</td>"
-                      + "<td>" + item.CommitmentRemark + "</td>"
-                      + "<td>" + item.DepartmentLmName + "</td>"
-                      + "<td class='color-yellow1-dark'>" + moment(startdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
-                      + "<td class='color-yellow1-dark'>" + moment(finishdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
-                      + "<td class='color-blue1-dark'>" + item.CommitmentStatus + "</td>"
-                      + "</tr>");
-                                
-            });
-
-        },
-        error: function (data,status){
-            console.log(data);
-        }
-    });*/
-    
-    $('#wig-dashboard-table').DataTable( {
-        "processing": true,
-        "serverSide": true,
-        "ajax": {
-            "url" : URL + "/api/dashboard/department/commitment",
-            "type": "POST", 
-            "contentType": "application/json", 
-            "dataType": "json",
-            "data": function (data)    
-            {    
-                // Pre-submit
-                data.DepartmentId = DepartmentId;
-
-                return JSON.stringify(data);    
-            }/*, 
-            dataSrc: function(response) {
-
-                // Post-submit
-                return response.data;
-            }*/
-        },
-        "columns": [
-            { "data": "CommitmentNo" },
-            { "data": "CommitmentName" },
-            { "data": "CommitmentRemark" },
-            { "data": "CommitmentStartDate" },
-            { "data": "CommitmentFinishDate" },
-            { "data": "CommitmentStatus" }
-        ]
-    } );
-}
-
-function getDashboardDepartmentWigCommitmentInfo(WigID) {
+function getDashboardCommitmentInfo() {
 
     clearWigDashboardTable();
-
+    
     $.ajax({
 		type:'GET',
 		contentType: 'application/json',
-		url: URL + '/api/dashboard/department/wig/commitment/' + WigID,
+		url: 'https://localhost:32768/api/dashboard/company/commitment',
 		data: '',
 		dataType: "json",
 		success: function (data,status){
@@ -262,14 +193,52 @@ function getDashboardDepartmentWigCommitmentInfo(WigID) {
 	});
 }
 
-function getDashboardDepartmentLmCommitmentInfo(LmID) {
+function getDashboardWigCommitmentInfo(WigID) {
 
     clearWigDashboardTable();
 
     $.ajax({
 		type:'GET',
 		contentType: 'application/json',
-		url: URL + '/api/dashboard/department/lm/commitment/' + LmID,
+		url: 'https://localhost:32768/api/dashboard/company/wig/commitment/' + WigID,
+		data: '',
+		dataType: "json",
+		success: function (data,status){
+            
+            console.log(data);
+
+            $.each(data, function(i, item){
+                
+                var startdate = new Date(item.CommitmentStartDate);
+                var finishdate = new Date(item.CommitmentFinishDate);
+
+                $("#wig-dashboard-table").find('tbody').append(
+                        "<tr><td>" + item.CommitmentNo + "</td>" 
+                      + "<td class='color-green1-dark'>" + item.CommitmentName + "</td>"
+                      + "<td>" + item.CommitmentRemark + "</td>"
+                      + "<td>" + item.DepartmentLmName + "</td>"
+                      + "<td class='color-yellow1-dark'>" + moment(startdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
+                      + "<td class='color-yellow1-dark'>" + moment(finishdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
+                      + "<td class='color-blue1-dark'>" + item.CommitmentStatus + "</td>"
+                      + "</tr>");
+                                
+            });
+
+		},
+		error: function (data,status){
+			console.log(data);
+		}
+	});
+}
+
+function getDashboardLmCommitmentInfo(LmID) {
+
+    clearWigDashboardTable();
+
+    $.ajax({
+		type:'GET',
+		contentType: 'application/json',
+		url: 'https://localhost:32768/api/dashboard/company/lm/commitment/' + LmID,
 		data: '',
 		dataType: "json",
 		success: function (data,status){
@@ -304,4 +273,3 @@ function clearWigDashboardTable() {
     $('#wig-dashboard-table tbody').html("");
 }
 
-} );
