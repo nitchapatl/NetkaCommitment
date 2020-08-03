@@ -33,8 +33,8 @@ namespace NetkaCommitment.Repository
             obj.CommitmentNo = lastId;
             obj.CommitmentLm = obj.CommitmentLm; 
             obj.CommitmentName = obj.CommitmentName; 
-            obj.UserId = 11;
-            obj.CreatedBy = 1;
+            //obj.UserId = obj.CreatedBy;
+            //obj.CreatedBy = obj.CreatedBy;
             obj.CreatedDate = DateTime.Now;
             obj.UpdatedBy = null;
             obj.UpdatedDate = null;
@@ -52,7 +52,7 @@ namespace NetkaCommitment.Repository
                 return false;
             }
 
-            obj.UpdatedBy = 1;
+            obj.UpdatedBy = obj.UpdatedBy;
             obj.UpdatedDate = DateTime.Now;
             obj.IsDeleted = 0;
             obj.CommitmentName = obj.CommitmentName;
@@ -68,7 +68,7 @@ namespace NetkaCommitment.Repository
                 return false;
             }
 
-            obj.UpdatedBy = 1;
+            obj.UpdatedBy = obj.UpdatedBy;
             obj.UpdatedDate = DateTime.Now;
             obj.IsDeleted = 1;
             db.Entry(obj).State = EntityState.Modified;

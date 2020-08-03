@@ -56,7 +56,7 @@ namespace NetkaCommitment.Web.ApiControllers
             oCommitment.UpdatedBy = model.UpdatedBy;
 
             var result = false;
-            if (model.CommitmentStatus == "Done" || model.CommitmentStatus == "Fail" || model.CommitmentStatus=="In-Progress") {
+            if (model.CommitmentStatus == "Success" || model.CommitmentStatus == "Fail") {
                 result = oCommitmentBiz.UpdateCommitment(model);
                 return StatusCode(StatusCodes.Status200OK, result);
             } else if (model.CommitmentStatus == "Delete") {
@@ -85,7 +85,7 @@ namespace NetkaCommitment.Web.ApiControllers
         [HttpPost("GetTCommitment")]
         public IActionResult getTCommitment([FromBody] TCommitmentViewModel model)
         {
-            var result = oCommitmentBiz.GetTCommitment().Where(x => x.CreatedBy == model.CreatedBy);
+            var result = oCommitmentBiz.GetCommitment().Where(x => x.CreatedBy == model.CreatedBy);
             if (result != null)
             {
                 return StatusCode(StatusCodes.Status200OK, result);
@@ -123,10 +123,10 @@ namespace NetkaCommitment.Web.ApiControllers
         }
 
 
-        [HttpGet("GetCommitmentSummary")]
-        public IActionResult getCommitmentSummary()
+        [HttpPost("GetCommitmentSummary")]
+        public IActionResult getCommitmentSummary([FromBody] TCommitmentSummaryViewModel model)
         {
-            var result = oCommitmentBiz.GetCommitmentSummary();
+            var result = oCommitmentBiz.GetCommitmentSummary(model);
             if (result != null)
             {
                 return StatusCode(StatusCodes.Status200OK, result);

@@ -63,7 +63,12 @@ namespace NetkaCommitment.Data.ViewModel
         public string DepartmentWigName { get; set; }
         public string DepartmentLmName { get; set; }
         public int CommitmentCount { get; set; }
-
+        public uint CreatedBy { get; set; }
+        public uint CompanyWigId { get; set; }
+        public uint CompanyLmId { get; set; }
+        public uint? DepartmentWigId { get; set; }
+        public uint DepartmentLmId { get; set; }
+        public int CommitmentSum { get; set; }
     }
 
 

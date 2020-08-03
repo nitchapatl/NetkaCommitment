@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using NetkaCommitment.Data.EFModels;
 using NetkaCommitment.Data.ViewModel;
 using NetkaCommitment.Repository;
@@ -25,8 +26,8 @@ namespace NetkaCommitment.Business
         {
             return oCommitmentRepository.Insert(new TCommitment
             {
-                UserId = 11,
-
+                UserId = obj.CreatedBy,
+                CreatedBy = obj.CreatedBy,
                 CommitmentLm = obj.DepartmentLmId,
                 CommitmentName = obj.CommitmentName,
                 CommitmentDescription = "",
@@ -34,7 +35,7 @@ namespace NetkaCommitment.Business
                 CommitmentStartDate = obj.CommitmentStartDate, //DateTime.Now,
                 CommitmentFinishDate = null,
                 CommitmentIsDeleted = 0,
-                CommitmentStatus = db.MParentUser.Any(t => t.UserId == 11) ? "Watting for approve." : "In-Progress"
+                CommitmentStatus = db.MParentUser.Any(t => t.UserId == obj.CreatedBy) ? "Watting for approve." : "In-Progress"
             });
         }
         public bool UpdateCommitment(TCommitmentViewModel obj)
@@ -42,16 +43,12 @@ namespace NetkaCommitment.Business
             var oCommitment = oCommitmentRepository.Get().Where(t => t.CommitmentId == obj.CommitmentId && t.IsDeleted == 0).FirstOrDefault();
             if (oCommitment != null)
             {
-                if (obj.CommitmentStatus == "Done") {
+                if (obj.CommitmentStatus == "Success") {
                     oCommitment.CommitmentFinishDate = DateTime.Now;
                     oCommitment.CommitmentStatus = db.MParentUser.Any(t => t.UserId == obj.UpdatedBy) ? "Waiting for " + obj.CommitmentStatus + " re-approve." : obj.CommitmentStatus;
                     return oCommitmentRepository.Update(oCommitment);
                 } else if (obj.CommitmentStatus == "Fail") {
                     oCommitment.CommitmentRemark = obj.CommitmentRemark;
-                    oCommitment.CommitmentStatus = obj.CommitmentStatus;
-                    return oCommitmentRepository.Update(oCommitment);
-                } else if (obj.CommitmentStatus=="In-Progress") {
-                    oCommitment.CommitmentName = obj.CommitmentName;
                     oCommitment.CommitmentStatus = obj.CommitmentStatus;
                     return oCommitmentRepository.Update(oCommitment);
                 }
@@ -185,16 +182,21 @@ namespace NetkaCommitment.Business
         }
 
 
-        public List<TCommitmentSummaryViewModel> GetCommitmentSummary()
+        public List<TCommitmentSummaryViewModel> GetCommitmentSummary(TCommitmentSummaryViewModel obj)
         {
             return db.MDepartmentLm.Select(t => new TCommitmentSummaryViewModel
             {
+                //CompanyWigId = t.DepartmentWig.CompanyLm.CompanyWig.CompanyWigId,
                 CompanyWigName = t.DepartmentWig.CompanyLm.CompanyWig.CompanyWigName,
+                //CompanyLmId = t.DepartmentWig.CompanyLm.CompanyWig.CompanyWigId,
                 CompanyLmName = t.DepartmentWig.CompanyLm.CompanyLmName,
+                //DepartmentWigId = t.DepartmentWigId,
                 DepartmentWigName = t.DepartmentWig.DepartmentWigName,
+                //DepartmentLmId = t.LmId,
                 DepartmentLmName = t.LmName,
-                CommitmentCount = t.TCommitment.Count()
-            }).ToList();
+                CreatedBy = t.CreatedBy,
+                CommitmentCount = t.TCommitment.Count(),
+            }).Where(x => x.CreatedBy==obj.CreatedBy).ToList();
         }
 
     }
