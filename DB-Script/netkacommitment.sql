@@ -42,7 +42,8 @@ DELETE FROM `m_company_lm`;
 INSERT INTO `m_company_lm` (`COMPANY_LM_ID`, `COMPANY_LM_NAME`, `COMPANY_LM_DESCRIPTION`, `COMPANY_LM_VALUE`, `COMPANY_LM_SEQUENCE`, `CREATED_DATE`, `CREATED_BY`, `UPDATED_DATE`, `UPDATED_BY`, `IS_DELETED`, `COMPANY_WIG_ID`) VALUES
 	(1, 'Increase total revenue from 1xxM Baht to 380M Baht by Dec 2020', NULL, 0, 1, '2020-03-05 14:15:49', 1, '2020-03-05 14:15:50', 1, b'0', 1),
 	(2, 'Increase NPA revenue from 0 to 60M Baht by Dec 2020', NULL, 0, 2, '2020-03-05 14:16:20', 1, '2020-03-05 14:16:25', 1, b'0', 1),
-	(3, 'Increase Process Compliance Index (PCI) of all projects and all department\'s processes from x% to 95% by Dec 2020', NULL, 0, 3, '2020-03-05 14:16:53', 1, '2020-03-05 14:16:54', 1, b'0', 1);
+	(3, 'Increase Process Compliance Index (PCI) of all projects and all department\'s processes from x% to 95% by Dec 2020', NULL, 0, 3, '2020-03-05 14:16:53', 1, '2020-03-05 14:16:54', 1, b'0', 1),
+    (4, 'Company WIG 2 LM 1', 'ทดสอบ', 0, 4, '2020-07-02 15:15:10', 47, '2020-07-02 15:15:10', 47, b'0', 2);
 /*!40000 ALTER TABLE `m_company_lm` ENABLE KEYS */;
 
 -- Dumping structure for table netkacommitment.m_company_wig
@@ -65,7 +66,8 @@ CREATE TABLE IF NOT EXISTS `m_company_wig` (
 DELETE FROM `m_company_wig`;
 /*!40000 ALTER TABLE `m_company_wig` DISABLE KEYS */;
 INSERT INTO `m_company_wig` (`COMPANY_WIG_ID`, `COMPANY_WIG_NAME`, `COMPANY_WIG_YEAR`, `COMPANY_WIG_DESCRIPTION`, `COMPANY_WIG_SEQUENCE`, `CREATED_DATE`, `CREATED_BY`, `UPDATED_DATE`, `UPDATED_BY`, `IS_DELETED`) VALUES
-	(1, 'Increase Net Income (NI) from xxM Baht to 180M Baht by Dec 2020', 2020, '', 1, '2020-03-05 13:55:26', 1, '2020-03-05 13:55:28', 1, b'0');
+	(1, 'Increase Net Income (NI) from xxM Baht to 180M Baht by Dec 2020', 2020, '', 1, '2020-03-05 13:55:26', 1, '2020-03-05 13:55:28', 1, b'0'),
+    (2, 'Company WIG 2', 2020, 'ทดสอบ', 2, '2020-07-02 15:10:10', 47, '2020-07-02 15:10:10', 47, b'0');
 /*!40000 ALTER TABLE `m_company_wig` ENABLE KEYS */;
 
 -- Dumping structure for table netkacommitment.m_department
@@ -128,7 +130,11 @@ INSERT INTO `m_department_lm` (`LM_ID`, `LM_NAME`, `LM_DESCRIPTION`, `LM_SEQUENC
 	(8, 'Conduct R&D process checklist and review every week', NULL, 8, '2020-03-05 14:28:25', 1, '2020-03-05 14:28:26', 1, b'0', 4),
 	(9, 'Do SCM comply statement 1 criteria per week', NULL, 9, '2020-03-05 14:28:25', 1, '2020-03-05 14:28:26', 1, b'0', 5),
 	(10, 'Write SCM manual 1 criteria per week', NULL, 10, '2020-03-05 14:28:25', 1, '2020-03-05 14:28:26', 1, b'0', 5),
-	(11, 'Increase number of activity that drive company goals from 0 to 5 every week', NULL, 11, '2020-03-05 14:28:25', 1, '2020-03-05 14:28:26', 1, b'0', 6);
+	(11, 'Increase number of activity that drive company goals from 0 to 5 every week', NULL, 11, '2020-03-05 14:28:25', 1, '2020-03-05 14:28:26', 1, b'0', 6),
+    (12, 'R&D LM12', 'R&D LM12', 12, '2020-06-26 11:22:51', 1, '2020-06-26 11:22:51', 1, b'0', 7),
+    (13, 'R&D LM13', 'R&D LM13', 13, '2020-06-26 11:23:44', 1, '2020-06-26 11:23:44', 1, b'0', 8),
+    (14, 'R&D LM14', 'R&D LM14', 14, '2020-06-26 11:25:46', 1, '2020-06-26 11:25:46', 1, b'0', 9),
+    (15, 'R&D LM15', 'R&D LM15', 4, '2020-07-14 15:48:04', 47, '2020-07-14 15:48:04', 47, b'0', 10);
 /*!40000 ALTER TABLE `m_department_lm` ENABLE KEYS */;
 
 -- Dumping structure for table netkacommitment.m_department_wig
@@ -164,7 +170,11 @@ INSERT INTO `m_department_wig` (`DEPARTMENT_WIG_ID`, `DEPARTMENT_WIG_NAME`, `DEP
 	(3, 'Develop new technologies from 0 to 3 features by Dec 2020', NULL, 3, '2020-03-05 14:23:48', 1, '2020-03-05 14:23:50', 1, b'0', 5, NULL, NULL),
 	(4, 'Increase PCI of all R&D projects from xx% to 95% by Dec 2020', NULL, 4, '2020-03-05 14:23:48', 1, '2020-03-05 14:23:50', 1, b'0', 5, NULL, NULL),
 	(5, 'Certify PINK from 3 to 4 Process by Aug 2020', NULL, 5, '2020-03-05 14:23:48', 1, '2020-03-05 14:23:50', 1, b'0', 5, NULL, NULL),
-	(6, 'Increase number of activity that drive company goals from 0 to 260 by Dec 2020', NULL, 6, '2020-03-05 14:23:48', 1, '2020-03-05 14:23:50', 1, b'0', 5, NULL, NULL);
+	(6, 'Increase number of activity that drive company goals from 0 to 260 by Dec 2020', NULL, 6, '2020-03-05 14:23:48', 1, '2020-03-05 14:23:50', 1, b'0', 5, NULL, NULL),
+    (7, 'R&D WIG 7', 'R&D WIG 7', 7, '2020-06-26 11:19:15', 1, '2020-06-26 11:19:15', 1, b'0', 5, 1, 1),
+    (8, 'R&D WIG 8', 'R&D WIG 8', 8, '2020-06-26 11:20:47', 1, '2020-06-26 11:20:47', 1, b'0', 5, 1, 2),
+    (9, 'R&D WIG 9', 'R&D WIG 9', 9, '2020-06-26 11:21:41', 1, '2020-06-26 11:21:41', 1, b'0', 5, 1, 3),
+    (10, 'R&D WIG 10', 'R&D WIG 10', 4, '2020-07-14 15:33:42', 47, '2020-07-14 15:33:42', 47, b'0', 5, 2, 4);
 /*!40000 ALTER TABLE `m_department_wig` ENABLE KEYS */;
 
 -- Dumping structure for table netkacommitment.m_parent_user
@@ -405,6 +415,22 @@ CREATE TABLE IF NOT EXISTS `t_commitment` (
 -- Dumping data for table netkacommitment.t_commitment: ~0 rows (approximately)
 DELETE FROM `t_commitment`;
 /*!40000 ALTER TABLE `t_commitment` DISABLE KEYS */;
+INSERT INTO `t_commitment` (`COMMITMENT_ID`, `COMMITMENT_NO`, `COMMITMENT_NAME`, `COMMITMENT_DESCRIPTION`, `COMMITMENT_REMARK`, `COMMITMENT_START_DATE`, `COMMITMENT_FINISH_DATE`, `COMMITMENT_IS_DELETED`, `COMMITMENT_STATUS`, `CREATED_DATE`, `CREATED_BY`, `UPDATED_DATE`, `UPDATED_BY`, `IS_DELETED`, `COMMITMENT_LM`, `USER_ID`) VALUES
+(1, 1, 'commitment 1', 'commitment 1', 'ทดสอบ', '2020-06-22 11:26:44', '2020-06-26 11:26:44', b'0', 'Watting for approval.', '2020-06-26 11:26:44', 47, '2020-06-26 11:26:44', 47, b'0', 12, 47),
+(2, 2, 'commitment 2', 'commitment 2', 'ทดสอบ', '2020-06-22 11:30:13', '2020-06-26 11:30:13', b'0', 'Watting for approval.', '2020-06-26 11:30:13', 47, '2020-06-26 11:30:13', 47, b'0', 13, 47),
+(3, 3, 'commitment 3', 'commitment 3', 'ทดสอบ', '2020-06-22 11:31:47', '2020-06-26 11:31:47', b'0', 'Watting for approval.', '2020-06-26 11:31:47', 47, '2020-06-26 11:31:47', 47, b'0', 14, 47),
+(4, 4, 'commitment 4', 'commitment 4', 'ทดสอบ', '2020-06-22 11:33:45', '2020-06-26 11:33:45', b'0', 'Watting for approval.', '2020-06-26 11:33:45', 47, '2020-06-26 11:33:45', 47, b'0', 12, 47),
+(5, 5, 'commitment 5', 'commitment 5', 'ทดสอบ', '2020-06-22 11:35:29', '2020-06-26 11:35:29', b'0', 'Watting for approval.', '2020-06-26 11:35:29', 47, '2020-06-26 11:35:29', 47, b'0', 13, 47),
+(6, 6, 'commitment 6', 'commitment 6', 'ทดสอบ', '2020-06-22 11:36:54', '2020-06-26 11:36:54', b'0', 'Watting for approval.', '2020-06-26 11:36:54', 47, '2020-06-26 11:36:54', 47, b'0', 12, 47),
+(7, 7, 'commitment 7', 'commitment 7', 'ทดสอบ', '2020-06-29 15:04:47', '2020-07-03 15:04:47', b'0', 'Watting for approval.', '2020-07-02 15:04:47', 47, '2020-07-02 15:04:47', 47, b'0', 11, 47),
+(8, 8, 'commitment 8', 'commitment 8', 'ทดสอบ', '2020-07-14 15:57:28', '2020-07-14 15:57:28', b'0', 'Watting for approval.', '2020-07-14 15:57:28', 47, '2020-07-14 15:57:28', 47, b'0', 15, 47),
+(9, 9, 'commitment 9', 'commitment 9', 'ทดสอบ', '2020-07-16 13:12:07', '2020-07-16 13:12:07', b'0', 'Watting for approval.', '2020-07-16 13:12:07', 47, '2020-07-16 13:12:07', 47, b'0', 8, 47),
+(10, 10, 'commitment 10 ', 'commitment 10', 'ทดสอบ', '2020-07-16 13:26:36', '2020-07-16 13:26:36', b'0', 'Watting for approval.', '2020-07-16 13:26:36', 47, '2020-07-16 13:26:36', 47, b'0', 10, 47),
+(11, 11, 'commitment 11', 'commitment 11', 'ทดสอบ', '2020-07-16 13:28:49', '2020-07-16 13:28:49', b'0', 'Watting for approval.', '2020-07-16 13:28:49', 47, '2020-07-16 13:28:49', 47, b'0', 5, 47),
+(12, 12, 'commitment 12', 'commitment 12', 'ทดสอบ', '2020-07-16 13:32:54', '2020-07-16 13:32:54', b'0', 'Watting for approval.', '2020-07-16 13:32:54', 47, '2020-07-16 13:32:54', 47, b'0', 5, 47),
+(13, 13, 'commitment 13', 'commitment 13', 'ทดสอบ', '2020-07-16 13:34:54', '2020-07-16 13:34:54', b'0', 'Watting for approval.', '2020-07-16 13:34:54', 47, '2020-07-16 13:34:54', 47, b'0', 3, 47),
+(14, 14, 'commitment 14', 'commitment 14', 'ทดสอบ', '2020-07-16 13:36:40', '2020-07-16 13:36:40', b'0', 'Watting for approval.', '2020-07-16 13:36:40', 47, '2020-07-16 13:36:40', 47, b'0', 1, 47),
+(15, 15, 'commitment 15', 'commitment 15', 'ทดสอบ', '2020-07-16 13:38:12', '2020-07-16 13:38:12', b'0', 'Watting for approval.', '2020-07-16 13:38:12', 47, '2020-07-16 13:38:12', 47, b'0', 2, 47);
 /*!40000 ALTER TABLE `t_commitment` ENABLE KEYS */;
 
 -- Dumping structure for table netkacommitment.t_firebase_notification

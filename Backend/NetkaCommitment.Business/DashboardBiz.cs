@@ -54,10 +54,14 @@ namespace NetkaCommitment.Business
                     }).ToList();
         }
 
-        public List<DashboardWIGGraphViewModel> GetDepartmentWIG(uint departmentID)
+        public List<DashboardWIGGraphViewModel> GetDepartmentWIG(uint DepartmentId)
         {
+            DateTime departmentwig_startdate = new DateTime(DateTime.Now.Year, 1, 1);
+            DateTime departmentwig_enddate = new DateTime(DateTime.Now.Year, 12, 31);
             return (from wig in db.MDepartmentWig
-                    where wig.DepartmentId == departmentID
+                    where wig.DepartmentId == DepartmentId
+                          && wig.CreatedDate >= departmentwig_startdate 
+                          && wig.CreatedDate <= departmentwig_enddate
                     select new DashboardWIGGraphViewModel
                     {
                         WigID = wig.DepartmentWigId,
@@ -99,6 +103,199 @@ namespace NetkaCommitment.Business
             }).ToList();
         }
 
+        public List<DashboardCommitmentViewModel> GetCompanyCommitment()
+        {
+            return (from c in db.TCommitment
+                    where c.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigYear == DateTime.Now.Year
+                          && c.CommitmentLmNavigation.DepartmentWig.CompanyWigId != null
+                    select new DashboardCommitmentViewModel
+                    {
+                        CommitmentId = c.CommitmentId,
+                        DepartmentLmId = c.CommitmentLmNavigation.LmId,
+                        DepartmentLmName = db.MDepartmentLm.Where(lm => lm.LmId == c.CommitmentLm).Select(lm => lm.LmName).FirstOrDefault(),
+                        DepartmentWigId = c.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
+                        CompanyLmId = c.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
+                        CompanyWigId = c.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigId,
+                        DepartmentId = c.CommitmentLmNavigation.DepartmentWig.Department.DepartmentId,
+                        CommitmentNo = c.CommitmentNo,
+                        CommitmentName = c.CommitmentName,
+                        CommitmentDescription = c.CommitmentDescription,
+                        CommitmentRemark = c.CommitmentRemark,
+                        CommitmentStartDate = c.CommitmentStartDate,
+                        CommitmentFinishDate = c.CommitmentFinishDate,
+                        CommitmentIsDeleted = c.CommitmentIsDeleted,
+                        CommitmentStatus = c.CommitmentStatus,
+                        CreatedDate = c.CreatedDate,
+                        CreatedBy = c.CreatedBy,
+                        UpdatedDate = c.UpdatedDate,
+                        UpdatedBy = c.UpdatedBy
+                    }).ToList();
+        }
+
+        public List<DashboardCommitmentViewModel> GetCompanyCommitmentbyWig(uint WigID)
+        {
+            return (from c in db.TCommitment
+                    where c.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigYear == DateTime.Now.Year
+                          && c.CommitmentLmNavigation.DepartmentWig.CompanyWigId == WigID
+                    select new DashboardCommitmentViewModel
+                    {
+                        CommitmentId = c.CommitmentId,
+                        DepartmentLmId = c.CommitmentLmNavigation.LmId,
+                        DepartmentLmName = db.MDepartmentLm.Where(lm => lm.LmId == c.CommitmentLm).Select(lm => lm.LmName).FirstOrDefault(),
+                        DepartmentWigId = c.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
+                        CompanyLmId = c.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
+                        CompanyWigId = c.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigId,
+                        DepartmentId = c.CommitmentLmNavigation.DepartmentWig.Department.DepartmentId,
+                        CommitmentNo = c.CommitmentNo,
+                        CommitmentName = c.CommitmentName,
+                        CommitmentDescription = c.CommitmentDescription,
+                        CommitmentRemark = c.CommitmentRemark,
+                        CommitmentStartDate = c.CommitmentStartDate,
+                        CommitmentFinishDate = c.CommitmentFinishDate,
+                        CommitmentIsDeleted = c.CommitmentIsDeleted,
+                        CommitmentStatus = c.CommitmentStatus,
+                        CreatedDate = c.CreatedDate,
+                        CreatedBy = c.CreatedBy,
+                        UpdatedDate = c.UpdatedDate,
+                        UpdatedBy = c.UpdatedBy
+                    }).ToList();
+        }
+
+        public List<DashboardCommitmentViewModel> GetCompanyCommitmentbyLm(uint LmID)
+        {
+            return (from c in db.TCommitment
+                    where c.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigYear == DateTime.Now.Year
+                          && c.CommitmentLmNavigation.DepartmentWig.CompanyLmId == LmID
+                    select new DashboardCommitmentViewModel
+                    {
+                        CommitmentId = c.CommitmentId,
+                        DepartmentLmId = c.CommitmentLmNavigation.LmId,
+                        DepartmentLmName = db.MDepartmentLm.Where(lm => lm.LmId == c.CommitmentLm).Select(lm => lm.LmName).FirstOrDefault(),
+                        DepartmentWigId = c.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
+                        CompanyLmId = c.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
+                        CompanyWigId = c.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigId,
+                        DepartmentId = c.CommitmentLmNavigation.DepartmentWig.Department.DepartmentId,
+                        CommitmentNo = c.CommitmentNo,
+                        CommitmentName = c.CommitmentName,
+                        CommitmentDescription = c.CommitmentDescription,
+                        CommitmentRemark = c.CommitmentRemark,
+                        CommitmentStartDate = c.CommitmentStartDate,
+                        CommitmentFinishDate = c.CommitmentFinishDate,
+                        CommitmentIsDeleted = c.CommitmentIsDeleted,
+                        CommitmentStatus = c.CommitmentStatus,
+                        CreatedDate = c.CreatedDate,
+                        CreatedBy = c.CreatedBy,
+                        UpdatedDate = c.UpdatedDate,
+                        UpdatedBy = c.UpdatedBy
+                    }).ToList();
+        }
+
+        public List<DashboardCommitmentViewModel> GetDepartmentCommitment(uint DepartmentId)
+        {
+            DateTime departmentwig_startdate = new DateTime(DateTime.Now.Year, 1, 1);
+            DateTime departmentwig_enddate = new DateTime(DateTime.Now.Year, 12, 31);
+
+            return (from c in db.TCommitment
+                    join departmentlm in db.MDepartmentLm on c.CommitmentLm equals departmentlm.LmId into commitment_departmentlm
+                    from departmentlm in commitment_departmentlm.DefaultIfEmpty()
+                    join departmentw in db.MDepartmentWig on departmentlm.DepartmentWigId equals departmentw.DepartmentWigId into commitment_departmentw
+                    from departmentw in commitment_departmentw.DefaultIfEmpty()
+                    where departmentw.DepartmentId == DepartmentId
+                          && departmentw.CreatedDate >= departmentwig_startdate
+                          && departmentw.CreatedDate <= departmentwig_enddate
+                          //&& companyw.CompanyWigYear == DateTime.Now.Year
+                    select new DashboardCommitmentViewModel
+                    {
+                        CommitmentId = c.CommitmentId,
+                        DepartmentLmId = c.CommitmentLmNavigation.LmId,
+                        DepartmentLmName = db.MDepartmentLm.Where(lm => lm.LmId == c.CommitmentLm).Select(lm => lm.LmName).FirstOrDefault(),
+                        DepartmentWigId = c.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
+                        CompanyLmId = c.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
+                        CompanyWigId = c.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigId,
+                        DepartmentId = c.CommitmentLmNavigation.DepartmentWig.Department.DepartmentId,
+                        CommitmentNo = c.CommitmentNo,
+                        CommitmentName = c.CommitmentName,
+                        CommitmentDescription = c.CommitmentDescription,
+                        CommitmentRemark = c.CommitmentRemark,
+                        CommitmentStartDate = c.CommitmentStartDate,
+                        CommitmentFinishDate = c.CommitmentFinishDate,
+                        CommitmentIsDeleted = c.CommitmentIsDeleted,
+                        CommitmentStatus = c.CommitmentStatus,
+                        CreatedDate = c.CreatedDate,
+                        CreatedBy = c.CreatedBy,
+                        UpdatedDate = c.UpdatedDate,
+                        UpdatedBy = c.UpdatedBy
+                    }).ToList();
+        }
+
+        public List<DashboardCommitmentViewModel> GetDepartmentCommitmentbyWig(uint WigID)
+        {
+            DateTime departmentwig_startdate = new DateTime(DateTime.Now.Year, 1, 1);
+            DateTime departmentwig_enddate = new DateTime(DateTime.Now.Year, 12, 31);
+
+            return (from c in db.TCommitment
+                    join departmentlm in db.MDepartmentLm on c.CommitmentLm equals departmentlm.LmId into commitment_departmentlm
+                    from departmentlm in commitment_departmentlm.DefaultIfEmpty()
+                    join departmentw in db.MDepartmentWig on departmentlm.DepartmentWigId equals departmentw.DepartmentWigId into commitment_departmentw
+                    from departmentw in commitment_departmentw.DefaultIfEmpty()
+                    where departmentw.DepartmentWigId == WigID
+                          && departmentw.CreatedDate >= departmentwig_startdate
+                          && departmentw.CreatedDate <= departmentwig_enddate
+                    
+                    //where c.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigYear == DateTime.Now.Year
+                    //&& c.CommitmentLmNavigation.DepartmentWig.DepartmentWigId == WigID
+                    select new DashboardCommitmentViewModel
+                    {
+                        CommitmentId = c.CommitmentId,
+                        DepartmentLmId = c.CommitmentLmNavigation.LmId,
+                        DepartmentLmName = db.MDepartmentLm.Where(lm => lm.LmId == c.CommitmentLm).Select(lm => lm.LmName).FirstOrDefault(),
+                        DepartmentWigId = c.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
+                        CompanyLmId = c.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
+                        CompanyWigId = c.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigId,
+                        DepartmentId = c.CommitmentLmNavigation.DepartmentWig.Department.DepartmentId,
+                        CommitmentNo = c.CommitmentNo,
+                        CommitmentName = c.CommitmentName,
+                        CommitmentDescription = c.CommitmentDescription,
+                        CommitmentRemark = c.CommitmentRemark,
+                        CommitmentStartDate = c.CommitmentStartDate,
+                        CommitmentFinishDate = c.CommitmentFinishDate,
+                        CommitmentIsDeleted = c.CommitmentIsDeleted,
+                        CommitmentStatus = c.CommitmentStatus,
+                        CreatedDate = c.CreatedDate,
+                        CreatedBy = c.CreatedBy,
+                        UpdatedDate = c.UpdatedDate,
+                        UpdatedBy = c.UpdatedBy
+                    }).ToList();
+        }
+
+        public List<DashboardCommitmentViewModel> GetDepartmentCommitmentbyLm(uint LmID)
+        {
+
+            return (from c in db.TCommitment
+                    where c.CommitmentLm == LmID
+                    select new DashboardCommitmentViewModel
+                    {
+                        CommitmentId = c.CommitmentId,
+                        DepartmentLmId = c.CommitmentLmNavigation.LmId,
+                        DepartmentLmName = db.MDepartmentLm.Where(lm => lm.LmId == c.CommitmentLm).Select(lm => lm.LmName).FirstOrDefault(),
+                        DepartmentWigId = c.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
+                        CompanyLmId = c.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
+                        CompanyWigId = c.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigId,
+                        DepartmentId = c.CommitmentLmNavigation.DepartmentWig.Department.DepartmentId,
+                        CommitmentNo = c.CommitmentNo,
+                        CommitmentName = c.CommitmentName,
+                        CommitmentDescription = c.CommitmentDescription,
+                        CommitmentRemark = c.CommitmentRemark,
+                        CommitmentStartDate = c.CommitmentStartDate,
+                        CommitmentFinishDate = c.CommitmentFinishDate,
+                        CommitmentIsDeleted = c.CommitmentIsDeleted,
+                        CommitmentStatus = c.CommitmentStatus,
+                        CreatedDate = c.CreatedDate,
+                        CreatedBy = c.CreatedBy,
+                        UpdatedDate = c.UpdatedDate,
+                        UpdatedBy = c.UpdatedBy
+                    }).ToList();
+        }
 
         public List<DashboardLMGraphViewModel> GetDoneCompanyLM(uint wigID)
         {
