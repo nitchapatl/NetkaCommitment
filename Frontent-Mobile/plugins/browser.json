@@ -1,0 +1,59 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-app-name": {
+      "APP_NAME": "Netka Commitment",
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-app-version": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-camera": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-file-transfer": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-firebasex": {
+      "FIREBASE_ANALYTICS_COLLECTION_ENABLED": "false",
+      "FIREBASE_PERFORMANCE_COLLECTION_ENABLED": "true",
+      "FIREBASE_CRASHLYTICS_COLLECTION_ENABLED": "true",
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-ios-camera-permissions": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-ios-location-permissions": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    }
+  },
+  "dependent_plugins": {
+    "cordova-plugin-androidx": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    },
+    "cordova-plugin-androidx-adapter": {
+      "PACKAGE_NAME": "com.netkasystem.netkacommitment"
+    }
+  }
+}
