@@ -82,10 +82,32 @@ namespace NetkaCommitment.Web.ApiControllers
             }
         }
 
+        [HttpPost("getCommitmentClosed")]
+        public IActionResult getCommitmentClosed([FromBody] TCommitmentViewModel model)
+        {
+            var result = oCommitmentBiz.GetCommitmentClosed().Where(x => x.CreatedBy == model.CreatedBy);
+            if (model.DepartmentWigName!=null && model.DepartmentLmName!=null) 
+            {
+                result = result.Where(x => x.DepartmentWigName==model.DepartmentWigName && x.DepartmentLmName==model.DepartmentLmName);
+            }else if (model.DepartmentWigName!=null && model.DepartmentLmName==null) 
+            {
+                result = result.Where(x => x.DepartmentWigName==model.DepartmentWigName);
+            }
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
         [HttpPost("GetTCommitment")]
         public IActionResult getTCommitment([FromBody] TCommitmentViewModel model)
         {
-            var result = oCommitmentBiz.GetCommitment().Where(x => x.CreatedBy == model.CreatedBy);
+            var result = oCommitmentBiz.GetTCommitment().Where(x => x.CreatedBy == model.CreatedBy);
             if (result != null)
             {
                 return StatusCode(StatusCodes.Status200OK, result);
@@ -95,33 +117,6 @@ namespace NetkaCommitment.Web.ApiControllers
                 return StatusCode(StatusCodes.Status404NotFound);
             }
         }
-
-        [HttpPost("GetCommitment")]
-        public IActionResult getCommitment([FromBody] TCommitmentViewModel model) {
-            var result = oCommitmentBiz.GetCommitment().Where(x => !(x.IsDeleted == 1) && x.CreatedBy == model.CreatedBy);
-            if (result != null) {
-                return StatusCode(StatusCodes.Status200OK, result);
-            }
-            else {
-                return StatusCode(StatusCodes.Status404NotFound);
-            }
-        }
-
-        [HttpGet("GetGraphWig")]
-        public IActionResult GetCompanyWig()
-        {
-            var result = oCommitmentBiz.GetCompanyWIG();
-
-            if (result != null)
-            {
-                return StatusCode(StatusCodes.Status200OK, result);
-            }
-            else
-            {
-                return StatusCode(StatusCodes.Status404NotFound);
-            }
-        }
-
 
         [HttpPost("GetCommitmentSummary")]
         public IActionResult getCommitmentSummary([FromBody] TCommitmentSummaryViewModel model)
@@ -137,6 +132,20 @@ namespace NetkaCommitment.Web.ApiControllers
             }
         }
 
-        
+        //Not use
+        [HttpPost("GetCommitment")]
+        public IActionResult getCommitment([FromBody] TCommitmentViewModel model)
+        {
+            var result = oCommitmentBiz.GetCommitment().Where(x => !(x.IsDeleted == 1) && x.CreatedBy == model.CreatedBy);
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
     }
 }
