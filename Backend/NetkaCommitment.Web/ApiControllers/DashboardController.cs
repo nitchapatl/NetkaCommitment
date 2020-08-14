@@ -155,90 +155,10 @@ namespace NetkaCommitment.Web.ApiControllers
             }
         }
 
-        /*[HttpGet("department/commitment/{DepartmentId}")]
-        public IActionResult GetDepartmentCommitment(uint DepartmentId)
-        {
-            var result = oDashboardBiz.GetDepartmentCommitment(DepartmentId).OrderBy(t => t.CommitmentNo);
-
-            if (result != null)
-            {
-                return StatusCode(StatusCodes.Status200OK, result);
-            }
-            else
-            {
-                return StatusCode(StatusCodes.Status404NotFound);
-            }
-        }*/
-
         [HttpPost("department/commitment")]
-        public IActionResult GetDepartmentCommitment(DashboardCommitmentViewModel model)
+        public IActionResult GetDepartmentCommitment([FromBody] DashboardCommitmentViewModel model)
         {
-
-            model = model ?? new DashboardCommitmentViewModel();
-            model.columns = model.columns ?? new List<Data.ViewModel.Column>();
-            model.search = model.search ?? new Data.ViewModel.Search
-            {
-                value = string.Empty
-            };
-
-            IEnumerable<DashboardCommitmentViewModel> results = oDashboardBiz.GetDepartmentCommitment(model.DepartmentId).OrderBy(t => t.CommitmentNo);
-
-            IEnumerable<DashboardCommitmentViewModel> resultsFiltered = results;
-            if (!string.IsNullOrEmpty(model.search.value.Trim()))
-            {
-                resultsFiltered = resultsFiltered.Where(t =>
-                    t.CommitmentName.Contains(model.search.value.Trim()) ||
-                    t.CommitmentRemark.Contains(model.search.value.Trim()) ||
-                    t.CommitmentStatus.Contains(model.search.value.Trim())
-                );
-            }
-
-            IOrderedEnumerable<DashboardCommitmentViewModel> resultsOrdered = resultsFiltered.OrderBy(t => t.CommitmentId);
-
-            if (model.columns.Any())
-            {
-                string orderBy = model.columns[model.order[0].column].data;
-                string orderType = model.order[0].dir;
-
-                resultsOrdered = orderBy == "CommitmentNo" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentNo) : resultsOrdered.OrderByDescending(t => t.CommitmentNo)) : resultsOrdered;
-                resultsOrdered = orderBy == "CommitmentName" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentName) : resultsOrdered.OrderByDescending(t => t.CommitmentName)) : resultsOrdered;
-                resultsOrdered = orderBy == "CommitmentRemark" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentRemark) : resultsOrdered.OrderByDescending(t => t.CommitmentRemark)) : resultsOrdered;
-                resultsOrdered = orderBy == "CommitmentStartDate" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentStartDate) : resultsOrdered.OrderByDescending(t => t.CommitmentStartDate)) : resultsOrdered;
-                resultsOrdered = orderBy == "CommitmentFinishDate" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentFinishDate) : resultsOrdered.OrderByDescending(t => t.CommitmentFinishDate)) : resultsOrdered;
-                resultsOrdered = orderBy == "CommitmentStatus" ? (orderType == "asc" ? resultsOrdered.OrderBy(t => t.CommitmentStatus) : resultsOrdered.OrderByDescending(t => t.CommitmentStatus)) : resultsOrdered;
-            }
-
-            /*return new DataTablesServerSideResult<DashboardCommitmentViewModel>
-            {
-                draw = model.draw,
-                recordsFiltered = resultsOrdered.Count(),
-                recordsTotal = results.Count(),
-                data = resultsOrdered.Skip(model.start).Take(model.length).ToList()
-            };*/
-            return Ok(new DataTablesServerSideResult<DashboardCommitmentViewModel>
-            {
-                draw = model.draw,
-                recordsTotal = results.Count(),
-                recordsFiltered = resultsOrdered.Count(),
-                data = resultsOrdered
-                    .Skip(model.start)
-                    .Take(model.length)
-                    .ToList()
-            });
-            /*if (result != null)
-            {
-                return StatusCode(StatusCodes.Status200OK, result);
-            }
-            else
-            {
-                return StatusCode(StatusCodes.Status404NotFound);
-            }*/
-        }
-
-        [HttpGet("department/wig/commitment/{WigID}")]
-        public IActionResult GetDepartmentCommitmentbyWig(uint WigID)
-        {
-            var result = oDashboardBiz.GetDepartmentCommitmentbyWig(WigID).OrderBy(t => t.CommitmentNo);
+            var result = oDashboardBiz.GetDepartmentCommitment(model.DepartmentId).OrderBy(t => t.CommitmentId);
 
             if (result != null)
             {
@@ -250,10 +170,25 @@ namespace NetkaCommitment.Web.ApiControllers
             }
         }
 
-        [HttpGet("department/lm/commitment/{LmID}")]
-        public IActionResult GetDepartmentCommitmentbyLm(uint LmID)
+        [HttpPost("department/wig/commitment")]
+        public IActionResult GetDepartmentCommitmentbyWig([FromBody] DashboardCommitmentViewModel model)
         {
-            var result = oDashboardBiz.GetDepartmentCommitmentbyLm(LmID).OrderBy(t => t.CommitmentNo);
+            var result = oDashboardBiz.GetDepartmentCommitmentbyWig(model.DepartmentWigId).OrderBy(t => t.CommitmentId);
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpPost("department/lm/commitment")]
+        public IActionResult GetDepartmentCommitmentbyLm([FromBody] DashboardCommitmentViewModel model)
+        {
+            var result = oDashboardBiz.GetDepartmentCommitmentbyLm(model.DepartmentLmId).OrderBy(t => t.CommitmentNo);
 
             if (result != null)
             {

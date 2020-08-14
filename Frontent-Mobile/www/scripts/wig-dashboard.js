@@ -157,103 +157,106 @@ function drawPiechart(wig_series, lm_series) {
 
 function getDashboardDepartmentCommitmentInfo(DepartmentId) {
 
-    /*clearWigDashboardTable();
+    data = {};
+    data.DepartmentId = DepartmentId;
     
+    //clearWigDashboardTable();
+
     $.ajax({
-        type:'GET',
-        contentType: 'application/json',
-        url: URL + '/api/dashboard/department/commitment/' + DepartmentId,
-        data: '',
+        type:'POST',
+        contentType: 'application/json; charset=utf-8',
+        url: URL + '/api/dashboard/department/commitment',
+        data: JSON.stringify(data),
         dataType: "json",
         success: function (data,status){
             
+            $("#wig-dashboard-table").empty();
+
             console.log(data);
+
+            $("#wig-dashboard-table").append(
+                "<thead><tr><td>Commitment NO</td>" 
+              + "<td>Name</td>"
+              + "<td>Remark</td>"
+              + "<td>Start Date</td>"
+              + "<td>Finish Date</td>"
+              + "<td>Status</td>"
+              + "</tr></thead><tbody>");
 
             $.each(data, function(i, item){
                 
                 var startdate = new Date(item.CommitmentStartDate);
                 var finishdate = new Date(item.CommitmentFinishDate);
 
-                $("#wig-dashboard-table").find('tbody').append(
+                $("#wig-dashboard-table").append(
                         "<tr><td>" + item.CommitmentNo + "</td>" 
                       + "<td class='color-green1-dark'>" + item.CommitmentName + "</td>"
                       + "<td>" + item.CommitmentRemark + "</td>"
-                      + "<td>" + item.DepartmentLmName + "</td>"
                       + "<td class='color-yellow1-dark'>" + moment(startdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
                       + "<td class='color-yellow1-dark'>" + moment(finishdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
                       + "<td class='color-blue1-dark'>" + item.CommitmentStatus + "</td>"
                       + "</tr>");
                                 
             });
+            $("#wig-dashboard-table").append("</tbody>");
+
+            getDatatable('wig-dashboard-table');
 
         },
         error: function (data,status){
             console.log(data);
         }
-    });*/
+    });
     
-    $('#wig-dashboard-table').DataTable( {
-        "processing": true,
-        "serverSide": true,
-        "ajax": {
-            "url" : URL + "/api/dashboard/department/commitment",
-            "type": "POST", 
-            "contentType": "application/json", 
-            "dataType": "json",
-            "data": function (data)    
-            {    
-                // Pre-submit
-                data.DepartmentId = DepartmentId;
-
-                return JSON.stringify(data);    
-            }/*, 
-            dataSrc: function(response) {
-
-                // Post-submit
-                return response.data;
-            }*/
-        },
-        "columns": [
-            { "data": "CommitmentNo" },
-            { "data": "CommitmentName" },
-            { "data": "CommitmentRemark" },
-            { "data": "CommitmentStartDate" },
-            { "data": "CommitmentFinishDate" },
-            { "data": "CommitmentStatus" }
-        ]
-    } );
 }
 
 function getDashboardDepartmentWigCommitmentInfo(WigID) {
 
-    clearWigDashboardTable();
+    data = {};
+    data.DepartmentWigId = WigID;
+    
+    //clearWigDashboardTable();
 
     $.ajax({
-		type:'GET',
-		contentType: 'application/json',
-		url: URL + '/api/dashboard/department/wig/commitment/' + WigID,
-		data: '',
+		type:'POST',
+		contentType: 'application/json; charset=utf-8',
+		url: URL + '/api/dashboard/department/wig/commitment',
+		data: JSON.stringify(data),
 		dataType: "json",
 		success: function (data,status){
+
+            $("#wig-dashboard-table").empty();
             
             console.log(data);
+
+            $("#wig-dashboard-table").append(
+                "<thead><tr><td>Commitment NO</td>" 
+              + "<td>Name</td>"
+              + "<td>Remark</td>"
+              + "<td>Start Date</td>"
+              + "<td>Finish Date</td>"
+              + "<td>Status</td>"
+              + "</tr></thead><tbody>");
 
             $.each(data, function(i, item){
                 
                 var startdate = new Date(item.CommitmentStartDate);
                 var finishdate = new Date(item.CommitmentFinishDate);
 
-                $("#wig-dashboard-table").find('tbody').append(
+                $("#wig-dashboard-table").append(
                         "<tr><td>" + item.CommitmentNo + "</td>" 
                       + "<td class='color-green1-dark'>" + item.CommitmentName + "</td>"
                       + "<td>" + item.CommitmentRemark + "</td>"
-                      + "<td>" + item.DepartmentLmName + "</td>"
                       + "<td class='color-yellow1-dark'>" + moment(startdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
                       + "<td class='color-yellow1-dark'>" + moment(finishdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
                       + "<td class='color-blue1-dark'>" + item.CommitmentStatus + "</td>"
                       + "</tr>");
                                 
             });
+
+            $("#wig-dashboard-table").append("</tbody>");
+
+            getDatatable('wig-dashboard-table');
 
 		},
 		error: function (data,status){
@@ -264,34 +267,51 @@ function getDashboardDepartmentWigCommitmentInfo(WigID) {
 
 function getDashboardDepartmentLmCommitmentInfo(LmID) {
 
-    clearWigDashboardTable();
+    data = {};
+    data.DepartmentLmId = LmID;
+
+    //clearWigDashboardTable();
 
     $.ajax({
-		type:'GET',
-		contentType: 'application/json',
-		url: URL + '/api/dashboard/department/lm/commitment/' + LmID,
-		data: '',
+		type:'POST',
+		contentType: 'application/json; charset=utf-8',
+		url: URL + '/api/dashboard/department/lm/commitment',
+		data: JSON.stringify(data),
 		dataType: "json",
 		success: function (data,status){
             
+            $("#wig-dashboard-table").empty();
+
             console.log(data);
+
+            $("#wig-dashboard-table").append(
+                "<thead><tr><td>Commitment NO</td>" 
+              + "<td>Name</td>"
+              + "<td>Remark</td>"
+              + "<td>Start Date</td>"
+              + "<td>Finish Date</td>"
+              + "<td>Status</td>"
+              + "</tr></thead><tbody>");
 
             $.each(data, function(i, item){
                 
                 var startdate = new Date(item.CommitmentStartDate);
                 var finishdate = new Date(item.CommitmentFinishDate);
 
-                $("#wig-dashboard-table").find('tbody').append(
+                $("#wig-dashboard-table").append(
                         "<tr><td>" + item.CommitmentNo + "</td>" 
                       + "<td class='color-green1-dark'>" + item.CommitmentName + "</td>"
                       + "<td>" + item.CommitmentRemark + "</td>"
-                      + "<td>" + item.DepartmentLmName + "</td>"
                       + "<td class='color-yellow1-dark'>" + moment(startdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
                       + "<td class='color-yellow1-dark'>" + moment(finishdate).format("YYYY-MM-DD HH:mm:ss") + "</td>"
                       + "<td class='color-blue1-dark'>" + item.CommitmentStatus + "</td>"
                       + "</tr>");
                                 
             });
+
+            $("#wig-dashboard-table").append("</tbody>");
+
+            getDatatable('wig-dashboard-table');
 
 		},
 		error: function (data,status){
@@ -300,7 +320,25 @@ function getDashboardDepartmentLmCommitmentInfo(LmID) {
 	});
 }
 
+function getDatatable(id){
+    
+    var table = $('#' + id).DataTable( {
+        destroy: true,
+        responsive: true,
+		lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]]
+    } );
+
+}
+
+function clearDatatable(id) {
+
+    $('#' + id).empty();
+  
+}
+
 function clearWigDashboardTable() {
+   
+    $('#wig-dashboard-table thead').html("");
     $('#wig-dashboard-table tbody').html("");
 }
 
