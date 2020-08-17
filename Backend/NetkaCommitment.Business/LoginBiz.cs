@@ -6,14 +6,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.JsonWebTokens;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace NetkaCommitment.Business
 {
     public class LoginBiz : BaseBiz
     {
         private readonly UserRepository oUserRepository = null;
+
         public LoginBiz()
         {
+
             oUserRepository = new UserRepository();
         }
 
@@ -60,6 +68,57 @@ namespace NetkaCommitment.Business
             }
             return strToken;
         }
+
+        public AuthorizeTokenViewModel Authorize(LoginUserViewModel model, IHttpContextAccessor httpcontext)
+        {
+            MUser oUser = oUserRepository.Get().Where(t => t.UserName == model.UserName && t.IsDeleted == 0 && t.UserPassword == model.UserPassword.Trim()).FirstOrDefault();
+            string strToken = null;
+            long userId = 0;
+            if (oUser != null)
+            {
+                //strToken = EncryptionHelpers.GenerateString();
+                strToken = GenerateJWTToken(oUser);
+                userId = oUser.UserId;
+                var oDevice = oAccessTokenRepository.Get().Where(t => t.AccessTokenDevice == model.UserDevice).FirstOrDefault();
+                if (oDevice == null)
+                {
+                    oAccessTokenRepository.Insert(new TAccessToken
+                    {
+                        AccessTokenDevice = model.UserDevice,
+                        AccessTokenKey = strToken,
+                        AccessTokenCreatedDate = DateTime.Now,
+                        AccessTokenExpriedDate = DateTime.Now.AddMinutes(JwtHelpers.JwtExpired),
+                        UserId = oUser.UserId
+                    });
+                }
+                else
+                {
+                    oDevice.AccessTokenKey = strToken;
+                    oDevice.AccessTokenUpdatedDate = DateTime.Now;
+                    oDevice.AccessTokenExpriedDate = DateTime.Now.AddMinutes(JwtHelpers.JwtExpired);
+                    oAccessTokenRepository.Update(oDevice);
+                }
+
+                oAccessLogRepository.Insert(new TAccessLog
+                {
+                    AccessLogDevice = model.UserDevice,
+                    AccessLogKey = strToken,
+                    AccessLogUrl = httpcontext.HttpContext.Request.Path.ToString(),
+                    AccessLogCreatedDate = DateTime.Now,
+                    UserId = oUser.UserId
+                });
+            }
+
+            //return strToken;
+
+            return new AuthorizeTokenViewModel
+            {
+                Id = userId,
+                Token = strToken,
+                Status = ""
+            };
+        }
+
         public bool ForgotPassword(LoginUserViewModel model)
         {
             var result = oUserRepository.Get().Where(t => t.UserName == model.UserName && t.IsDeleted == 0).FirstOrDefault();
@@ -94,5 +153,27 @@ namespace NetkaCommitment.Business
 
             return oUser;
         }
+
+        private string GenerateJWTToken(MUser userInfo)
+        {
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(JwtHelpers.JwtKey));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var expires = DateTime.Now.AddMinutes(JwtHelpers.JwtExpired);
+            var claims = new[]
+            {
+                new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Sub, userInfo.UserName),
+                new Claim("fullName", userInfo.UserFirstName.ToString() + " " + userInfo.UserLastName.ToString()),
+                new Claim(Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
+            var token = new JwtSecurityToken(
+                                issuer: JwtHelpers.JwtIssuer,
+                                audience: JwtHelpers.JwtAudience,
+                                claims: claims,
+                                expires: expires,
+                                signingCredentials: credentials
+                               );
+            return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
     }
 }

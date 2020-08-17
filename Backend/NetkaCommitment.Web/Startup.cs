@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using MySqlConnector;
 using NetkaCommitment.Data.EFModels;
 using Newtonsoft.Json.Serialization;
@@ -36,7 +39,9 @@ namespace NetkaCommitment.Web
                 options.Cookie.IsEssential = true;
             });
 
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddHttpContextAccessor();
 
             services.AddControllersWithViews().AddNewtonsoftJson(options =>
             {
@@ -50,6 +55,22 @@ namespace NetkaCommitment.Web
             services.AddDbContextPool<NetkaCommitmentContext>(options => options.UseMySql("Server=10.1.8.31;port=3306;Database=netkacommitment;User=nksnms;Password=G4xK$8qLa",
                 mySqlOptions => mySqlOptions.ServerVersion(new ServerVersion(new Version(8, 0, 19), ServerType.MySql))
             ));
+
+            //JWT
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer =  "Netkacommitment",
+                    ValidAudience = "Netkacommitment",
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("asdhjkl;';lkjhgfdsa[poiuytrewzxcvbnm,."))
+                };
+            });
 
             services.AddCors(options => {
                 options.AddPolicy("CORSPolicy", builder => builder
@@ -77,6 +98,8 @@ namespace NetkaCommitment.Web
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
