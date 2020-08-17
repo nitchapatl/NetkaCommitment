@@ -55,6 +55,8 @@ namespace NetkaCommitment.Data.ViewModel
         public DateTime? UpdatedDate { get; set; }
         public uint? UpdatedBy { get; set; }
         public uint? IsDeleted { get; set; }
+        public string DepartmentWigName { get; set; }
+        public string DepartmentLmName { get; set; }
     }
     public class TCommitmentSummaryViewModel
     {

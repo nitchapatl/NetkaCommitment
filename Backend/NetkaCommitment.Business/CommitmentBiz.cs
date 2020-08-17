@@ -99,12 +99,16 @@ namespace NetkaCommitment.Business
                                   }).ToList()
                     }).ToList();
         }
-        public List<TCommitmentViewModel> GetTCommitment() 
-        { 
+        public List<TCommitmentViewModel> GetCommitmentClosed()
+        {
             return (from t in db.TCommitment
-                    where t.CommitmentStatus== "In-Progress" //!(t.IsDeleted==1)
+                    join lm in db.MDepartmentLm on t.CommitmentLm equals lm.LmId
+                    join wig in db.MDepartmentWig on lm.DepartmentWigId equals wig.DepartmentWigId 
+                    where !(t.IsDeleted == 1)
                     select new TCommitmentViewModel
                     {
+                        DepartmentWigName = wig.DepartmentWigName,
+                        DepartmentLmName = lm.LmName,
                         CommitmentId = t.CommitmentId,
                         DepartmentLmId = t.CommitmentLmNavigation.LmId,
                         DepartmentWigId = t.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
@@ -125,6 +129,54 @@ namespace NetkaCommitment.Business
                         UpdatedBy = t.UpdatedBy
                     }).ToList();
         }
+        public List<TCommitmentViewModel> GetTCommitment() 
+        { 
+            return (from t in db.TCommitment
+                    join lm in db.MDepartmentLm on t.CommitmentLm equals lm.LmId
+                    join wig in db.MDepartmentWig on lm.DepartmentWigId equals wig.DepartmentWigId
+                    where !(t.IsDeleted==1)
+                    select new TCommitmentViewModel
+                    {
+                        DepartmentWigName = wig.DepartmentWigName,
+                        DepartmentLmName = lm.LmName,
+                        CommitmentId = t.CommitmentId,
+                        DepartmentLmId = t.CommitmentLmNavigation.LmId,
+                        DepartmentWigId = t.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
+                        CompanyLmId = t.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
+                        CompanyWigId = t.CommitmentLmNavigation.DepartmentWig.CompanyWig.CompanyWigId,
+                        DepartmentId = t.CommitmentLmNavigation.DepartmentWig.Department.DepartmentId,
+                        CommitmentNo = t.CommitmentNo,
+                        CommitmentName = t.CommitmentName,
+                        CommitmentDescription = t.CommitmentDescription,
+                        CommitmentRemark = t.CommitmentRemark,
+                        CommitmentStartDate = t.CommitmentStartDate,
+                        CommitmentFinishDate = t.CommitmentFinishDate,
+                        CommitmentIsDeleted = t.CommitmentIsDeleted,
+                        CommitmentStatus = t.CommitmentStatus,
+                        CreatedDate = t.CreatedDate,
+                        CreatedBy = t.CreatedBy,
+                        UpdatedDate = t.UpdatedDate,
+                        UpdatedBy = t.UpdatedBy
+                    }).ToList();
+        }
+        public List<TCommitmentSummaryViewModel> GetCommitmentSummary(TCommitmentSummaryViewModel obj)
+        {
+            return db.MDepartmentLm.Select(t => new TCommitmentSummaryViewModel
+            {
+                CompanyWigId = t.DepartmentWig.CompanyLm.CompanyWig.CompanyWigId,
+                CompanyWigName = t.DepartmentWig.CompanyLm.CompanyWig.CompanyWigName,
+                CompanyLmId = t.DepartmentWig.CompanyLm.CompanyWig.CompanyWigId,
+                CompanyLmName = t.DepartmentWig.CompanyLm.CompanyLmName,
+                DepartmentWigId = t.DepartmentWigId,
+                DepartmentWigName = t.DepartmentWig.DepartmentWigName,
+                DepartmentLmId = t.LmId,
+                DepartmentLmName = t.LmName,
+                CreatedBy = t.CreatedBy,
+                CommitmentCount = t.TCommitment.Count(),
+            }).Where(x => x.CreatedBy==obj.CreatedBy).ToList();
+        }
+
+        //Not use
         public List<TCommitmentViewModel> GetCommitment()
         {
             return db.TCommitment.Select(t => new TCommitmentViewModel
@@ -149,55 +201,7 @@ namespace NetkaCommitment.Business
                 UpdatedBy = t.UpdatedBy
             }).ToList();
         }
-        public List<DashboardWIGGraphViewModel> GetCompanyWIG()
-        {
-            return (from wig in db.MCompanyWig
-                    where wig.CompanyWigYear == DateTime.Now.Year
-                    select new DashboardWIGGraphViewModel
-                    {
-                        WigID = wig.CompanyWigId,
-                        WigName = wig.CompanyWigName,
-                        WigValue = db.TCommitment.Where(t => t.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyWigId == wig.CompanyWigId).Count(),
-                        LmList = (from lm in db.MCompanyLm
-                                  where lm.CompanyWigId == wig.CompanyWigId
-                                  select new DashboardLMGraphViewModel
-                                  {
-                                      LmID = lm.CompanyLmId,
-                                      LmName = lm.CompanyLmName,
-                                      LmValue = db.TCommitment.Where(t => t.CommitmentLmNavigation.DepartmentWig.CompanyLmId == lm.CompanyLmId).Count()
-                                  }).ToList()
-                    }).ToList();
-        }
-        public List<CommitmentGraphData> GetGraphDrillDown()
 
-        {
-            return (from wig in db.MDepartmentWig
-                    join lm in db.MDepartmentLm on wig.DepartmentWigId equals lm.DepartmentWigId
-                    //join t in db.TCommitment on t.CommitmentLm equals lm.LmId 
-                    select new CommitmentGraphData
-                    {
-                        //y = t.CommitmentId,
-                        //drilldown = t.CommitmentName
-                    }).ToList();
-        }
-
-
-        public List<TCommitmentSummaryViewModel> GetCommitmentSummary(TCommitmentSummaryViewModel obj)
-        {
-            return db.MDepartmentLm.Select(t => new TCommitmentSummaryViewModel
-            {
-                //CompanyWigId = t.DepartmentWig.CompanyLm.CompanyWig.CompanyWigId,
-                CompanyWigName = t.DepartmentWig.CompanyLm.CompanyWig.CompanyWigName,
-                //CompanyLmId = t.DepartmentWig.CompanyLm.CompanyWig.CompanyWigId,
-                CompanyLmName = t.DepartmentWig.CompanyLm.CompanyLmName,
-                //DepartmentWigId = t.DepartmentWigId,
-                DepartmentWigName = t.DepartmentWig.DepartmentWigName,
-                //DepartmentLmId = t.LmId,
-                DepartmentLmName = t.LmName,
-                CreatedBy = t.CreatedBy,
-                CommitmentCount = t.TCommitment.Count(),
-            }).Where(x => x.CreatedBy==obj.CreatedBy).ToList();
-        }
 
     }
 }
