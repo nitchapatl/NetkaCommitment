@@ -33,8 +33,6 @@ namespace NetkaCommitment.Repository
             obj.CommitmentNo = lastId;
             obj.CommitmentLm = obj.CommitmentLm; 
             obj.CommitmentName = obj.CommitmentName; 
-            //obj.UserId = obj.CreatedBy;
-            //obj.CreatedBy = obj.CreatedBy;
             obj.CreatedDate = DateTime.Now;
             obj.UpdatedBy = null;
             obj.UpdatedDate = null;
@@ -72,6 +70,32 @@ namespace NetkaCommitment.Repository
             obj.UpdatedDate = DateTime.Now;
             obj.IsDeleted = 1;
             db.Entry(obj).State = EntityState.Modified;
+            db.SaveChanges();
+
+            return true;
+        }
+        public bool InsertTApprove(TApprove obj)
+        {
+            TApprove oResult = db.TApprove.Where(t => t.CommitmentId == obj.CommitmentId).FirstOrDefault();
+            if (oResult != null)
+            {
+                return false;
+            }
+
+            TApprove oTApprove = db.TApprove.OrderByDescending(t => t.ApproveId).FirstOrDefault();
+            var lastId = !(oTApprove == null) ? oTApprove.ApproveId + 1 : 1;
+            obj.ApproveId = lastId;
+            obj.ApproveNo = lastId;
+            obj.ApproveType = obj.ApproveType;
+            obj.ApproveStatus = obj.ApproveStatus;
+            obj.ApproveRemark = obj.ApproveRemark;
+            obj.CreatedDate = DateTime.Now;
+            obj.CreatedBy = obj.CreatedBy;
+            obj.UpdatedBy = null;
+            obj.UpdatedDate = null;
+            obj.IsDeleted = 0;
+            obj.ApproveUserId = obj.ApproveUserId;
+            db.TApprove.Add(obj);
             db.SaveChanges();
 
             return true;
