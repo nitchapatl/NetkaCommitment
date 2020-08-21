@@ -6,7 +6,7 @@ function getWIGDashboardInfo() {
 	$.ajax({
 		type:'GET',
 		contentType: 'application/json',
-		url: 'https://localhost:32768/api/dashboard/company/wig',
+		url: 'https://localhost:32772/api/dashboard/company/wig',
 		data: '',
 		dataType: "json",
 		success: function (data,status){
@@ -162,7 +162,7 @@ function getDashboardCommitmentInfo() {
     $.ajax({
 		type:'GET',
 		contentType: 'application/json',
-		url: 'https://localhost:32768/api/dashboard/company/commitment',
+		url: 'https://localhost:32772/api/dashboard/company/commitment',
 		data: '',
 		dataType: "json",
 		success: function (data,status){
@@ -200,7 +200,7 @@ function getDashboardWigCommitmentInfo(WigID) {
     $.ajax({
 		type:'GET',
 		contentType: 'application/json',
-		url: 'https://localhost:32768/api/dashboard/company/wig/commitment/' + WigID,
+		url: 'https://localhost:32772/api/dashboard/company/wig/commitment/' + WigID,
 		data: '',
 		dataType: "json",
 		success: function (data,status){
@@ -238,7 +238,7 @@ function getDashboardLmCommitmentInfo(LmID) {
     $.ajax({
 		type:'GET',
 		contentType: 'application/json',
-		url: 'https://localhost:32768/api/dashboard/company/lm/commitment/' + LmID,
+		url: 'https://localhost:32772/api/dashboard/company/lm/commitment/' + LmID,
 		data: '',
 		dataType: "json",
 		success: function (data,status){

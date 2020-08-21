@@ -15,14 +15,70 @@
     <link rel="stylesheet" type="text/css" href="styles/datatables/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="styles/datatables/fixedHeader.bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="styles/datatables/responsive.bootstrap.min.css">
+
+
+	<!-- adjust css -->
+	<!-- <link rel="stylesheet" type="text/css" href="styles/datatables/adjust.dataTables.css"> 
+
+
     <!-- Don't forget to update PWA version (must be same) in pwa.js & manifest.json -->
     <link rel="manifest" href="_manifest.json" data-pwa-version="set_by_pwa.js">
     <link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png">
 </head>
 
 <body class="theme-light" data-background="none" data-highlight="red2">
+	<!--menu share-->
+	<div id="menu-confirm" class="menu menu-box-bottom menu-box-detached round-medium" data-menu-height="410" data-menu-effect="menu-over" style="height: 410px; opacity: 1; display: block;">
+
+		<h1 class="center-text uppercase ultrabold top-30">Update</h1>
+		<p class="boxed-text-small"></p>
+		<div class="content left-20 right-20">
+			<div class="input-style input-style-2 input-required update-status">
+				<span class="">Select Status</span>
+				<em><i class="fa fa-exclamation-triangle color-red2-light"></i></em>
+				<select onchange="statusOnChange();" id="ddlStatus">
+					<option value="" disabled="" selected="">Select Status</option>
+					<option value="Postpone">Postpone</option>
+					<option value="Fail">Fail</option>
+				</select>
+			</div>
+
+			<!-- <div class="input-style input-style-1 input-required update-commitment">
+				<span class="input-style-1-active input-style-1-inactive">Enter your Commitment</span>
+				<em><i class="fa fa-check color-green1-dark"></i></em>
+				<textarea id="txtCommitmentName" placeholder="Enter your Commitment"></textarea>
+			</div> -->
+
+			<div class="input-style input-style-2 input-required update-commitment">
+				<span>Enter your Commitment</span>
+				<em>(required)</em>
+				<textarea id="txtCommitmentName" placeholder="Enter your Commitment"></textarea>
+			</div>
+
+			<div class="input-style input-style-2 input-required update-remark" style="display:none">
+				<span>Enter your Remark</span>
+				<em>(required)</em>
+				<textarea id="txtRemark" placeholder=""></textarea>
+			</div>
+			<div class="input-style input-style-1 input-required postpone-date update-postpone" style="display:none">
+				<span class="input-style-1-active input-style-1-inactive">Postpone Date</span>
+				<em><i class="fa fa-angle-down"></i></em>
+				<input id="txtPostpone" type="date" value="1980-08-26">
+			</div>
+
+			<div class="one-half">
+				<input id="btnConfirm" onclick="UpdateCommitment();" type="button" value="Confrim" class="button button-center-large button-m shadow-large button-round-small bg-blue2-dark"/>
+			</div>
+			<div class="one-half last-column">
+				<input type="button" value="Cancel" class="close-menu button button-center-large button-m shadow-large button-round-small bg-red1-dark"/>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+	</div>
+
 	<!--menu confirm-->
-	<div id="menu-confirm" 
+	<div id="menu-share-thumbs" 
 		 class="menu menu-box-modal round-medium" 
 		 data-menu-height="350" 
 		 data-menu-width="610" 
@@ -418,7 +474,7 @@
         <div class="menu-hider"></div>
     </div>
     <!-- <script type="text/javascript" src="cordova.js"></script> -->
-    <script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
 	<script type="text/javascript" src="scripts/datatables/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="scripts/datatables/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript" src="scripts/datatables/dataTables.fixedHeader.min.js"></script>
@@ -426,9 +482,10 @@
     <script type="text/javascript" src="scripts/datatables/responsive.bootstrap.min.js"></script>
     <script type="text/javascript" src="scripts/plugins.js"></script>
     <script type="text/javascript" src="scripts/custom.js"></script>
-    <script type="text/javascript" src="scripts/highchartsv8.1.2.js"></script>
-    <script type="text/javascript" src="scripts/drilldown.js"></script>
-	<script type="text/javascript" src="scripts/themes/gray.js"></script>
+    <!-- <script type="text/javascript" src="scripts/highchartsv8.1.2.js"></script> -->
+    <!-- <script type="text/javascript" src="scripts/drilldown.js"></script> -->
+	<!-- <script type="text/javascript" src="scripts/themes/gray.js"></script> -->
     <script type="text/javascript" src="scripts/index-commitment.js"></script>
 	<script type="text/javascript" src="scripts/moment-with-locales.min.js"></script>
+	<script type="text/javascript" src="scripts/netkacommitment_conf.js"></script>
 </body>
