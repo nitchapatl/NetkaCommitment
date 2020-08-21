@@ -41,8 +41,8 @@ namespace NetkaCommitment.Repository
                 return false;
             }
 
-            obj.AccessTokenCreatedDate = DateTime.Now;
-            obj.AccessTokenExpriedDate = DateTime.Now.AddMinutes(30);
+            //obj.AccessTokenCreatedDate = DateTime.Now;
+            //obj.AccessTokenExpriedDate = DateTime.Now.AddMinutes(30);
             obj.AccessTokenUpdatedDate = null;
             db.TAccessToken.Add(obj);
             db.SaveChanges();
@@ -58,8 +58,8 @@ namespace NetkaCommitment.Repository
                 return false;
             }
 
-            obj.AccessTokenExpriedDate = DateTime.Now.AddMinutes(30);
-            obj.AccessTokenUpdatedDate = DateTime.Now;
+            //obj.AccessTokenExpriedDate = DateTime.Now.AddMinutes(30);
+            //obj.AccessTokenUpdatedDate = DateTime.Now;
             db.Entry(obj).State = EntityState.Modified;
             db.SaveChanges();
 

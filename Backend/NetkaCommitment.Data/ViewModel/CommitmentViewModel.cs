@@ -57,6 +57,31 @@ namespace NetkaCommitment.Data.ViewModel
         public uint? IsDeleted { get; set; }
         public string DepartmentWigName { get; set; }
         public string DepartmentLmName { get; set; }
+        public uint DepartmentWigSequence { get; set; }
+        public uint LmSequence { get; set; }
+    }
+
+    public class CommitmentApprove 
+    {
+        public uint IsDeleted { get; set; }
+        public uint CommitmentId { get; set; }
+    }
+    public class TApproveViewModel 
+    {
+        public List<CommitmentApprove> listCommitment { get; set; }
+        public List<UInt32> listCommitmentId { get; set; }
+        public uint ApproveId { get; set; }
+        public uint ApproveNo { get; set; }
+        public string ApproveType { get; set; }
+        public string ApproveStatus { get; set; }
+        public string ApproveRemark { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public uint CreatedBy { get; set; }
+        public uint UpdatedBy { get; set; }
+        public DateTime UpdatedDate { get; set; }
+        public uint IsDeleted { get; set; }
+        public uint ApproveUserId { get; set; }
+        public uint CommitmentId { get; set; }
     }
     public class TCommitmentSummaryViewModel
     {

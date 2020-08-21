@@ -21,7 +21,6 @@ namespace NetkaCommitment.Business
             oApproveRepository = new ApproveRepository();
             oCommitmentRepository = new CommitmentRepository();
         }
-
         public bool InsertCommitment(TCommitmentViewModel obj)
         {
             return oCommitmentRepository.Insert(new TCommitment
@@ -37,6 +36,32 @@ namespace NetkaCommitment.Business
                 CommitmentIsDeleted = 0,
                 CommitmentStatus = db.MParentUser.Any(t => t.UserId == obj.CreatedBy) ? "Watting for approve." : "In-Progress"
             });
+        }
+        public bool InsertCommitmentApprove(TApproveViewModel obj)
+        {
+            bool isUser = db.MUser.Any(t => t.UserId == obj.ApproveUserId);
+            if (!isUser) 
+            {
+                return false;
+            }
+
+            foreach (uint commitmentId in obj.listCommitmentId) 
+            {
+                oCommitmentRepository.InsertTApprove(new TApprove
+                {
+                    ApproveType = obj.ApproveType,
+                    ApproveStatus = obj.ApproveStatus,
+                    ApproveRemark = obj.ApproveRemark,
+                    CreatedDate = DateTime.Now,
+                    CreatedBy = obj.CreatedBy,
+                    UpdatedBy = null,
+                    UpdatedDate = null,
+                    IsDeleted = 0,
+                    ApproveUserId = obj.ApproveUserId,
+                    CommitmentId = commitmentId
+                });
+            }
+            return true;
         }
         public bool UpdateCommitment(TCommitmentViewModel obj)
         {
@@ -110,6 +135,8 @@ namespace NetkaCommitment.Business
                         DepartmentWigName = wig.DepartmentWigName,
                         DepartmentLmName = lm.LmName,
                         CommitmentId = t.CommitmentId,
+                        DepartmentWigSequence = wig.DepartmentWigSequence,
+                        LmSequence = lm.LmSequence,
                         DepartmentLmId = t.CommitmentLmNavigation.LmId,
                         DepartmentWigId = t.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
                         CompanyLmId = t.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
@@ -140,6 +167,8 @@ namespace NetkaCommitment.Business
                         DepartmentWigName = wig.DepartmentWigName,
                         DepartmentLmName = lm.LmName,
                         CommitmentId = t.CommitmentId,
+                        DepartmentWigSequence = wig.DepartmentWigSequence,
+                        LmSequence = lm.LmSequence,
                         DepartmentLmId = t.CommitmentLmNavigation.LmId,
                         DepartmentWigId = t.CommitmentLmNavigation.DepartmentWig.DepartmentWigId,
                         CompanyLmId = t.CommitmentLmNavigation.DepartmentWig.CompanyLm.CompanyLmId,
