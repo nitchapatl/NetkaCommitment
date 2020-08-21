@@ -1,7 +1,122 @@
+function checkAll(ctrl){
+	var table = $('#tbCommitmentApprove').DataTable();
+	var rows = table.rows({'search':'applied'}).nodes();
+	var isCheck = ctrl.prop("checked");
+	$('input[type="checkbox"]', rows).prop('checked', isCheck);
+
+	if(isCheck){
+		$(rows).addClass('selected');
+	}else{
+		$(rows).removeClass('selected');
+	}
+
+}
+
+function checkCommitment(ctrl){
+	var isSelect = $(ctrl).parents().eq(1).hasClass("selected");
+	//if(isSelect){
+	//	$(ctrl).parents().eq(1).removeClass('selected');
+	//}
+
+	var isCheck = ctrl.prop("checked");
+	if(isCheck){
+		if(!isSelect){
+			$(ctrl).parents().eq(1).addClass('selected');
+		}
+	}else{
+		if(isSelect){
+			$(ctrl).parents().eq(1).removeClass('selected');	
+		}
+	}
+}
+
+function validateInput(){
+	var commitment = [];
+	var table = $('#tbCommitmentApprove').DataTable();
+	commitment.push(table.rows('.selected').data());
+
+	var status = $('input[name=status]:checked', '#chbStatus').val();
+	var level = $('#ddlLevel option:selected').val();
+	var message="";
+	if (status===undefined)
+	{
+		message = "Please select status";
+	}
+	else if(level==""){
+		message = "Please select level";
+	}
+	else if (commitment.length<=0)
+	{
+		message = "Please select commitment";
+	}
+
+	notification(message);
+	return
+}
+
+function validateConfrim(ctrl){
+	validateInput();
+	$('#menu-confirm-approve').addClass('menu-active');
+	$('.menu-hider').addClass('menu-active');
+	$('.confirm-approve').text('Do you want to approve this commitment?');
+}
+
+function clearData(){
+	var table = $('#tbCommitmentApprove').DataTable();
+	var rows = table.rows({'search':'applied'}).nodes();
+	$('input[type="checkbox"]', rows).prop('checked', false);
+	$(rows).removeClass('selected');
+
+	$('.menu-hider').removeClass('menu-active');
+	$('.online-message').addClass('online-message-active');
+}
+
+function confirmApprove(){	
+	var table = $('#tbCommitmentApprove').DataTable();
+	dataSelected = table.rows('.selected').data();
+	var data = {};
+	data.listCommitmentId = [];
+	for(var i=0;i<dataSelected.length;i++)
+	{
+		data.listCommitmentId.push(dataSelected[i][0]);
+	}
+	data.ApproveStatus = $('input[name=status]:checked', '#chbStatus').val();
+	data.ApproveType = $('#ddlLevel option:selected').val();
+	data.ApproveRemark = $('#txtRemarkApprove').val();
+	data.ApproveUserId = 13;
+	data.CreatedBy = 13;
+
+	console.log(data);
+	$.ajax({
+		type:'POST',
+		contentType: 'application/json; charset=utf-8',
+		url: URL + '/api/commitment/AddCommitmentApprove',
+		data: JSON.stringify(data),
+		dataType: "json",
+		success: function (data,status){
+			console.log('AddCommitmentApprove >>> ',data);
+			//clearData();
+		},
+		error: function (data,status){
+			$("#lblError").css('display','block')
+			console.log(data);		
+		}
+	});
+}
+
+function notification(message){
+	$('.offline-message').text(message)
+	$('.offline-message').addClass('offline-message-active');
+	setTimeout(function(){
+		$('.offline-message').removeClass('offline-message-active');
+	},3000);
+}
+
 $(document).ready(function() {
 	getGraphCommitment(); 
 	getTableCommitment(15,null,null);
 
+	$('.menu').css('overflow','hidden');
 	function getTableCommitment(userId,wigName,lmName){
 		data = {};
 		data.CreatedBy = userId;
@@ -14,11 +129,11 @@ $(document).ready(function() {
 			data: JSON.stringify(data),
 			dataType: "json",
 			success: function (data,status){
-				console.log('data :::: ',data);
-				$("#tbCommitment").empty();
+				$("#tbCommitmentApprove").empty();
 				var html = "<thead>"
 					html += "<tr>"
 					html += "<th>No.</th>"
+					html += '<th style="text-align:center"><input onclick="checkAll($(this))" value="All" id="chbAll" type="checkbox"></th>'
 					html += "<th>Commitment</th>"
 					html += "<th>WIG</th>"
 					html += "<th>LM</th>"
@@ -33,28 +148,41 @@ $(document).ready(function() {
 					var StartDate = (moment(data[i].CommitmentStartDate).isValid()) ? moment(data[i].CommitmentStartDate).format('DD/MM/YYYY') : '';
 					html += "<tr>"
 					html += "<td>" + data[i].CommitmentId + "</td>"
+					html += '<td><input onclick="checkCommitment($(this));" name="select_all" value=' + data[i].CommitmentId + ' id="example-select-all" type="checkbox"></td>';
 					html += "<td style='text-align:left'>" + data[i].CommitmentName + "</td>"
-					html += "<td style='text-align:left'>" + data[i].DepartmentWigName + "</td>"
+					html += "<td style='text-align:left'>" + "<b>WIG" + data[i].DepartmentWigSequence + ":</b>:" + data[i].DepartmentWigName + "</td>"
 					html += "<td style='text-align:left'>" + data[i].DepartmentLmName + "</td>"
 					html += "<td>" + data[i].CommitmentStatus + "</td>"
-					html += "<td>" + StartDate + "</td>"
-					html += "<td>" + closeDate + "</td>" 
+					html += "<td nowrap>" + StartDate + "</td>"
+					html += "<td nowrap>" + closeDate + "</td>" 
 					html += "</tr>"
 				}
 				html += "</tbody>"
-				$("#tbCommitment").append(html);
+				$("#tbCommitmentApprove").append(html);
 
-				var table = $('#tbCommitment').DataTable( {
+				var table = $('#tbCommitmentApprove').DataTable( {
 					destroy: true,
 					responsive: true,
-					lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
+					select: {
+						style: 'multi'
+					},
+					scrollX: false,
+					lengthMenu: [[5, 10, 25, 50, 100,-1], [5, 10, 25, 50, 100,'All']],
 					columnDefs: [
 						{ responsivePriority: 1, targets: 0 },
-						{ responsivePriority: 2, targets: 4 },
-						{ responsivePriority: 3, targets: 6 },
-						{targets:[2], class:"wrapok"}
+						{ responsivePriority: 2, targets: 1 },
+						{ responsivePriority: 3, targets: 5 },
+						{ responsivePriority: 4, targets: 6 },
+						{ targets:[2], class:"wrapok"},
+						{
+							targets: 1,
+							searchable: false,
+							orderable: false,
+							className: 'dt-body-center'
+						}
 					]
 				});
+ 
 			},
 			error: function (data,status){
 				$("#lblError").css('display','block')
@@ -73,8 +201,6 @@ $(document).ready(function() {
 			data: JSON.stringify(data),
 			dataType: "json",
 			success: function (data,status){
-				console.log(data);
-
 				//Wig
 				var arrCommitmentWigId = [];
 				var arrCommitmentWig = [];
