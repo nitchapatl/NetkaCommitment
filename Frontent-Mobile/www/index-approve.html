@@ -15,18 +15,20 @@
     <link rel="stylesheet" type="text/css" href="styles/datatables/dataTables.bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="styles/datatables/fixedHeader.bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="styles/datatables/responsive.bootstrap.min.css">
+
+	<!-- adjust css -->
+	<!-- <link rel="stylesheet" type="text/css" href="styles/datatables/adjust.dataTables.css"> 
+
+
     <!-- Don't forget to update PWA version (must be same) in pwa.js & manifest.json -->
     <link rel="manifest" href="_manifest.json" data-pwa-version="set_by_pwa.js">
     <link rel="apple-touch-icon" sizes="180x180" href="app/icons/icon-192x192.png">
 </head>
 
 <body class="theme-light" data-background="none" data-highlight="red2">
-	<!--menu confirm-->
-	<div id="menu-confirm" 
-		 class="menu menu-box-modal round-medium" 
-		 data-menu-height="350" 
-		 data-menu-width="610" 
-		 data-menu-effect="menu-over">
+	<!--menu share-->
+	<div id="menu-confirm" class="menu menu-box-bottom menu-box-detached round-medium" data-menu-height="410" data-menu-effect="menu-over" style="height: 410px; opacity: 1; display: block;">
+
 		<h1 class="center-text uppercase ultrabold top-30">Update</h1>
 		<p class="boxed-text-small"></p>
 		<div class="content left-20 right-20">
@@ -35,11 +37,8 @@
 				<em><i class="fa fa-exclamation-triangle color-red2-light"></i></em>
 				<select onchange="statusOnChange();" id="ddlStatus">
 					<option value="" disabled="" selected="">Select Status</option>
-					<option value="Done">Success</option>
 					<option value="Postpone">Postpone</option>
 					<option value="Fail">Fail</option>
-					<option value="Delete">Delete</option>
-					<option value="In-Progress">In-Progress</option>
 				</select>
 			</div>
 
@@ -67,7 +66,60 @@
 			</div>
 
 			<div class="one-half">
-				<input id="btnConfirm" onclick="UpdateStatus();" type="button" value="Confrim" class="button button-center-large button-m shadow-large button-round-small bg-blue2-dark"/>
+				<input id="btnConfirm" onclick="UpdateCommitment();" type="button" value="Confrim" class="button button-center-large button-m shadow-large button-round-small bg-blue2-dark"/>
+			</div>
+			<div class="one-half last-column">
+				<input type="button" value="Cancel" class="close-menu button button-center-large button-m shadow-large button-round-small bg-red1-dark"/>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+	</div>
+
+	<!--menu confirm-->
+	<div id="menu-share-thumbs" 
+		 class="menu menu-box-modal round-medium" 
+		 data-menu-height="350" 
+		 data-menu-width="610" 
+		 data-menu-effect="menu-over">
+		<h1 class="center-text uppercase ultrabold top-30">Update</h1>
+		<p class="boxed-text-small"></p>
+		<div class="content left-20 right-20">
+			<div class="input-style input-style-2 input-required update-status">
+				<span class="">Select Status</span>
+				<em><i class="fa fa-exclamation-triangle color-red2-light"></i></em>
+				<select onchange="statusOnChange();" id="ddlStatus">
+					<option value="" disabled="" selected="">Select Status</option>
+					<option value="Postpone">Postpone</option>
+					<option value="Fail">Fail</option>
+				</select>
+			</div>
+
+			<!-- <div class="input-style input-style-1 input-required update-commitment">
+				<span class="input-style-1-active input-style-1-inactive">Enter your Commitment</span>
+				<em><i class="fa fa-check color-green1-dark"></i></em>
+				<textarea id="txtCommitmentName" placeholder="Enter your Commitment"></textarea>
+			</div> -->
+
+			<div class="input-style input-style-2 input-required update-commitment">
+				<span>Enter your Commitment</span>
+				<em>(required)</em>
+				<textarea id="txtCommitmentName" placeholder="Enter your Commitment"></textarea>
+			</div>
+
+			<div class="input-style input-style-2 input-required update-remark" style="display:none">
+				<span>Enter your Remark</span>
+				<em>(required)</em>
+				<textarea id="txtRemark" placeholder=""></textarea>
+			</div>
+			<div class="input-style input-style-1 input-required postpone-date update-postpone" style="display:none">
+				<span class="input-style-1-active input-style-1-inactive">Postpone Date</span>
+				<em><i class="fa fa-angle-down"></i></em>
+				<input id="txtPostpone" type="date" value="1980-08-26">
+			</div>
+
+			<div class="one-half">
+				<input id="btnConfirm" onclick="UpdateCommitment();" type="button" value="Confrim" class="button button-center-large button-m shadow-large button-round-small bg-blue2-dark"/>
 			</div>
 			<div class="one-half last-column">
 				<input type="button" value="Cancel" class="close-menu button button-center-large button-m shadow-large button-round-small bg-red1-dark"/>
@@ -75,6 +127,21 @@
 			<div class="clear"></div>
 		</div>
 	</div> 
+
+	<!-- Confirm Approve -->
+	<div id="menu-confirm-approve" class="menu menu-box-modal round-medium" data-menu-height="210" data-menu-width="310" data-menu-effect="menu-over" style="height: 210px; width: 310px; opacity: 1; display: block;">
+        <h1 class="center-text uppercase ultrabold top-30">Are you sure?</h1>
+        <p class="boxed-text-large confirm-approve"></p>
+        <div class="content left-20 right-20">
+            <div class="one-half">
+                <a href="#" onclick="confirmApprove();" class="close-menu button button-center-large button-s shadow-large button-round-small bg-green1-dark">Accept</a>
+            </div>
+            <div class="one-half last-column">
+                <a href="#" class="close-menu button button-center-large button-s shadow-large button-round-small bg-red1-dark">Cancel</a>
+            </div>
+            <div class="clear"></div>
+        </div>
+    </div>
 
 	<p class="offline-message bg-red1-dark color-white center-text uppercase ultrabold">Warning</p>
 	<p class="online-message bg-green1-dark color-white center-text uppercase ultrabold">Success</p>
@@ -102,27 +169,146 @@
         <div class="page-content header-clear-medium">
 			<!-- Content -->
 
-			<!-- Graph -->
+			<!-- Tab Box -->
 			<div class="content-boxed">
 				<div class="content">
-					<h3 class="bolder">Commitment Failed</h3>
-					<div id="container"></div>
-				</div>
+					<div class="tab-controls tab-animated tabs-large tabs-rounded" data-tab-items="2" data-tab-active="bg-red1-dark">
+						<a href="#" data-tab-active="" data-tab="tab-8" class="bg-red1-dark color-white no-click" style="width: 50%;">Commitment</a>
+						<a href="#" data-tab="tab-9" style="width: 50%;" class="">Approve
+						</a>
+					</div>
+					<div class="clear bottom-15"></div>
+					<div class="tab-content" id="tab-8" style="display: block;">
+						<p class="bottom-0">
+						<!-- Tab Commitment -->
+						<!-- Input -->
+						<div class="content-boxed">
+							<div class="content"> 
+								<div class="input-style input-style-2 input-required add-wig">
+									<em><i class="fa fa-angle-down"></i></em>
+									<span>Select WIG</span> 
+									<select id="ddlDepartmentWIG" onchange="getDDLDepartmentLM($('#ddlDepartmentWIG').val());">
+										<option value="default" disabled selected>Select WIG</option>
+									</select>
+								</div>
+								<div class="input-style input-style-2 input-required add-lm">
+									<em><i class="fa fa-angle-down"></i></em>
+									<span>Select LM</span> 
+									<select id="ddlDepartmentLM"">
+										<option value="default" disabled selected>Select LM</option>
+									</select>
+								</div>
+								<div class="input-style input-style-2 input-required add-commitment">
+									<span class="input-style-1-inactive">Enter your Commitment</span>
+									<em>(required)</em>
+									<textarea style="height:100px;" id="txtCommitment" placeholder="Enter your Commitment"></textarea>
+								</div>
+
+								<div class="input-style input-style-1 input-required">
+									<span>Select your start date</span>
+									<em><i class="fa fa-angle-down"></i></em>
+									<input type="date" id="txtStartDate" value="1980-08-26">
+								</div>
+
+								<a href="#" id="btnAdd" class="button button-m shadow-small bg-blue2-dark" onclick="addCommitment()">Add</a>
+
+							</div>
+						</div>
+
+						<!-- Table -->
+						<div class="content-boxed ">
+							<div class="content">
+								<h3 class="bolder">This Week Commitment</h3>
+								<p></p>
+								<div class="table-scroll">
+									<table id="tbCommitment" class="table table-striped table-bordered" style="width:100%"></table>
+								</div>
+							</div>
+						</div>
+
+						<div class="content-boxed">
+							<div class="content">
+								<h3 class="bolder">Pending Commitment</h3>
+								<p></p>
+								<div class="table-scroll">
+									<table id="tbCommitmentPending" class="table table-striped table-bordered" style="width:100%"></table>
+								</div>
+							</div>
+						</div>
+
+						<div class="content-boxed">
+							<div class="content">
+								<h3 class="bolder">Closed Commitment</h3>
+								<p></p>
+								<div class="table-scroll">
+									<table id="tbCommitmentClosed" class="table table-striped table-bordered" style="width:100%"></table>
+								</div>
+							</div>
+						</div>
+						<!-- Tab Commitment -->
+
+						</p>
+					</div>
+					<div class="tab-content" id="tab-9" style="display: none;">
+						<!-- Tab Approve -->
+						<!-- Graph -->
+						<div class="content-boxed">
+							<div class="content">
+								<h3 class="bolder">Approve Commitment</h3>
+								<div id="container"></div>
+							</div>
+						</div>
+
+						<!-- Table -->
+						<div class="content-boxed">
+							<div class="content">
+								<h3 class="bolder">Approve Commitment</h3>
+								<p></p>
+								<div class="table-scroll">
+									<table id="tbCommitmentApprove" class="table table-striped table-bordered" style="width:100%"></table>
+								</div>
+
+								<br>
+								<div class="content">
+									<form id="chbStatus">
+										<div class="fac fac-radio fac-blue"><span></span>
+											<input class="boxApprove" id="boxApprove" type="radio" name="status" value="Approve">
+											<label style="padding-top:2px" for="boxApprove">Approve</label>
+										</div>
+										<div class="fac fac-radio fac-red"><span></span>
+											<input class="boxApprove" id="boxReject" type="radio" name="status" value="Reject">
+											<label style="padding-top:2px" for="boxReject">Reject</label>
+										</div>	
+									</form>
+
+									<br>
+									<div class="input-style input-style-2 input-required">
+										<span class="">Select Level</span>
+										<em><i class="fa fa-exclamation-triangle color-red2-light"></i></em>
+										<select id="ddlLevel" >
+											<option value="" disabled="" selected="">Select Level</option>
+											<option value="ยาก">ยาก</option>
+											<option value="ง่าย">ง่าย</option>
+											<option value="ไม่เกี่ยวกับงาน">ไม่เกี่ยวกับงาน</option>
+										</select>
+									</div>
+									<div class="input-style input-style-2 input-required add-commitment">
+										<span class="input-style-1-inactive">Enter your Remark</span>
+										<em>(required)</em>
+										<textarea style="height:100px;" id="txtRemarkApprove" placeholder="Enter your Remark"></textarea>
+									</div>
+									<a href="#" onclick="validateConfrim($(this));" id="btnApprove" class="button button-m shadow-small button-round-small bg-red1-dark">Confrim</a>
+								<div>
+							</div>
+						</div>
+						<!-- Tab Approve -->
+					</div>
+				</div>     
 			</div>
+			<!-- Tab Box -->
 
-			<!-- Table -->
-            <div class="content-boxed">
-                <div class="content">
-                    <h3 class="bolder">Commitment Failed</h3>
-                    <p></p>
-                    <div class="table-scroll table-responsive">
-                        <table id="tbCommitment" class="table table-striped table-bordered" style="width:100%">
-
-                        </table>
-                    </div>
-                </div>
-            </div>
         </div>
+
 
         <!--Menu Settings-->
         <div id="menu-settings" class="menu menu-box-bottom menu-box-detached round-large" data-menu-height="310" data-menu-effect="menu-over">
@@ -219,6 +405,7 @@
                 <a href="#" data-menu="menu-settings" class="button button-s button-full button-m button-round-large bg-highlight shadow-large">Back to Settings</a>
             </div>
         </div>
+
         <!-- Menu Settings Backgrounds-->
         <div id="menu-backgrounds" class="menu menu-box-bottom menu-box-detached round-large" data-menu-height="310" data-menu-effect="menu-over">
             <div class="content">
@@ -246,7 +433,7 @@
         <div class="menu-hider"></div>
     </div>
     <!-- <script type="text/javascript" src="cordova.js"></script> -->
-    <script type="text/javascript" src="scripts/jquery-3.5.1.js"></script>
+    <script type="text/javascript" src="scripts/jquery.js"></script>
 	<script type="text/javascript" src="scripts/datatables/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="scripts/datatables/dataTables.bootstrap.min.js"></script>
     <script type="text/javascript" src="scripts/datatables/dataTables.fixedHeader.min.js"></script>
@@ -254,9 +441,10 @@
     <script type="text/javascript" src="scripts/datatables/responsive.bootstrap.min.js"></script>
     <script type="text/javascript" src="scripts/plugins.js"></script>
     <script type="text/javascript" src="scripts/custom.js"></script>
-    <script type="text/javascript" src="scripts/highcharts.js"></script>
-    <script type="text/javascript" src="scripts/drilldown.js"></script>
-    <script type="text/javascript" src="scripts/index-fail.js"></script>
+    <script type="text/javascript" src="scripts/highcharts.js"></script> 
+    <script type="text/javascript" src="scripts/drilldown.js"></script> 
+	<script type="text/javascript" src="scripts/index-commitment.js"></script>
+    <script type="text/javascript" src="scripts/index-approve.js"></script>
 	<script type="text/javascript" src="scripts/moment-with-locales.min.js"></script>
 	<script type="text/javascript" src="scripts/netkacommitment_conf.js"></script>
 </body>

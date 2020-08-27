@@ -132,6 +132,20 @@ namespace NetkaCommitment.Web.ApiControllers
             }
         }
 
+        [HttpPost("AddCommitmentApprove")]
+        public IActionResult AddCommitmentApprove([FromBody] TApproveViewModel model)
+        {
+            var result = oCommitmentBiz.InsertCommitmentApprove(model);
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else 
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
         //Not use
         [HttpPost("GetCommitment")]
         public IActionResult getCommitment([FromBody] TCommitmentViewModel model)

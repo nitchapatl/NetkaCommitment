@@ -8,6 +8,7 @@ function UpdateCommitment(){
 	var remark = $('#txtRemark').val();
 	var postpone = $('#txtPostpone').val();
 
+	var message="";
 	if(status==""){
 		message = "Please select status";
 	}else if (commitmentName==""){
@@ -31,7 +32,7 @@ function UpdateCommitment(){
 	data.CommitmentStatus = status;
 	data.CommitmentRemark = remark;
 	data.UpdatedBy = commitment.userId;
-	debugger
+
 	if(status==="postpone"){
 		data.CommitmentStartDate = $('#txtPostpone').val();
 	}
@@ -39,7 +40,7 @@ function UpdateCommitment(){
 	$.ajax({
 		type:'POST',
 		contentType: 'application/json; charset=utf-8',
-		url: 'https://localhost:32768/api/commitment/updateCommitment',
+		url: 'https://localhost:32774/api/commitment/updateCommitment',
 		data: JSON.stringify(data),
 		dataType: "json",
 		success: function (data,status){			
@@ -125,7 +126,7 @@ function addNewCommitment(commitmentLm,commimentName,commitmentStartDate){
 	data.CommitmentName = commimentName;
 	data.CommitmentStartDate = commitmentStartDate;
 	data.CreatedBy = commitment.userId;
-	debugger
+
 	$.ajax({
 		type:'POST',
 		contentType: 'application/json; charset=utf-8',
@@ -211,11 +212,11 @@ function getTableCommitment(userId){
 				html += '<input onclick="commitmentDelete($(this));" value="Delete" type="button" class="button button-xs shadow-small button-round-small bg-red1-dark btnDelete"/>'
 				html += '</td>'
 				html += "<td style='text-align:left'>" + data[i].CommitmentName + "</td>"
-				html += "<th style='text-align:left'>" + data[i].DepartmentWigName + "</td>"
+				html += "<th style='text-align:left'>" + "<b>WIG" + data[i].DepartmentWigSequence + ":</b>" + data[i].DepartmentWigName + "</td>"
 				html += "<th style='text-align:left'>" + data[i].DepartmentLmName + "</td>"
-				html += "<td>" + moment(data[i].CommitmentStartDate).format('DD/MM/YYYY') + "</td>"
+				html += "<td nowrap>" + moment(data[i].CommitmentStartDate).format('DD/MM/YYYY') + "</td>"
 				html += "<td>" + data[i].CommitmentStatus + "</td>"
-				html += '<td>'
+				html += '<td nowrap>'
 				html += '<input onclick="commitmentPostpone();" value="postpone" type="button" class="button button-xs shadow-small button-round-small bg-blue2-dark btnPostpone"/>'
 				html += '<input onclick="commitmentFail();" value="Fail" type="button" style="margin-left:5px;" class="button button-xs shadow-small button-round-small bg-brown2-dark btnFail"/>'
 				html += '</td>'
@@ -230,8 +231,9 @@ function getTableCommitment(userId){
 				lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
 				columnDefs: [
 					{ responsivePriority: 1, targets: 0 },
-					{ responsivePriority: 2, targets: 1 },
-					{ responsivePriority: 3, targets: 7 },
+					{ responsivePriority: 2, targets: 3 },
+					{ responsivePriority: 3, targets: 1 },
+					{ responsivePriority: 4, targets: 7 },
 				]
 			});
 
@@ -270,9 +272,9 @@ function getTableCommitmentPending(userId){
 				html += "<tr>"
 				html += "<td>" + data[i].CommitmentId + "</td>"
 				html += "<td style='text-align:left'>" + data[i].CommitmentName + "</td>"
-				html += "<th style='text-align:left'>" + data[i].DepartmentWigName + "</td>"
+				html += "<th style='text-align:left'>" + "<b>WIG" + data[i].DepartmentWigSequence + ":</b>" + data[i].DepartmentWigName + "</td>"
 				html += "<th style='text-align:left'>" + data[i].DepartmentLmName + "</td>"
-				html += "<td>" + moment(data[i].CommitmentStartDate).format('DD/MM/YYYY') + "</td>"
+				html += "<td nowrap>" + moment(data[i].CommitmentStartDate).format('DD/MM/YYYY') + "</td>"
 				html += "<td>" + data[i].CommitmentStatus + "</td>"
 				html += '<td>'
 				html += '<input onclick="commitmentDelete($(this));" value="Delete" type="button" class="button button-xs shadow-small button-round-small bg-red1-dark btnDelete"/>'
@@ -288,8 +290,9 @@ function getTableCommitmentPending(userId){
 				lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
 				columnDefs: [
 					{ responsivePriority: 1, targets: 0 },
-					{ responsivePriority: 2, targets: 5 },
-					{ responsivePriority: 3, targets: 6 },
+					{ responsivePriority: 2, targets: 1 },
+					{ responsivePriority: 3, targets: 5 },
+					{ responsivePriority: 4, targets: 6 },
 				]
 			});
 
@@ -331,11 +334,11 @@ function getTableCommitmentClosed(userId,wigName){
 				html += "<tr>"
 				html += "<td>" + data[i].CommitmentId + "</td>"
 				html += "<td style='text-align:left'>" + data[i].CommitmentName + "</td>"
-				html += "<th style='text-align:left'>" + data[i].DepartmentWigName + "</td>"
+				html += "<th style='text-align:left'>" + "<b>WIG" + data[i].DepartmentWigSequence + ":</b>" + data[i].DepartmentWigName + "</td>"
 				html += "<th style='text-align:left'>" + data[i].DepartmentLmName + "</td>"
 				html += "<td>" + data[i].CommitmentStatus + "</td>"
-				html += "<td>" + StartDate + "</td>"
-				html += "<td>" + closeDate + "</td>" 
+				html += "<td nowrap>" + StartDate + "</td>"
+				html += "<td nowrap>" + closeDate + "</td>" 
 				html += "</tr>"
 			}
 			html += "</tbody>"
@@ -347,10 +350,9 @@ function getTableCommitmentClosed(userId,wigName){
 				lengthMenu: [[5, 10, 25, 50, 100], [5, 10, 25, 50, 100]],
 				columnDefs: [
 					{ responsivePriority: 1, targets: 0 },
-					{ responsivePriority: 2, targets: 4 },
-					{ responsivePriority: 3, targets: 6 },
-					//{ width: "5%" },
-					{targets:[2], class:"wrapok"}
+					{ responsivePriority: 2, targets: 1 },
+					{ responsivePriority: 3, targets: 4 },
+					{ responsivePriority: 4, targets: 6 },
 				]
 			});
 		},
@@ -384,11 +386,10 @@ function UpdateStatus(){
 	data.CommitmentStatus = status;
 	data.UpdatedBy = commitment.userId;
 
-	debugger
 	$.ajax({
 		type:'POST',
 		contentType: 'application/json; charset=utf-8',
-		url: 'https://localhost:32768/api/commitment/updateCommitment',
+		url: 'https://localhost:32774/api/commitment/updateCommitment',
 		data: JSON.stringify(data),
 		dataType: "json",
 		success: function (data,status){			

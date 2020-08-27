@@ -69,7 +69,7 @@ $(document).ready(function() {
 		$.ajax({
 			type:'POST',
 			contentType: 'application/json; charset=utf-8',
-			url: 'https://localhost:32768/api/commitment/GetCommitmentSummary',
+			url: 'https://localhost:32774/api/commitment/GetCommitmentSummary',
 			data: JSON.stringify(data),
 			dataType: "json",
 			success: function (data,status){
