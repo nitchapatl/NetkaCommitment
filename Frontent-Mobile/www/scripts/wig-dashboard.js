@@ -3,9 +3,19 @@ $(document).ready(function() {
 
 var DepartmentId = 5; 
     
-
+displayUserDetail();
 getDepartmentWIGDashboardInfo(DepartmentId);
 getDashboardDepartmentCommitmentInfo(DepartmentId);
+
+function displayUserDetail() {
+    var firstname = localStorage.getItem("userFirstNameEn"); //alert(firstname)
+    var lastname = localStorage.getItem("userLastNameEn"); //alert(lastname)
+
+    var department = localStorage.getItem("departmentName"); //alert(department)
+
+    $("#display_user").text(firstname + " " + lastname);
+    $("#display_team").text(department);
+}
 
 function getDepartmentWIGDashboardInfo(DepartmentId) {
     $.ajax({
