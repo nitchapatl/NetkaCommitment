@@ -13,7 +13,18 @@ if(WEBAPI_ACCESS_TOKEN == null)
 
 $("#logout").click(function () {
     localStorage.removeItem("token");
-});
+    localStorage.removeItem("userName");
+    localStorage.removeItem("departmentName");
+    localStorage.removeItem("userLastNameEn");
+    localStorage.removeItem("status");
+    localStorage.removeItem("userLastName");
+    localStorage.removeItem("userFirstNameEn");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("departmentId");
+    localStorage.removeItem("userFirstName");
+    localStorage.removeItem("userCode");
 
+    window.location.href = "index-login.html"; 
+});
 
 });

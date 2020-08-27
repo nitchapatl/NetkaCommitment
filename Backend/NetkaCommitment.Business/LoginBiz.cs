@@ -164,7 +164,7 @@ namespace NetkaCommitment.Business
                 if (UserOTP != null)
                 {
                     UserOTP.UserPassword = model.NewPassword;
-                    UserOTP.UserPasswordResetToken = "";
+                    UserOTP.UserPasswordResetToken = null;
 
                     oUserRepository.Update(UserOTP);
 
