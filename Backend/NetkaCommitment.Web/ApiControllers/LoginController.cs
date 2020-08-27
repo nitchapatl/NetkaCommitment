@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -85,7 +88,7 @@ namespace NetkaCommitment.Web.ApiControllers
             }
         }
 
-        [AllowAnonymous]
+        /*[AllowAnonymous]
         [HttpPost("forgotpassword")]
         public IActionResult ForgotPassword([FromBody] LoginUserViewModel model)
         {
@@ -97,6 +100,80 @@ namespace NetkaCommitment.Web.ApiControllers
             {
                 return StatusCode(StatusCodes.Status404NotFound, "Username not found");
             }
+        }*/
+
+        [AllowAnonymous]
+        [HttpPost("forgotpassword")]
+        public IActionResult ForgotPassword([FromBody] ForgotPasswordViewModel model)
+        {
+            var user = oLoginBiz.GetUser(model.UserName);
+
+            // Email
+
+            var UserPasswordResetToken = oLoginBiz.ForgotPassword(model);
+
+            /*var link = Url.Action("resetpassword", "login",
+                                  new { userId = user.UserId, token = UserPasswordResetToken }, Request.Scheme);*/
+
+            if (UserPasswordResetToken != "")
+            {
+                sendResetPasswordEmail(model.Email, UserPasswordResetToken);
+                return StatusCode(StatusCodes.Status201Created, UserPasswordResetToken);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound, "Username not found");
+            }
         }
+
+        public void sendResetPasswordEmail(string Email, string UserResetPasswordOTP)
+        {
+            // Credentials
+            var credentials = new NetworkCredential("netkacommitment@gmail.com", "netka123");
+
+            // Mail message
+            MailMessage mail = new MailMessage();
+
+            mail.From = new MailAddress("noreply@netkacommitment.com");
+            mail.To.Add(Email);
+            mail.Subject = "Netkacommitment Reset Password";
+            mail.Body = "<br> Your reset password OTP: " + UserResetPasswordOTP;
+            mail.IsBodyHtml = true;
+
+            // Smtp client
+            var client = new SmtpClient()
+            {
+                Port = 587,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Host = "smtp.gmail.com",
+                EnableSsl = true,
+                Credentials = credentials
+            };
+            client.Send(mail);
+
+        }
+
+        [AllowAnonymous]
+        [HttpPost("resetpassword")]
+        public IActionResult ResetPassword([FromBody] ResetPasswordViewModel model)
+        {
+            
+            var result = oLoginBiz.ResetPassword(model);
+
+            if (result == "Reset password success")
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else if (result == "Invalid OTP")
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound, result);
+            }
+        }
+
     }
 }

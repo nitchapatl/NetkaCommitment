@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.JsonWebTokens;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Policy;
 
 namespace NetkaCommitment.Business
 {
@@ -135,9 +136,75 @@ namespace NetkaCommitment.Business
             return false;
         }
 
+        public string ForgotPassword(ForgotPasswordViewModel model)
+        {
+            var result = oUserRepository.Get().Where(t => t.UserName == model.UserName && t.IsDeleted == 0).FirstOrDefault();
+
+            if (result != null)
+            {
+
+                result.UserPasswordResetToken = EncryptionHelpers.GeneratePasswordOTP();
+
+                oUserRepository.Update(result);
+
+                return result.UserPasswordResetToken;
+            }
+
+            return "";
+        }
+
+        public string ResetPassword(ResetPasswordViewModel model)
+        {
+            var User = oUserRepository.Get().Where(t => t.UserName == model.UserName && t.IsDeleted == 0).FirstOrDefault();
+            string result = "";
+            if (User != null)
+            {
+                var UserOTP = oUserRepository.Get().Where(t => t.UserId == User.UserId && t.UserPasswordResetToken == model.OTP).FirstOrDefault();
+
+                if (UserOTP != null)
+                {
+                    UserOTP.UserPassword = model.NewPassword;
+                    UserOTP.UserPasswordResetToken = "";
+
+                    oUserRepository.Update(UserOTP);
+
+                    result = "Reset password success";
+                }
+                else
+                {
+                    result = "Invalid OTP";
+                }
+            }
+            else
+            {
+                result = "Username not found";
+            }
+
+            return result;
+        }
+
         public LoginUserViewModel GetUser(int id)
         {
             LoginUserViewModel oUser = oUserRepository.Get().Where(t => t.UserId == id && t.IsDeleted == 0).Select(t => new LoginUserViewModel
+            {
+                UserId = t.UserId,
+                UserCode = t.UserCode,
+                UserName = t.UserName,
+                //UserPassword = t.UserPassword,
+                UserFirstName = t.UserFirstName,
+                UserLastName = t.UserLastName,
+                UserFirstNameEn = t.UserFirstNameEn,
+                UserLastNameEn = t.UserLastNameEn,
+                DepartmentId = t.Department == null ? (uint?)null : t.Department.DepartmentId,
+                DepartmentName = t.Department == null ? null : t.Department.DepartmentName
+            }).FirstOrDefault();
+
+            return oUser;
+        }
+
+        public LoginUserViewModel GetUser(string username)
+        {
+            LoginUserViewModel oUser = oUserRepository.Get().Where(t => t.UserName == username && t.IsDeleted == 0).Select(t => new LoginUserViewModel
             {
                 UserId = t.UserId,
                 UserCode = t.UserCode,

@@ -22,4 +22,23 @@ namespace NetkaCommitment.Data.ViewModel
         public uint? DepartmentId { get; set; }
         public string DepartmentName { get; set; }
     }
+
+
+    public class ForgotPasswordViewModel
+    {
+        public string Email { get; set; }
+        public string UserName { get; set; }
+    }
+
+
+    public class ResetPasswordViewModel
+    {
+        public string UserName { get; set; }
+
+        public string OTP { get; set; }
+
+        public string NewPassword { get; set; }
+
+        public string ConfirmPassword { get; set; }
+    }
 }
