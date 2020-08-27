@@ -154,6 +154,7 @@ namespace NetkaCommitment.Web.ApiControllers
 
         }
 
+        //resetpassword
         [AllowAnonymous]
         [HttpPost("resetpassword")]
         public IActionResult ResetPassword([FromBody] ResetPasswordViewModel model)
