@@ -155,10 +155,40 @@ namespace NetkaCommitment.Web.ApiControllers
             }
         }
 
+        [HttpGet("user/department/wig/{UserId}/{DepartmentId}")]
+        public IActionResult GetUserDepartmentWig(uint UserId, uint DepartmentId)
+        {
+            var result = oDashboardBiz.GetUserDepartmentWIG(UserId, DepartmentId);
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
         [HttpPost("department/commitment")]
         public IActionResult GetDepartmentCommitment([FromBody] DashboardCommitmentViewModel model)
         {
             var result = oDashboardBiz.GetDepartmentCommitment(model.DepartmentId).OrderBy(t => t.CommitmentId);
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpPost("user/department/commitment/{UserId}/{DepartmentId}")]
+        public IActionResult GetUserDepartmentCommitment(uint UserId, uint DepartmentId)
+        {
+            var result = oDashboardBiz.GetUserDepartmentCommitment(UserId, DepartmentId).OrderBy(t => t.CommitmentId);
 
             if (result != null)
             {
@@ -185,10 +215,40 @@ namespace NetkaCommitment.Web.ApiControllers
             }
         }
 
+        [HttpPost("user/department/wig/commitment/{UserId}/{DepartmentWigId}")]
+        public IActionResult GetUserDepartmentCommitmentbyWig(uint UserId, uint DepartmentWigId)
+        {
+            var result = oDashboardBiz.GetUserDepartmentCommitmentbyWig(UserId, DepartmentWigId).OrderBy(t => t.CommitmentId);
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
         [HttpPost("department/lm/commitment")]
         public IActionResult GetDepartmentCommitmentbyLm([FromBody] DashboardCommitmentViewModel model)
         {
             var result = oDashboardBiz.GetDepartmentCommitmentbyLm(model.DepartmentLmId).OrderBy(t => t.CommitmentNo);
+
+            if (result != null)
+            {
+                return StatusCode(StatusCodes.Status200OK, result);
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpPost("user/department/lm/commitment/{UserId}/{LmId}")]
+        public IActionResult GetUserDepartmentCommitmentbyLm(uint UserId, uint LmId)
+        {
+            var result = oDashboardBiz.GetUserDepartmentCommitmentbyLm(UserId, LmId).OrderBy(t => t.CommitmentNo);
 
             if (result != null)
             {
