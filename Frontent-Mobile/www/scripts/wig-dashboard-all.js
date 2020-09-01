@@ -1,13 +1,11 @@
 $(document).ready(function() {
     
 
-var DepartmentId = localStorage.getItem("departmentId");
-var UserId = localStorage.getItem("userId");
-
+var DepartmentId = 5; 
     
 displayUserDetail();
-getUserDepartmentWIGDashboardInfo(UserId, DepartmentId);
-getDashboardUserDepartmentCommitmentInfo(UserId, DepartmentId);
+getDepartmentWIGDashboardInfo(DepartmentId);
+getDashboardDepartmentCommitmentInfo(DepartmentId);
 
 function displayUserDetail() {
     var firstname = localStorage.getItem("userFirstNameEn"); //alert(firstname)
@@ -19,11 +17,11 @@ function displayUserDetail() {
     $("#display_team").text(department);
 }
 
-function getUserDepartmentWIGDashboardInfo(UserId, DepartmentId) {
+function getDepartmentWIGDashboardInfo(DepartmentId) {
     $.ajax({
 		type:'GET',
 		contentType: 'application/json',
-		url: URL + '/api/dashboard/user/department/wig/' + UserId + '/' + DepartmentId,
+		url: URL + '/api/dashboard/department/wig/' + DepartmentId,
 		data: '',
 		dataType: "json",
 		success: function (data,status){
@@ -88,7 +86,7 @@ function drawPiechart(wig_series, lm_series) {
                        
                 },    
                 drillup: function(e) {    
-                    getDashboardUserDepartmentCommitmentInfo(UserId, DepartmentId);
+                    getDashboardDepartmentCommitmentInfo(DepartmentId);
                 }    
             }    
         },
@@ -96,7 +94,7 @@ function drawPiechart(wig_series, lm_series) {
             text: 'WIG Dashboard'
         },
         subtitle: {
-            text: 'Personal Department WIG'
+            text: 'Overall Department Wig'
         },
 
         accessibility: {
@@ -133,7 +131,7 @@ function drawPiechart(wig_series, lm_series) {
                                 console.log("display commitment by wig")
                                 console.log("WIG ID: " + WigID)
 
-                                getDashboardUserDepartmentWigCommitmentInfo(UserId, WigID);
+                                getDashboardDepartmentWigCommitmentInfo(WigID);
                             }
                             else if (WigID != "" && LmID != "") {
                                 console.log("display commitment by lm")
@@ -142,7 +140,7 @@ function drawPiechart(wig_series, lm_series) {
                                 console.log("WIG ID: " + WigID_value);
                                 console.log("LM ID: " + LmID_value);
                                 
-                                getDashboardUserDepartmentLmCommitmentInfo(UserId, LmID_value);
+                                getDashboardDepartmentLmCommitmentInfo(LmID_value);
                             }
 
                         }
@@ -167,13 +165,18 @@ function drawPiechart(wig_series, lm_series) {
     });
 }
 
-function getDashboardUserDepartmentCommitmentInfo(UserId, DepartmentId) {
+function getDashboardDepartmentCommitmentInfo(DepartmentId) {
+
+    data = {};
+    data.DepartmentId = DepartmentId;
+    
+    //clearWigDashboardTable();
 
     $.ajax({
         type:'POST',
         contentType: 'application/json; charset=utf-8',
-        url: URL + '/api/dashboard/user/department/commitment/' + UserId + "/" + DepartmentId,
-        data: '',
+        url: URL + '/api/dashboard/department/commitment',
+        data: JSON.stringify(data),
         dataType: "json",
         success: function (data,status){
             
@@ -217,16 +220,18 @@ function getDashboardUserDepartmentCommitmentInfo(UserId, DepartmentId) {
     
 }
 
-function getDashboardUserDepartmentWigCommitmentInfo(UserId, WigId) {
+function getDashboardDepartmentWigCommitmentInfo(WigID) {
 
-
+    data = {};
+    data.DepartmentWigId = WigID;
+    
     //clearWigDashboardTable();
 
     $.ajax({
 		type:'POST',
 		contentType: 'application/json; charset=utf-8',
-		url: URL + '/api/dashboard/user/department/wig/commitment/' + UserId + '/' + WigId ,
-		data: '',
+		url: URL + '/api/dashboard/department/wig/commitment',
+		data: JSON.stringify(data),
 		dataType: "json",
 		success: function (data,status){
 
@@ -270,16 +275,18 @@ function getDashboardUserDepartmentWigCommitmentInfo(UserId, WigId) {
 	});
 }
 
-function getDashboardUserDepartmentLmCommitmentInfo(UserId, LmID) {
+function getDashboardDepartmentLmCommitmentInfo(LmID) {
 
+    data = {};
+    data.DepartmentLmId = LmID;
 
     //clearWigDashboardTable();
 
     $.ajax({
 		type:'POST',
 		contentType: 'application/json; charset=utf-8',
-		url: URL + '/api/dashboard/user/department/lm/commitment/' + UserId + '/' + LmID,
-		data: '',
+		url: URL + '/api/dashboard/department/lm/commitment',
+		data: JSON.stringify(data),
 		dataType: "json",
 		success: function (data,status){
             
